@@ -5223,10 +5223,10 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
   var A = { set: new Set(), bans: new Set(), loaded: false, tab: 'chat', unA: null, unB: null, shell: false, q: '' };
   var T = {
     uz: { nav_admin: 'Admin panel', adm_h: 'Adminlar', adm_ph: 'Username', adm_add: 'Admin berish', adm_rm: 'Olib tashlash', adm_none: "Admin yo'q", adm_nouser: 'Bunday foydalanuvchi topilmadi', adm_ok: 'Admin berildi', adm_off: 'Admin olib tashlandi',
-      tab_chat: 'Chat', tab_users: 'Foydalanuvchilar', tab_clans: 'Klanlar', clear: 'Umumiy chatni tozalash', clear_q: "Umumiy chatdagi barcha xabarlar o'chadi. Davom etasizmi?", cleared: 'Chat tozalandi',
+      tab_bans: 'Banlar', tab_chat: 'Chat', tab_users: 'Foydalanuvchilar', tab_clans: 'Klanlar', clear: 'Umumiy chatni tozalash', clear_q: "Umumiy chatdagi barcha xabarlar o'chadi. Davom etasizmi?", cleared: 'Chat tozalandi',
       ban: 'Chatdan bloklash', unban: 'Blokni olish', banned: 'Chatdan bloklangan', banned_list: 'Bloklanganlar', none: "Yo'q", search: 'Qidirish…', del: "O'chirish", del_q: "Klan o'chiriladi. Davom etasizmi?", deleted: "O'chirildi", members: "a'zo", err: 'Xatolik: ', denied: 'Bu foydalanuvchini bloklab bo\'lmaydi', adm_badge: 'ADMIN', loading: 'Yuklanmoqda…' },
     en: { nav_admin: 'Admin panel', adm_h: 'Admins', adm_ph: 'Username', adm_add: 'Make admin', adm_rm: 'Remove', adm_none: 'No admins', adm_nouser: 'User not found', adm_ok: 'Admin granted', adm_off: 'Admin removed',
-      tab_chat: 'Chat', tab_users: 'Users', tab_clans: 'Clans', clear: 'Clear global chat', clear_q: 'All global chat messages will be deleted. Continue?', cleared: 'Chat cleared',
+      tab_bans: 'Bans', tab_chat: 'Chat', tab_users: 'Users', tab_clans: 'Clans', clear: 'Clear global chat', clear_q: 'All global chat messages will be deleted. Continue?', cleared: 'Chat cleared',
       ban: 'Ban from chat', unban: 'Unban', banned: 'Banned from chat', banned_list: 'Banned users', none: 'None', search: 'Search…', del: 'Delete', del_q: 'The clan will be deleted. Continue?', deleted: 'Deleted', members: 'members', err: 'Error: ', denied: 'This user cannot be banned', adm_badge: 'ADMIN', loading: 'Loading…' }
   };
   try { Object.keys(X).forEach(function (l) { X[l].nav_admin = (T[l] || T.en).nav_admin; }); } catch (e) {}
@@ -5289,7 +5289,7 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
 
   /* ---- Admin panel sahifasi ---- */
   function tabs() {
-    return '<div class="ez-tabs">' + [['chat', 'tab_chat'], ['users', 'tab_users'], ['clans', 'tab_clans']].map(function (t) {
+    return '<div class="ez-tabs">' + [['chat', 'tab_bans'], ['users', 'tab_users'], ['clans', 'tab_clans']].map(function (t) {
       return '<button class="' + (A.tab === t[0] ? 'on' : '') + '" onclick="ezAdTab(\'' + t[0] + '\')">' + Q(t[1]) + '</button>';
     }).join('') + '</div>';
   }
@@ -5351,7 +5351,7 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
       el.innerHTML = a.map(function (c) {
         return '<div class="cl-row"><div class="tx"><b>' + E(c.name) + '</b><br><small>' + c.n + ' ' + Q('members') + ' · ' + E(c.owner) + '</small></div><button onclick="ezAdClanDel(\'' + c.id + '\')">' + Q('del') + '</button></div>';
       }).join('') || '<p>' + Q('none') + '</p>';
-    }).catch(function (e) { var el = document.getElementById('ad-clans'); if (el) el.innerHTML = '<p>' + Q('err') + E(e.message) + '</p>'; });
+    }).catch(function (e) { var el = document.getElementById('ad-clans'); if (el) el.innerHTML = '<p>' + E(errText(e)) + '</p>'; });
   }
   function wipe(col) { return col.limit(400).get().then(function (sn) { if (sn.empty) return; var b = fbDb.batch(); sn.forEach(function (d) { b.delete(d.ref); }); return b.commit(); }); }
   window.ezAdClanDel = function (id) {
@@ -5426,6 +5426,10 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
   function FV() { return firebase.firestore.FieldValue; }
   function ensureFb() {
     if (!fbDb) { try { if (typeof firebase !== 'undefined') fbInit(FIREBASE_CONFIG); } catch (e) {} }
+    if (fbAuth && !fbAuth.currentUser && !window.__fbAnonBusy) {
+      window.__fbAnonBusy = true;
+      fbAuth.signInAnonymously().catch(function () {}).then(function () { window.__fbAnonBusy = false; });
+    }
     return !!fbDb;
   }
   function p2(n) { return (n < 10 ? '0' : '') + n; }
@@ -5517,7 +5521,7 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
     var col = CL.id ? fbDb.collection('clans').doc(CL.id).collection('messages') : null;
     if (col) col.doc(id).delete().catch(function (e) { toast(Q('err') + e.message); });
   };
-  function showErr(id, e) { var b = document.getElementById(id), m = (e && e.code === 'permission-denied') ? Q('rules') : Q('err') + (e && e.message); if (b) b.innerHTML = '<div class="ch-empty">' + E(m) + '</div>'; toast(m); }
+  function showErr(id, e) { var b = document.getElementById(id), m = errText(e); if (b) b.innerHTML = '<div class="ch-empty">' + E(m) + '</div>'; toast(m); }
   function chatUi(boxId, inputId, btnId, sendFn) {
     return '<div class="ch-box" id="' + boxId + '"></div><div class="ch-form"><input id="' + inputId + '" maxlength="300" placeholder="' + Q('chat_ph') + '" autocomplete="off" onkeydown="if(event.key===\'Enter\'){' + sendFn + '()}">' +
       '<button id="' + btnId + '" onclick="' + sendFn + '()">' + Q('send') + '</button></div>';
@@ -5609,7 +5613,7 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
         return '<div class="cl-row"><div class="tx"><b>' + E(c.name) + '</b><br><small>' + c.n + '/' + CLAN_MAX + ' ' + Q('members') + '</small></div>' +
           '<button ' + (c.n >= CLAN_MAX ? 'disabled' : '') + ' onclick="ezClanJoin(\'' + c.id + '\')">' + (c.n >= CLAN_MAX ? Q('full') : Q('join')) + '</button></div>';
       }).join('') : '<p>' + Q('list_empty') + '</p>';
-    }).catch(function (e) { var el = document.getElementById('cl-list'); if (el) el.innerHTML = '<p>' + Q('err') + E(e.message) + '</p>'; });
+    }).catch(function (e) { var el = document.getElementById('cl-list'); if (el) el.innerHTML = '<p>' + E(errText(e)) + '</p>'; });
   }
   window.ezClanCreate = function () {
     if (!ensureFb() || !me()) return toast(Q('nofb'));
@@ -5700,6 +5704,7 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
   var DUEL_REWARD = 300, DUEL_DRAW = 100;
   function sumStats(arr, mode) { var t = 0; (arr || []).forEach(function (x) { t += (mode === 'plays' ? x.plays : x.earned) || 0; }); return t; }
   function oppId(d) { return d.a === CL.id ? d.b : d.a; }
+  function errText(e) { return (e && e.code === 'permission-denied') ? Q('rules') : (Q('err') + (e && e.message)); }
   function duelErr(e) { toast(e && e.code === 'permission-denied' ? Q('rules') : Q('err') + (e && e.message)); }
   function stopDuels() {
     if (CL.unDu) { try { CL.unDu(); } catch (e) {} CL.unDu = null; }
