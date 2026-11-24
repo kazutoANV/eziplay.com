@@ -551,6 +551,35 @@ body.auth .card p{font-size:.9rem}
 body.kbd #game-type .ty-hk,body.kbd #snd-btn{display:none!important}
 body.kbd main{padding-top:8px!important;padding-bottom:8px!important}
 body.kbd #game-type .card{margin:0!important;padding:14px}
+/* ===== Yon menyu tuzatishlari ===== */
+aside{overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+aside nav{padding-bottom:16px}
+aside a{position:relative;overflow:hidden}
+aside a:hover{transform:none}
+aside a.active{box-shadow:none!important;background:var(--white);background:color-mix(in srgb,var(--accent) 22%,var(--card))}
+aside a.active::before{content:"";position:absolute;left:0;top:20%;bottom:20%;width:4px;border-radius:0 4px 4px 0;background:var(--accent)}
+body:not(.loggedin) aside a[data-page="chellenj"],body:not(.loggedin) aside a[data-page="klan"],body:not(.loggedin) aside a[data-page="chat"]{display:none}
+/* ===== Chat / Klan / Chellenj ===== */
+.cl-head{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:14px}
+.cl-head h3{margin:0;font-size:1.4rem}
+.cl-badge{padding:4px 12px;border-radius:999px;background:var(--accent);color:#fff;font-weight:800;font-size:.85rem}
+.cl-row{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:var(--white);margin-top:8px}
+.cl-row .tx{flex:1;min-width:0}
+.cl-row small{opacity:.75}
+.cl-row button,.cl-form button,.ch-form button,.cl-leave{padding:9px 14px;border:none;border-radius:10px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.cl-row button:disabled,.ch-form button:disabled{opacity:.5}
+.cl-leave{background:#B83A2E;margin-top:16px}
+.cl-form input,.ch-form input{width:100%;padding:11px 14px;border-radius:12px;border:2px solid var(--peach-2);background:var(--white);color:var(--text);font:inherit;min-width:0}
+.cl-form{display:flex;flex-direction:column;gap:10px;max-width:420px;margin:10px 0 20px}
+.ch-box{height:min(55vh,460px);overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:10px;border-radius:14px;background:var(--peach);overscroll-behavior:contain}
+.ch-msg{max-width:82%;padding:8px 12px;border-radius:14px;background:var(--white);word-break:break-word;align-self:flex-start}
+.ch-msg.me{align-self:flex-end;background:var(--accent);color:#fff}
+.ch-msg .ch-n{font-size:.75rem;font-weight:800;opacity:.8;display:flex;gap:6px;align-items:center}
+.ch-msg .ch-t{font-size:.7rem;opacity:.65;margin-left:auto}
+.ch-msg .ch-x{border:none;background:none;color:inherit;cursor:pointer;font-size:.8rem;padding:0 2px}
+.ch-form{display:flex;gap:8px;margin-top:10px}
+.ch-empty{opacity:.7;text-align:center;margin:auto}
+.cl-sec{font-weight:800;margin:18px 0 4px}
 </style>
 </head>
 <body>
@@ -564,6 +593,9 @@ body.kbd #game-type .card{margin:0!important;padding:14px}
     <a href="#sozlamalar" data-page="sozlamalar"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg></span><span data-i18n="nav_settings"></span></a>
     <a href="#mavzular" data-page="mavzular"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.5 0-.4-.2-.8-.4-1-.3-.3-.4-.6-.4-1 0-.8.6-1.5 1.5-1.5H16a5 5 0 0 0 5-5c0-4.4-4-8-9-8z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="14.5" cy="7" r="1"/><circle cx="16.5" cy="11" r="1"/></svg></span><span data-i18n="nav_themes"></span></a>
     
+    <a href="#chellenj" data-page="chellenj"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg></span><span data-i18n="nav_chal"></span></a>
+    <a href="#klan" data-page="klan"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14.5c3 0 5 1.6 5 4.5"/></svg></span><span data-i18n="nav_clan"></span></a>
+    <a href="#chat" data-page="chat"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg></span><span data-i18n="nav_chat"></span></a>
     <a href="#kompaniya" data-page="kompaniya"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/></svg></span><span data-i18n="nav_company"></span></a>
     <a href="#profil" data-page="profil"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><span data-i18n="nav_profile"></span></a>
     <a href="#devpanel" data-page="devpanel"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3M7 9l2 2-2 2M12 13h5"/></svg></span><span data-i18n="nav_dev"></span></a>
@@ -822,6 +854,30 @@ body.kbd #game-type .card{margin:0!important;padding:14px}
       
   </section>
 
+  <section class="page" id="chellenj">
+    <div class="page-head">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg></div>
+      <h2 data-i18n="nav_chal"></h2>
+    </div>
+    <div class="card"><div id="chal-box"></div></div>
+  </section>
+
+  <section class="page" id="klan">
+    <div class="page-head">
+      <div class="icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14.5c3 0 5 1.6 5 4.5"/></svg></div>
+      <h2 data-i18n="nav_clan"></h2>
+    </div>
+    <div class="card"><div id="clan-box"></div></div>
+  </section>
+
+  <section class="page" id="chat">
+    <div class="page-head">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg></div>
+      <h2 data-i18n="nav_chat"></h2>
+    </div>
+    <div class="card"><div id="chat-box"></div></div>
+  </section>
+
   <section class="page" id="kompaniya">
     <div class="page-head">
       <div class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/></svg></div>
@@ -864,7 +920,7 @@ body.kbd #game-type .card{margin:0!important;padding:14px}
       <div class="avatar" id="p-avatar" style="overflow:hidden"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
       <div class="field"><label data-i18n="avatar_title"></label><input type="file" id="pavatar" accept="image/*" onchange="pickAvatar(this)"></div>
       <div class="field"><label data-i18n="name"></label><input type="text" id="pname" oninput="saveProfileField()"></div>
-      <div class="field"><label data-i18n="username"></label><input type="text" id="pusername" oninput="saveProfileField()"></div>
+      <div class="field"><label data-i18n="username"></label><input type="text" id="pusername" maxlength="20"></div>
       <div class="field"><label data-i18n="age"></label><input type="number" min="1" max="120" id="page" oninput="saveProfileField()"></div>
       <div class="field"><label data-i18n="email"></label><input type="email" id="pemail" oninput="saveProfileField()"></div>
       <button class="btn" data-i18n="save" onclick="saveProfile()"></button>
@@ -1277,7 +1333,7 @@ const T = {
 };
 
 let lang = "uz", notif = true, dark = false, loggedIn = false, theme = "peach", glass = false;
-const MNAV_ALL = ["uy","oyinlar","reyting","sozlamalar","mavzular","kompaniya","profil","login","register","terms","policy","devpanel"];
+const MNAV_ALL = ["uy","oyinlar","reyting","sozlamalar","mavzular","chellenj","klan","chat","kompaniya","profil","login","register","terms","policy","devpanel"];
 let mnav = ["uy","reyting","sozlamalar","profil"];
 
 try {
@@ -1571,7 +1627,6 @@ function saveProfileField() {
   const d = Object.assign(old, {
     name: document.getElementById("pname").value,
     email: document.getElementById("pemail").value,
-    username: document.getElementById("pusername").value,
     age: document.getElementById("page").value
   });
   try { localStorage.setItem("profile", JSON.stringify(d)); } catch (e) {}
@@ -2653,7 +2708,7 @@ document.querySelectorAll("aside a[data-page]").forEach(a => a.addEventListener(
 
 /* ===== Phone bottom menu ===== */
 function mnavVisible(id) {
-  if ((id === "oyinlar" || id === "profil") && !loggedIn) return false;
+  if ((id === "oyinlar" || id === "profil" || id === "chellenj" || id === "klan" || id === "chat") && !loggedIn) return false;
   if ((id === "login" || id === "register") && loggedIn) return false;
   if (id === "devpanel" && !isDev()) return false;
   return true;
@@ -2789,9 +2844,9 @@ function fbListen() {
   // Reyting: jonli yangilanadi. Lokal-only yozuvlar Firestore'ga yuboriladi (yo'qolmasin).
   fbDb.collection("ratings").onSnapshot(snap => {
     const remote = [], names = new Set();
-    snap.forEach(d => { const x = d.data(); if (x && x.name) { remote.push({ name: x.name, score: x.score || 0, best: x.best || 0, eq: x.eq || null }); names.add(String(x.name)); } });
+    snap.forEach(d => { const x = d.data(); if (x && x.name && !(window.__ezGone && window.__ezGone.has(String(x.name).toLowerCase()))) { remote.push({ name: x.name, score: x.score || 0, best: x.best || 0, eq: x.eq || null }); names.add(String(x.name)); } });
     loadRating().forEach(x => {
-      if (x.name && !names.has(String(x.name))) {
+      if (x.name && !names.has(String(x.name)) && !(window.__ezGone && window.__ezGone.has(String(x.name).toLowerCase()))) {
         remote.push(x);
         try { fbDb.collection("ratings").doc(String(x.name)).set({ name: x.name, score: x.score || 0, best: x.best || 0 }, { merge: true }); } catch (e) {}
       }
@@ -2804,9 +2859,9 @@ function fbListen() {
   // Akkauntlar: jonli. Lokal-only akkauntlar yuboriladi, o'chirilganlar qayta paydo bo'lmaydi.
   fbDb.collection("accounts").onSnapshot(snap => {
     const remote = [], names = new Set();
-    snap.forEach(d => { const x = d.data(); if (x && x.username) { remote.push({ username: x.username, email: x.email || "", name: x.name || "", age: x.age || "" }); names.add(x.username); } });
+    snap.forEach(d => { const x = d.data(); if (x && x.username && !(window.__ezGone && window.__ezGone.has(String(x.username).toLowerCase()))) { remote.push({ username: x.username, email: x.email || "", name: x.name || "", age: x.age || "" }); names.add(x.username); } });
     getAccounts().forEach(a => {
-      if (a.username && !names.has(a.username)) {
+      if (a.username && !names.has(a.username) && !(window.__ezGone && window.__ezGone.has(String(a.username).toLowerCase()))) {
         remote.push(a);
         try { fbDb.collection("accounts").doc(a.username).set({ username: a.username, email: a.email || "", name: a.name || "", age: a.age || "" }, { merge: true }); } catch (e) {}
       }
@@ -2934,7 +2989,7 @@ function showPage() {
   document.body.classList.toggle("isdev", isDev());
   if (location.hash === "#devpanel") { if (!isDev()) { location.hash = "uy"; return; } renderDev(); fbPanelInit(); }
   let name = location.hash.slice(1);
-  if (name === "oyinlar" && !loggedIn) {
+  if ((name === "oyinlar" || name === "chellenj" || name === "klan" || name === "chat") && !loggedIn) {
     toast(t("t_login_first"));
     location.hash = "register";
     return;
@@ -3579,7 +3634,7 @@ renderPremCard();
 applyI18n();
 
 /* ===== Profil: auto-save fields; Premium visible to logged-in users ===== */
-['pname', 'pemail', 'pusername', 'page'].forEach(id => {
+['pname', 'pemail', 'page'].forEach(id => {
   const el = document.getElementById(id);
   if (el) el.addEventListener('input', saveProfileField);
 });
@@ -4901,7 +4956,7 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
   function renderProfile() {
     var box = document.getElementById('ez-prof'); if (!box) return;
     var eq = eqGet(), av = myAvatar(), own = items();
-    var pic = av ? '<img src="' + av + '">' : '<span>' + esc((getPlayer() || '?').charAt(0).toUpperCase()) + '</span>';
+    var pic = av ? '<img src="' + av + '">' : '<span>' + esc(ezInitial(getPlayer())) + '</span>';
     var ti = earnedTitles().map(function (tk) { return '<button class="' + (eq.tk === tk ? 'on' : '') + '" onclick="ezTitle(\'' + tk + '\')">' + titleText(tk) + '</button>'; }).join('');
     var pbs = NM[L()].map(function (n, i) { return own.indexOf('pb:' + i) < 0 ? '' : '<button class="' + (eq.b.indexOf(i) >= 0 ? 'on' : '') + '" onclick="ezCat(\'pb\',' + i + ',0)">' + CH[i] + ' ' + n + '</button>'; }).join('');
     box.innerHTML = '<div class="ez-big fr-' + (eq.f || 'none') + '">' + pic + '</div>' +
@@ -4910,15 +4965,18 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
   }
 
   // ---- Reyting (1 dan 100 gacha, o'yin bo'yicha tablar) ----
+  function ezClean(n) { return String(n == null ? '' : n).replace(/[\u0000-\u001F\u007F-\u009F\u200B-\u200F\u2028-\u202E\u2060-\u206F\uFEFF\uFFFD\uFFFC]/g, '').replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/g, function (m) { return m.length > 1 ? m.charAt(0) : ''; }); }
+  function ezInitial(n) { var a = Array.from(ezClean(n)); for (var i = 0; i < a.length; i++) if (/[\p{L}\p{N}]/u.test(a[i])) return a[i].toUpperCase(); return '?'; }
+  window.ezClean = ezClean; window.ezInitial = ezInitial;
   var tab = 'all';
   function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function rowHtml(i, name, eq, score, me) {
     eq = eq || {};
     var rk = i < 3 ? MEDAL_SVG(i) : (i + 1);
-    var av = eq.av ? '<img src="' + eq.av + '">' : '<span>' + esc((name || '?').charAt(0).toUpperCase()) + '</span>';
+    var av = eq.av ? '<img src="' + eq.av + '">' : '<span>' + esc(ezInitial(name)) + '</span>';
     var pbs = (eq.b || []).map(function (x) { return '<i style="background:' + GRAD[x] + '">' + CH[x] + '</i>'; }).join('');
     return '<div class="rank-row' + (me ? ' me' : '') + '"><span class="rk">' + rk + '</span><span class="ez-av fr-' + (eq.f || 'none') + '">' + av + '</span>' +
-      '<span class="nm">' + esc(name || t('g_guest')) + (isPremiumName(name) ? PREM_MINI : '') + (isDevName(name) ? DEV_MINI : '') + (eq.tt ? '<div class="ez-tt">' + esc(eq.tt) + '</div>' : '') + '</span>' +
+      '<span class="nm">' + esc(ezClean(name) || t('g_guest')) + (isPremiumName(name) ? PREM_MINI : '') + (isDevName(name) ? DEV_MINI : '') + (eq.tt ? '<div class="ez-tt">' + esc(eq.tt) + '</div>' : '') + '</span>' +
       '<span class="ez-pbs">' + pbs + '</span><span class="sc">' + score + '</span></div>';
   }
   function tabsHtml() {
@@ -5113,9 +5171,447 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
     document.body.dataset.shop = (a && own.indexOf('th:' + a) >= 0) ? a : '';
     applyCosmetics(); pushEq(); refresh(); window.renderRating();
   }
+  window.ezAddCoins = addCoins; window.ezWallet = wallet; window.ezRefresh = refresh;
+  window.ezSpend = function (n) { SV('ezsp_' + k(), spent() + n); refresh(); };
   build();
   sync();
   window.addEventListener('hashchange', sync);
+})();
+</script>
+
+<script>
+/* ===== Eziplay: Klan, Chat, Chellenjlar, ism almashtirish (akkaunt yo'qolmasligi) ===== */
+(function () {
+  'use strict';
+  var GAMES = ['bj', 'tap', 'type', 'lv', 'dn'];
+  var CLAN_COST = 15000, CLAN_MAX = 30;
+
+  var TX = {
+    uz: {
+      nav_chal: 'Chellenjlar', nav_clan: 'Klan', nav_chat: 'Chat',
+      login: 'Avval akkauntga kiring', nofb: "Internet yoki Firebase ulanmagan. Sahifani yangilang.", loading: 'Yuklanmoqda…',
+      daily: 'Kunlik chellenjlar', weekly: 'Haftalik chellenjlar', claim: 'Olish', done: 'Olindi', wait: 'Jarayonda', coin: 'coin',
+      c_plays: "O'yin o'ynang", c_games: 'Turli xil o\'yinlar', c_earned: 'Coin to\'plang', c_chat: 'Chatga xabar yozing', c_members: "A'zolar soni",
+      claimed_t: '+{n} coin', bal: 'Balans',
+      chat_global: 'Umumiy chat', chat_ph: 'Xabar yozing…', send: 'Yuborish', chat_empty: "Hali xabar yo'q. Birinchi bo'ling!", chat_wait: 'Sekinroq yozing', chat_long: 'Xabar juda uzun',
+      noclan_h: "Siz hali klanda emassiz", create_h: 'Klan ochish', create_p: 'Klan ochish narxi: {n} coin', create_name: 'Klan nomi (3–16 belgi)', create_btn: 'Klan ochish ({n} coin)',
+      join: "Qo'shilish", full: "To'la", members: "a'zo", list_h: 'Mavjud klanlar', list_empty: "Hozircha klan yo'q — birinchi klanni siz oching!",
+      need: 'Coin yetarli emas (kerak: {n})', name_bad: "Klan nomi 3–16 belgi bo'lsin", name_taken: 'Bunday klan nomi band', created: 'Klan ochildi!', joined: "Klanga qo'shildingiz", left: 'Klandan chiqdingiz',
+      tab_tasks: 'Vazifalar', tab_chat: 'Klan chati', tab_members: "A'zolar", leave: 'Klandan chiqish', leave_q: 'Klandan chiqasizmi?',
+      owner: 'Rahbar', plays: "o'yin", earned: 'coin', score: 'Klan coini', t_plays: "Klan jami {v} ta o'yin o'ynasin", t_earned: "Klan jami {v} coin to'plasin", t_members: "Klanda {v} ta a'zo bo'lsin",
+      err: 'Xatolik: ', renamed: 'Username almashtirildi — barcha ma\'lumotlaringiz saqlandi', taken: 'Bu username band', bad_user: "Username 3–20 belgi: harf, raqam, _ . - bo'lsin", saved: 'Saqlandi', dev_lock: "Dasturchi username'ini o'zgartirib bo'lmaydi"
+    },
+    en: {
+      nav_chal: 'Challenges', nav_clan: 'Clan', nav_chat: 'Chat',
+      login: 'Please log in first', nofb: 'No internet or Firebase connection. Reload the page.', loading: 'Loading…',
+      daily: 'Daily challenges', weekly: 'Weekly challenges', claim: 'Claim', done: 'Claimed', wait: 'In progress', coin: 'coins',
+      c_plays: 'Play games', c_games: 'Different games', c_earned: 'Earn coins', c_chat: 'Send chat messages', c_members: 'Members',
+      claimed_t: '+{n} coins', bal: 'Balance',
+      chat_global: 'Global chat', chat_ph: 'Type a message…', send: 'Send', chat_empty: 'No messages yet. Be the first!', chat_wait: 'Slow down', chat_long: 'Message too long',
+      noclan_h: "You're not in a clan yet", create_h: 'Create a clan', create_p: 'Clan cost: {n} coins', create_name: 'Clan name (3–16 chars)', create_btn: 'Create clan ({n} coins)',
+      join: 'Join', full: 'Full', members: 'members', list_h: 'Available clans', list_empty: 'No clans yet — create the first one!',
+      need: 'Not enough coins (need {n})', name_bad: 'Clan name must be 3–16 characters', name_taken: 'Clan name is taken', created: 'Clan created!', joined: 'You joined the clan', left: 'You left the clan',
+      tab_tasks: 'Tasks', tab_chat: 'Clan chat', tab_members: 'Members', leave: 'Leave clan', leave_q: 'Leave the clan?',
+      owner: 'Leader', plays: 'plays', earned: 'coins', score: 'Clan coins', t_plays: 'Clan plays {v} games in total', t_earned: 'Clan earns {v} coins in total', t_members: 'Clan has {v} members',
+      err: 'Error: ', renamed: 'Username changed — all your data was kept', taken: 'This username is taken', bad_user: 'Username: 3–20 chars, letters, digits, _ . -', saved: 'Saved', dev_lock: 'Developer username cannot be changed'
+    }
+  };
+  try {
+    Object.keys(X).forEach(function (l) {
+      Object.assign(X[l], l === 'uz' ? { nav_chal: TX.uz.nav_chal, nav_clan: TX.uz.nav_clan, nav_chat: TX.uz.nav_chat } :
+        l === 'ru' ? { nav_chal: 'Челленджи', nav_clan: 'Клан', nav_chat: 'Чат' } :
+        { nav_chal: TX.en.nav_chal, nav_clan: TX.en.nav_clan, nav_chat: TX.en.nav_chat });
+    });
+  } catch (e) {}
+  function Q(k, v) {
+    var s = (TX[lang] && TX[lang][k]) || TX.uz[k] || k;
+    if (v) for (var x in v) s = s.split('{' + x + '}').join(v[x]);
+    return s;
+  }
+  function me() { try { return getPlayer() || ''; } catch (e) { return ''; } }
+  function kk(n) { return String(n || '').toLowerCase(); }
+  function sk(n) { return encodeURIComponent(String(n)).replace(/\./g, '%2E'); }
+  function E(s) { return esc(window.ezClean ? window.ezClean(s) : s); }
+  function jget(key, def) { try { var v = JSON.parse(localStorage.getItem(key)); return v == null ? def : v; } catch (e) { return def; } }
+  function jset(key, v) { try { localStorage.setItem(key, JSON.stringify(v)); } catch (e) {} }
+  function FV() { return firebase.firestore.FieldValue; }
+  function ensureFb() {
+    if (!fbDb) { try { if (typeof firebase !== 'undefined') fbInit(FIREBASE_CONFIG); } catch (e) {} }
+    return !!fbDb;
+  }
+  function p2(n) { return (n < 10 ? '0' : '') + n; }
+  function dstr(d) { return d.getFullYear() + '-' + p2(d.getMonth() + 1) + '-' + p2(d.getDate()); }
+  function weekKey() { var d = new Date(); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return dstr(d); }
+  function myPlays() {
+    var n = kk(me()), per = {}, total = 0;
+    GAMES.forEach(function (g) { var s = jget('ezg_' + g + '_' + n, null); per[g] = (s && s.plays) || 0; total += per[g]; });
+    return { total: total, per: per };
+  }
+  function wallet() { return window.ezWallet ? window.ezWallet() : 0; }
+  function refreshChips() { try { if (window.ezRefresh) window.ezRefresh(); } catch (e) {} }
+
+  /* ================= CHELLENJLAR (kunlik / haftalik) ================= */
+  var DAILY = [
+    { id: 'd1', m: 'plays', v: 3, r: 30 }, { id: 'd2', m: 'plays', v: 10, r: 80 }, { id: 'd3', m: 'games', v: 3, r: 60 },
+    { id: 'd4', m: 'earned', v: 200, r: 70 }, { id: 'd5', m: 'chat', v: 1, r: 20 }
+  ];
+  var WEEKLY = [
+    { id: 'w1', m: 'plays', v: 40, r: 300 }, { id: 'w2', m: 'games', v: 5, r: 250 },
+    { id: 'w3', m: 'earned', v: 3000, r: 500 }, { id: 'w4', m: 'chat', v: 10, r: 100 }
+  ];
+  function baseKey(s) { return 'ezbase' + s + '_' + kk(me()); }
+  function getBase(s) {
+    var cur = s === 'd' ? dstr(new Date()) : weekKey(), b = jget(baseKey(s), null);
+    if (!b || b.k !== cur) { b = { k: cur, per: myPlays().per, earned: bestOf(me()) || 0, chat: 0, claimed: [] }; jset(baseKey(s), b); }
+    return b;
+  }
+  function progress(s) {
+    var b = getBase(s), p = myPlays(), pl = 0, gm = 0;
+    GAMES.forEach(function (g) { var d = Math.max(0, p.per[g] - (b.per[g] || 0)); pl += d; if (d > 0) gm++; });
+    return { plays: pl, games: gm, earned: Math.max(0, (bestOf(me()) || 0) - b.earned), chat: b.chat || 0, b: b };
+  }
+  function bumpChat() { ['d', 'w'].forEach(function (s) { var b = getBase(s); b.chat = (b.chat || 0) + 1; jset(baseKey(s), b); }); }
+  window.ezChalClaim = function (s, id) {
+    var list = s === 'd' ? DAILY : WEEKLY, pr = progress(s), c = list.filter(function (x) { return x.id === id; })[0];
+    if (!c || pr.b.claimed.indexOf(id) >= 0 || pr[c.m] < c.v) return;
+    pr.b.claimed.push(id); jset(baseKey(s), pr.b);
+    if (window.ezAddCoins) window.ezAddCoins(me(), c.r);
+    toast(Q('claimed_t', { n: c.r })); refreshChips(); renderChal();
+  };
+  function chalRows(s, list) {
+    var pr = progress(s);
+    return list.map(function (c) {
+      var val = Math.min(pr[c.m], c.v), got = pr.b.claimed.indexOf(c.id) >= 0, ok = pr[c.m] >= c.v;
+      return '<div class="ez-ch"><div class="tx"><b>' + Q('c_' + c.m) + ': ' + c.v + '</b> · +' + c.r + ' ' + Q('coin') +
+        '<div class="bar"><i style="width:' + Math.round(val / c.v * 100) + '%"></i></div></div>' +
+        '<button ' + (ok && !got ? '' : 'disabled') + ' onclick="ezChalClaim(\'' + s + '\',\'' + c.id + '\')">' + (got ? Q('done') : ok ? Q('claim') : Q('wait')) + '</button></div>';
+    }).join('');
+  }
+  function renderChal() {
+    var box = document.getElementById('chal-box'); if (!box) return;
+    if (!me()) { box.innerHTML = '<p>' + Q('login') + '</p>'; return; }
+    box.innerHTML = '<div class="ez-chip" data-ezchip=""></div><h3>' + Q('daily') + '</h3>' + chalRows('d', DAILY) +
+      '<h3 style="margin-top:22px">' + Q('weekly') + '</h3>' + chalRows('w', WEEKLY);
+    refreshChips();
+  }
+
+  /* ================= CHAT (umumiy va klan) ================= */
+  var lastSend = 0;
+  function fmtT(ts) { try { var d = ts && ts.toDate ? ts.toDate() : null; return d ? p2(d.getHours()) + ':' + p2(d.getMinutes()) : ''; } catch (e) { return ''; } }
+  function msgsHtml(arr, colRefGetter) {
+    if (!arr.length) return '<div class="ch-empty">' + Q('chat_empty') + '</div>';
+    var n = kk(me());
+    return arr.map(function (m) {
+      var mine = kk(m.name) === n;
+      return '<div class="ch-msg' + (mine ? ' me' : '') + '"><div class="ch-n">' + E(m.name) + (isDevName(m.name) ? DEV_MINI : '') + '<span class="ch-t">' + fmtT(m.ts) + '</span>' +
+        (isDev() ? '<button class="ch-x" title="O\'chirish" onclick="ezMsgDel(\'' + colRefGetter + '\',\'' + m.id + '\')">✕</button>' : '') + '</div>' + E(m.text) + '</div>';
+    }).join('');
+  }
+  function paintMsgs(boxId, arr, tag) {
+    var box = document.getElementById(boxId); if (!box) return;
+    var near = box.scrollHeight - box.scrollTop - box.clientHeight < 80;
+    box.innerHTML = msgsHtml(arr, tag);
+    if (near || !box.dataset.init) { box.scrollTop = box.scrollHeight; box.dataset.init = '1'; }
+  }
+  function sendTo(colRef, inputId, btnId) {
+    var inp = document.getElementById(inputId); if (!inp) return;
+    var text = (inp.value || '').trim(); if (!text) return;
+    if (text.length > 300) return toast(Q('chat_long'));
+    if (Date.now() - lastSend < 1200) return toast(Q('chat_wait'));
+    var n = me(); if (!n || !ensureFb()) return toast(Q('nofb'));
+    lastSend = Date.now(); inp.value = '';
+    colRef.add({ name: n, text: text, ts: FV().serverTimestamp() }).then(bumpChat).catch(function (e) { toast(Q('err') + e.message); });
+  }
+  window.ezMsgDel = function (tag, id) {
+    if (!isDev() || !fbDb) return;
+    var col = tag === 'g' ? fbDb.collection('chat_global') : (CL.id ? fbDb.collection('clans').doc(CL.id).collection('messages') : null);
+    if (col) col.doc(id).delete().catch(function (e) { toast(Q('err') + e.message); });
+  };
+  function chatUi(boxId, inputId, btnId, sendFn) {
+    return '<div class="ch-box" id="' + boxId + '"></div><div class="ch-form"><input id="' + inputId + '" maxlength="300" placeholder="' + Q('chat_ph') + '" autocomplete="off" onkeydown="if(event.key===\'Enter\'){' + sendFn + '()}">' +
+      '<button id="' + btnId + '" onclick="' + sendFn + '()">' + Q('send') + '</button></div>';
+  }
+  /* umumiy chat */
+  var GC = { un: null, msgs: [], user: null };
+  function snapMsgs(sn) { var a = []; sn.forEach(function (d) { var x = d.data({ serverTimestamps: 'estimate' }); a.push({ id: d.id, name: x.name, text: x.text, ts: x.ts }); }); return a.reverse(); }
+  window.ezGlobalSend = function () { if (ensureFb()) sendTo(fbDb.collection('chat_global'), 'gc-in', 'gc-btn'); };
+  function renderChat() {
+    var box = document.getElementById('chat-box'); if (!box) return;
+    if (!me()) { box.innerHTML = '<p>' + Q('login') + '</p>'; return; }
+    if (!ensureFb()) { box.innerHTML = '<p>' + Q('nofb') + '</p>'; return; }
+    if (!document.getElementById('gc-msgs')) box.innerHTML = '<h3 style="margin-bottom:10px">' + Q('chat_global') + '</h3>' + chatUi('gc-msgs', 'gc-in', 'gc-btn', 'ezGlobalSend');
+    if (!GC.un) {
+      GC.un = fbDb.collection('chat_global').orderBy('ts', 'desc').limit(80).onSnapshot(function (sn) { GC.msgs = snapMsgs(sn); paintMsgs('gc-msgs', GC.msgs, 'g'); }, function (e) { toast(Q('err') + e.message); });
+    } else paintMsgs('gc-msgs', GC.msgs, 'g');
+  }
+  function stopChat() { if (GC.un) { GC.un(); GC.un = null; } }
+
+  /* ================= KLAN ================= */
+  var CL = { ready: false, id: null, data: null, stats: [], tab: 'tasks', user: null, unClan: null, unStats: null, unMsgs: null, msgs: [], shell: null, list: null, hasStat: false, syncing: false };
+  var TASKS = [
+    { id: 'c1', m: 'plays', v: 50, r: 150 }, { id: 'c2', m: 'plays', v: 250, r: 500 },
+    { id: 'c3', m: 'earned', v: 3000, r: 200 }, { id: 'c4', m: 'earned', v: 20000, r: 800 },
+    { id: 'c5', m: 'members', v: 5, r: 300 }, { id: 'c6', m: 'members', v: 15, r: 1000 }
+  ];
+  function clanBaseKey() { return 'ezclanbase_' + kk(me()); }
+  function setClanBase(id) { jset(clanBaseKey(), { id: id || CL.id, plays: myPlays().total, earned: bestOf(me()) || 0 }); }
+  function statRef(id, name) { return fbDb.collection('clans').doc(id || CL.id).collection('stats').doc(sk(name || me())); }
+  function stopClan() {
+    ['unClan', 'unStats', 'unMsgs'].forEach(function (k) { if (CL[k]) { CL[k](); CL[k] = null; } });
+    CL.id = null; CL.data = null; CL.stats = []; CL.msgs = []; CL.shell = null; CL.user = null; CL.ready = false;
+  }
+  function listenClan() {
+    var n = me(); if (!n || !ensureFb()) return;
+    if (CL.user === n && CL.unClan) return;
+    stopClan(); CL.user = n;
+    CL.unClan = fbDb.collection('clans').where('memberNames', 'array-contains', n).limit(1).onSnapshot(function (sn) {
+      var d = sn.docs[0], nid = d ? d.id : null;
+      CL.ready = true; CL.data = d ? Object.assign({ id: d.id }, d.data()) : null;
+      if (nid !== CL.id) { CL.id = nid; resub(); }
+      renderClan();
+    }, function (e) { CL.ready = true; toast(Q('err') + e.message); renderClan(); });
+  }
+  function resub() {
+    ['unStats', 'unMsgs'].forEach(function (k) { if (CL[k]) { CL[k](); CL[k] = null; } });
+    CL.stats = []; CL.msgs = []; CL.hasStat = false; CL.shell = null;
+    if (!CL.id) return;
+    CL.unStats = fbDb.collection('clans').doc(CL.id).collection('stats').onSnapshot(function (sn) {
+      var a = []; sn.forEach(function (d) { var x = d.data(); a.push({ key: d.id, name: x.name || '', plays: x.plays || 0, earned: x.earned || 0, claimed: x.claimed || [] }); });
+      CL.stats = a; CL.hasStat = a.some(function (s) { return s.key === sk(me()); });
+      renderClan(); syncStats();
+    });
+    CL.unMsgs = fbDb.collection('clans').doc(CL.id).collection('messages').orderBy('ts', 'desc').limit(80).onSnapshot(function (sn) {
+      CL.msgs = snapMsgs(sn); if (CL.tab === 'chat') paintMsgs('cl-msgs', CL.msgs, 'c');
+    });
+  }
+  function syncStats() {
+    if (!CL.id || !fbDb || CL.syncing || !me()) return;
+    var p = myPlays().total, e = bestOf(me()) || 0, b = jget(clanBaseKey(), null);
+    if (!b || b.id !== CL.id) { setClanBase(); if (!CL.hasStat) statRef().set({ name: me(), plays: 0, earned: 0 }, { merge: true }); return; }
+    var dp = Math.max(0, p - b.plays), de = Math.max(0, e - b.earned);
+    if (!dp && !de && CL.hasStat) { if (p !== b.plays || e !== b.earned) setClanBase(); return; }
+    CL.syncing = true;
+    statRef().set({ name: me(), plays: FV().increment(dp), earned: FV().increment(de) }, { merge: true })
+      .then(function () { setClanBase(); }).catch(function () {}).then(function () { CL.syncing = false; });
+  }
+  function totals() {
+    var pl = 0, er = 0; CL.stats.forEach(function (s) { pl += s.plays; er += s.earned; });
+    return { plays: pl, earned: er, members: (CL.data && CL.data.memberNames || []).length };
+  }
+  function renderClan() {
+    var box = document.getElementById('clan-box'); if (!box || location.hash !== '#klan') return;
+    if (!me()) { box.innerHTML = '<p>' + Q('login') + '</p>'; return; }
+    if (!ensureFb()) { box.innerHTML = '<p>' + Q('nofb') + '</p>'; return; }
+    listenClan();
+    if (!CL.ready) { box.innerHTML = '<p>' + Q('loading') + '</p>'; return; }
+    if (!CL.data) { CL.shell = null; return renderNoClan(box); }
+    if (CL.shell !== CL.id || !document.getElementById('cl-body')) {
+      CL.shell = CL.id; box.innerHTML = '<div id="cl-head"></div><div class="ez-tabs" id="cl-tabs"></div><div id="cl-body"></div>'; paintBody(true);
+    }
+    paintHead(); paintTabs(); if (CL.tab !== 'chat') paintBody(false);
+  }
+  function renderNoClan(box) {
+    var have = document.getElementById('cl-create-name');
+    if (have && CL.list) return;
+    box.innerHTML = '<h3>' + Q('noclan_h') + '</h3><div class="ez-chip" data-ezchip=""></div>' +
+      '<div class="cl-sec">' + Q('create_h') + '</div><p>' + Q('create_p', { n: CLAN_COST }) + '</p>' +
+      '<div class="cl-form"><input id="cl-create-name" maxlength="16" placeholder="' + Q('create_name') + '"><button onclick="ezClanCreate()">' + Q('create_btn', { n: CLAN_COST }) + '</button></div>' +
+      '<div class="cl-sec">' + Q('list_h') + '</div><div id="cl-list"><p>' + Q('loading') + '</p></div>';
+    refreshChips(); loadList();
+  }
+  function loadList() {
+    fbDb.collection('clans').limit(50).get().then(function (sn) {
+      var a = []; sn.forEach(function (d) { var x = d.data(); a.push({ id: d.id, name: x.name, n: (x.memberNames || []).length }); });
+      CL.list = a;
+      var el = document.getElementById('cl-list'); if (!el) return;
+      el.innerHTML = a.length ? a.sort(function (x, y) { return y.n - x.n; }).map(function (c) {
+        return '<div class="cl-row"><div class="tx"><b>' + E(c.name) + '</b><br><small>' + c.n + '/' + CLAN_MAX + ' ' + Q('members') + '</small></div>' +
+          '<button ' + (c.n >= CLAN_MAX ? 'disabled' : '') + ' onclick="ezClanJoin(\'' + c.id + '\')">' + (c.n >= CLAN_MAX ? Q('full') : Q('join')) + '</button></div>';
+      }).join('') : '<p>' + Q('list_empty') + '</p>';
+    }).catch(function (e) { var el = document.getElementById('cl-list'); if (el) el.innerHTML = '<p>' + Q('err') + E(e.message) + '</p>'; });
+  }
+  window.ezClanCreate = function () {
+    if (!ensureFb() || !me()) return toast(Q('nofb'));
+    var inp = document.getElementById('cl-create-name'), name = (inp.value || '').trim().replace(/\s+/g, ' ');
+    if (!/^[\p{L}\p{N}_ .\-]{3,16}$/u.test(name)) return toast(Q('name_bad'));
+    if (wallet() < CLAN_COST) return toast(Q('need', { n: CLAN_COST }));
+    var nl = kk(name);
+    fbDb.collection('clans').where('nameLower', '==', nl).limit(1).get().then(function (sn) {
+      if (!sn.empty) { toast(Q('name_taken')); return; }
+      return fbDb.collection('clans').add({ name: name, nameLower: nl, owner: me(), memberNames: [me()], createdAt: FV().serverTimestamp() }).then(function (ref) {
+        if (window.ezSpend) window.ezSpend(CLAN_COST);
+        setClanBase(ref.id);
+        statRef(ref.id).set({ name: me(), plays: 0, earned: 0 }, { merge: true });
+        toast(Q('created')); refreshChips();
+      });
+    }).catch(function (e) { toast(Q('err') + e.message); });
+  };
+  window.ezClanJoin = function (id) {
+    if (!ensureFb() || !me() || CL.data) return;
+    fbDb.collection('clans').doc(id).get().then(function (d) {
+      if (!d.exists) return;
+      if ((d.data().memberNames || []).length >= CLAN_MAX) { toast(Q('full')); return; }
+      return d.ref.update({ memberNames: FV().arrayUnion(me()) }).then(function () {
+        setClanBase(id); statRef(id).set({ name: me(), plays: 0, earned: 0 }, { merge: true }); toast(Q('joined'));
+      });
+    }).catch(function (e) { toast(Q('err') + e.message); });
+  };
+  window.ezClanLeave = function () {
+    if (!CL.data || !confirm(Q('leave_q'))) return;
+    var id = CL.id, n = me(), names = (CL.data.memberNames || []).filter(function (x) { return x !== n; }), ref = fbDb.collection('clans').doc(id);
+    var p = names.length ? ref.update({ memberNames: FV().arrayRemove(n), owner: CL.data.owner === n ? names[0] : CL.data.owner }) : ref.delete();
+    p.then(function () { return statRef(id, n).delete().catch(function () {}); }).then(function () { try { localStorage.removeItem(clanBaseKey()); } catch (e) {} CL.list = null; toast(Q('left')); }).catch(function (e) { toast(Q('err') + e.message); });
+  };
+  window.ezClTab = function (t) { CL.tab = t; paintTabs(); paintBody(true); };
+  window.ezClanSend = function () { if (CL.id) sendTo(fbDb.collection('clans').doc(CL.id).collection('messages'), 'cl-in', 'cl-btn'); };
+  window.ezTaskClaim = function (id) {
+    var c = TASKS.filter(function (x) { return x.id === id; })[0], tt = totals(), mine = CL.stats.filter(function (s) { return s.key === sk(me()); })[0];
+    if (!c || tt[c.m] < c.v || (mine && mine.claimed.indexOf(id) >= 0)) return;
+    statRef().set({ name: me(), claimed: FV().arrayUnion(id) }, { merge: true }).then(function () {
+      if (window.ezAddCoins) window.ezAddCoins(me(), c.r); toast(Q('claimed_t', { n: c.r })); refreshChips();
+    }).catch(function (e) { toast(Q('err') + e.message); });
+  };
+  function paintHead() {
+    var h = document.getElementById('cl-head'); if (!h || !CL.data) return;
+    var tt = totals();
+    h.innerHTML = '<div class="cl-head"><h3>' + E(CL.data.name) + '</h3><span class="cl-badge">' + tt.members + '/' + CLAN_MAX + ' ' + Q('members') + '</span>' +
+      '<span class="cl-badge">' + Q('score') + ': ' + tt.earned + '</span></div>';
+  }
+  function paintTabs() {
+    var el = document.getElementById('cl-tabs'); if (!el) return;
+    el.innerHTML = [['tasks', 'tab_tasks'], ['chat', 'tab_chat'], ['members', 'tab_members']].map(function (t) {
+      return '<button class="' + (CL.tab === t[0] ? 'on' : '') + '" onclick="ezClTab(\'' + t[0] + '\')">' + Q(t[1]) + '</button>';
+    }).join('');
+  }
+  function paintBody(force) {
+    var el = document.getElementById('cl-body'); if (!el || !CL.data) return;
+    var tt = totals(), mine = CL.stats.filter(function (s) { return s.key === sk(me()); })[0], claimed = (mine && mine.claimed) || [];
+    if (CL.tab === 'tasks') {
+      el.innerHTML = '<div class="ez-chip" data-ezchip=""></div>' + TASKS.map(function (c) {
+        var val = Math.min(tt[c.m], c.v), ok = tt[c.m] >= c.v, got = claimed.indexOf(c.id) >= 0;
+        return '<div class="ez-ch"><div class="tx"><b>' + Q('t_' + c.m, { v: c.v }) + '</b> · +' + c.r + ' ' + Q('coin') + ' <small>(' + Math.min(tt[c.m], c.v) + '/' + c.v + ')</small>' +
+          '<div class="bar"><i style="width:' + Math.round(val / c.v * 100) + '%"></i></div></div>' +
+          '<button ' + (ok && !got ? '' : 'disabled') + ' onclick="ezTaskClaim(\'' + c.id + '\')">' + (got ? Q('done') : ok ? Q('claim') : Q('wait')) + '</button></div>';
+      }).join('') + '<button class="cl-leave" onclick="ezClanLeave()">' + Q('leave') + '</button>';
+      refreshChips();
+    } else if (CL.tab === 'members') {
+      var st = {}; CL.stats.forEach(function (s) { st[kk(s.name)] = s; });
+      var names = (CL.data.memberNames || []).slice().sort(function (a, b) { return ((st[kk(b)] || {}).earned || 0) - ((st[kk(a)] || {}).earned || 0); });
+      el.innerHTML = names.map(function (n) {
+        var s = st[kk(n)] || { plays: 0, earned: 0 };
+        return '<div class="cl-row"><div class="tx"><b>' + E(n) + '</b>' + (n === CL.data.owner ? ' <span class="cl-badge">' + Q('owner') + '</span>' : '') + (isDevName(n) ? DEV_MINI : '') +
+          '<br><small>' + s.plays + ' ' + Q('plays') + ' · ' + s.earned + ' ' + Q('earned') + '</small></div></div>';
+      }).join('');
+    } else if (force || !document.getElementById('cl-msgs')) {
+      el.innerHTML = chatUi('cl-msgs', 'cl-in', 'cl-btn', 'ezClanSend'); paintMsgs('cl-msgs', CL.msgs, 'c');
+    }
+  }
+
+  /* ================= USERNAME ALMASHTIRISH (akkaunt yo'qolmaydi) ================= */
+  function localKeyPrefixes() {
+    var p = ['ezown_', 'ezsp_', 'ezeq_', 'ezact_', 'ezbased_', 'ezbasew_', 'ezclanbase_'];
+    GAMES.forEach(function (g) { p.push('ezg_' + g + '_', 'ezbd_' + g + '_', 'ezch_' + g + '_'); });
+    return p;
+  }
+  function migrateLocal(oldN, newN) {
+    var ol = kk(oldN), nl = kk(newN), keys = [], i;
+    for (i = 0; i < localStorage.length; i++) keys.push(localStorage.key(i));
+    var pre = localKeyPrefixes();
+    keys.forEach(function (key) {
+      var np = null;
+      pre.forEach(function (p) { if (key === p + ol) np = p + nl; });
+      if (key === 'play_' + oldN) np = 'play_' + newN;
+      if (key === 'premium_' + oldN) np = 'premium_' + newN;
+      if (np && np !== key) { var v = localStorage.getItem(key); if (localStorage.getItem(np) == null) localStorage.setItem(np, v); localStorage.removeItem(key); }
+    });
+    var same = function (x) { return kk(x && x.name) === ol; };
+    var r = loadRating(); r.forEach(function (x) { if (same(x)) x.name = newN; });
+    try { localStorage.setItem('eziplay-rating', JSON.stringify(r)); } catch (e) {}
+    GAMES.forEach(function (g) { var l = jget('ezlb_' + g, []); l.forEach(function (x) { if (same(x)) x.name = newN; }); jset('ezlb_' + g, l); });
+    var a = getAccounts(); a.forEach(function (x) { if (kk(x.username) === ol) x.username = newN; }); setAccounts(a);
+    try { var s = JSON.parse(localStorage.getItem('session') || 'null'); if (s) { s.name = newN; localStorage.setItem('session', JSON.stringify(s)); } } catch (e) {}
+    var prof = readProfile(); prof.username = newN; try { localStorage.setItem('profile', JSON.stringify(prof)); } catch (e) {}
+    playerName = newN;
+  }
+  function moveDoc(col, oldId, newId, field, newN) {
+    var ref = fbDb.collection(col).doc(oldId);
+    return ref.get().then(function (d) {
+      if (!d.exists) return;
+      var x = d.data(); x[field] = newN;
+      var b = fbDb.batch(); b.set(fbDb.collection(col).doc(newId), x); b.delete(ref); return b.commit();
+    });
+  }
+  function migrateRemote(oldN, newN) {
+    if (!ensureFb()) return Promise.resolve();
+    var jobs = [moveDoc('ratings', String(oldN), String(newN), 'name', newN), moveDoc('accounts', String(oldN), String(newN), 'username', newN)];
+    GAMES.forEach(function (g) { jobs.push(moveDoc('lb_' + g, String(oldN), String(newN), 'name', newN)); });
+    jobs.push(fbDb.collection('clans').where('memberNames', 'array-contains', oldN).get().then(function (sn) {
+      return Promise.all(sn.docs.map(function (d) {
+        var isOwner = d.data().owner === oldN;
+        return d.ref.update({ memberNames: FV().arrayRemove(oldN) }).then(function () {
+          var u = { memberNames: FV().arrayUnion(newN) }; if (isOwner) u.owner = newN; return d.ref.update(u);
+        }).then(function () {
+          var o = d.ref.collection('stats').doc(sk(oldN));
+          return o.get().then(function (s) {
+            if (!s.exists) return; var x = s.data(); x.name = newN;
+            var b = fbDb.batch(); b.set(d.ref.collection('stats').doc(sk(newN)), x); b.delete(o); return b.commit();
+          });
+        });
+      }));
+    }));
+    return Promise.all(jobs);
+  }
+  function checkFree(newN, oldN) {
+    var nl = kk(newN), ol = kk(oldN);
+    if (nl !== ol) {
+      var taken = getAccounts().some(function (a) { return kk(a.username) === nl; }) || loadRating().some(function (r) { return kk(r.name) === nl; });
+      if (taken) return Promise.reject(new Error('taken'));
+    }
+    if (!ensureFb() || nl === ol) return Promise.resolve();
+    return Promise.all([fbDb.collection('accounts').doc(newN).get(), fbDb.collection('ratings').doc(newN).get()]).then(function (r) {
+      if (r[0].exists || r[1].exists) throw new Error('taken');
+    });
+  }
+  window.ezRenameUser = function (oldN, newN) {
+    var ol = kk(oldN), nl = kk(newN);
+    return checkFree(newN, oldN).then(function () {
+      window.__ezGone = window.__ezGone || new Set();
+      if (ol !== nl) window.__ezGone.add(ol);
+      migrateLocal(oldN, newN);
+      return migrateRemote(oldN, newN);
+    }).then(function () {
+      setTimeout(function () { if (window.__ezGone) window.__ezGone.delete(ol); }, 60000);
+      stopClan(); stopChat();
+    });
+  };
+  window.saveProfile = function () {
+    var inp = document.getElementById('pusername'), nu = ((inp && inp.value) || '').trim(), cur = me();
+    try { saveProfileField(); } catch (e) {}
+    if (!nu || nu === cur) { toast(t('t_saved')); return; }
+    if (isDev()) { toast(Q('dev_lock')); if (inp) inp.value = cur; return; }
+    if (!/^[\p{L}\p{N}_.\-]{3,20}$/u.test(nu)) { toast(Q('bad_user')); if (inp) inp.value = cur; return; }
+    window.ezRenameUser(cur, nu).then(function () {
+      toast(Q('renamed'));
+      try { loadProfile(); renderRating(); refreshChips(); renderChal(); } catch (e) {}
+    }).catch(function (e) {
+      if (inp) inp.value = cur;
+      toast(e && e.message === 'taken' ? Q('taken') : Q('err') + (e && e.message));
+    });
+  };
+
+  /* ================= Yo'naltirish ================= */
+  function route() {
+    var h = location.hash;
+    if (h !== '#chat') stopChat();
+    if (!loggedIn) return;
+    if (h === '#chat') renderChat();
+    else if (h === '#klan') { renderClan(); }
+    else if (h === '#chellenj') renderChal();
+  }
+  window.addEventListener('hashchange', route);
+  setInterval(function () { try { if (CL.id) syncStats(); if (location.hash === '#chellenj') renderChal(); } catch (e) {} }, 15000);
+  try { applyI18n(); renderMnav(); renderMnavOpts(); } catch (e) {}
+  route();
 })();
 </script>
 
