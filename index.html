@@ -4573,126 +4573,164 @@ function eziFbLogin(acc, p) {
 </script>
 
 <style>
-/* ===== EZI PACK v3 ===== */
-#bj-area, #dn-area { position: relative; border-radius: 24px; }
-#bj-board { gap: 6px !important; padding: 12px; border-radius: 18px; background: rgba(0,0,0,.08); box-shadow: inset 0 2px 10px rgba(0,0,0,.15); }
-.bj-c { border-radius: 8px !important; transition: transform .12s, filter .12s; }
-.bj-c:active { transform: scale(.9); }
-.bj-p { border-radius: 14px !important; box-shadow: 0 6px 16px rgba(0,0,0,.12); transition: transform .18s, box-shadow .18s; }
-.bj-p.sel { transform: translateY(-6px) scale(1.05); box-shadow: 0 14px 26px rgba(0,0,0,.22); }
-#dn-canvas { max-width: 100%; height: auto; border-radius: 16px; box-shadow: 0 10px 26px rgba(0,0,0,.15); }
-.ez-fs { float: right; margin: 0 0 10px 10px; padding: 9px 16px; border: none; border-radius: 12px; background: var(--accent); color: #fff; font: inherit; font-weight: 700; cursor: pointer; box-shadow: 0 6px 16px rgba(0,0,0,.18); }
-.ez-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: var(--white); font-weight: 800; box-shadow: 0 4px 12px rgba(0,0,0,.1); margin: 0 0 14px; }
-.ez-chip::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #fff7b0, #f5b400 60%, #b07800); }
-.ez-medals { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 14px; margin-top: 14px; }
-.ez-b { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; padding: 14px 10px; border-radius: 16px; background: var(--white); transition: transform .2s; }
-.ez-b:hover { transform: translateY(-3px); }
-.ez-b .m { width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 900; font-size: 20px; box-shadow: 0 8px 18px rgba(0,0,0,.25), inset 0 0 0 3px rgba(255,255,255,.35); text-shadow: 0 2px 4px rgba(0,0,0,.4); }
-.ez-b.lock { filter: grayscale(1); opacity: .45; }
-.ez-b small { opacity: .75; font-size: 12px; }
-.ez-gt { margin: 18px 0 4px; font-weight: 800; font-size: 1.05rem; }
-.ez-shop { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; margin-top: 14px; }
-.ez-sh { border-radius: 18px; padding: 14px; color: #fff; min-height: 150px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 8px 20px rgba(0,0,0,.2); }
-.ez-sh b { font-size: 1.1rem; text-shadow: 0 2px 6px rgba(0,0,0,.35); }
-.ez-sh span { font-size: .9rem; opacity: .95; }
-.ez-sh button { margin-top: 10px; padding: 9px; border: none; border-radius: 12px; background: rgba(255,255,255,.92); color: #222; font: inherit; font-weight: 800; cursor: pointer; }
-.ez-sh.act { outline: 3px solid #fff; outline-offset: -6px; }
-.ez-sub { margin: 22px 0 4px; font-weight: 800; }
-.ez-pick { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-.ez-pick button { padding: 9px 14px; border-radius: 12px; border: 2px solid var(--peach-2); background: var(--white); color: var(--text); font: inherit; font-weight: 700; cursor: pointer; }
-.ez-pick button.on { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent) inset; }
-.ez-pbs i { display: inline-grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; color: #fff; font: 700 9px/1 system-ui; margin-left: 3px; vertical-align: middle; }
-.ez-tt { font-size: 12px; opacity: .8; font-weight: 600; }
-#bj-area:fullscreen, #dn-area:fullscreen, #bj-area.ez-fake, #dn-area.ez-fake { background: var(--card); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow: auto; border-radius: 0; }
-#bj-area.ez-fake, #dn-area.ez-fake { position: fixed; inset: 0; z-index: 999; }
-#dn-area:fullscreen #dn-canvas, #dn-area.ez-fake #dn-canvas { width: min(96vw, calc(88vh * 600 / 160)); height: auto; }
-#bj-area:fullscreen #bj-board, #bj-area.ez-fake #bj-board { width: min(92vmin, 640px) !important; height: min(92vmin, 640px) !important; }
-
-/* Mavzular: ikki rangli, harakatli fon */
-@keyframes ezbg { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
-body[data-shop] { background-size: 250% 250% !important; animation: ezbg 16s ease-in-out infinite !important; }
-body[data-shop="galaxy"]{--bg:linear-gradient(120deg,#4c1d95,#0b0320,#7c3aed,#0b0320)!important;--peach:#1e1140!important;--peach-2:#2c1a5c!important;--peach-dark:#a855f7!important;--text:#f5f0ff!important;--card:#2a1a52!important;--white:#3b2470!important;--accent:#c084fc!important;--head:#f5f0ff!important}
-body[data-shop="neon"]{--bg:linear-gradient(120deg,#050510,#0f0f2a,#050510)!important;--peach:#0b0b1a!important;--peach-2:#15152e!important;--peach-dark:#00f5d4!important;--text:#e6fffb!important;--card:#12122a!important;--white:#1b1b3a!important;--accent:#00f5d4!important;--head:#00f5d4!important}
-body[data-shop="forest"]{--bg:linear-gradient(160deg,#0d2b1f,#06140e,#17402b)!important;--peach:#10301f!important;--peach-2:#17402b!important;--peach-dark:#6ee7b7!important;--text:#e8fff4!important;--card:#134030!important;--white:#1a5438!important;--accent:#34d399!important;--head:#e8fff4!important}
-body[data-shop="lava"]{--bg:linear-gradient(160deg,#3b0a04,#140202,#5a1a06)!important;--peach:#2a0b05!important;--peach-2:#4a1408!important;--peach-dark:#ff6b35!important;--text:#ffe9de!important;--card:#3d1208!important;--white:#55190b!important;--accent:#ff6b35!important;--head:#ffe9de!important}
-body[data-shop="candy"]{--bg:linear-gradient(135deg,#ffd6ec,#d6f0ff,#ffd6ec)!important;--peach:#ffe3f2!important;--peach-2:#ffc2e2!important;--peach-dark:#ff6fb5!important;--text:#5a1a40!important;--card:#fff0f8!important;--white:#ffffff!important;--accent:#ff5fa8!important;--head:#5a1a40!important}
-body[data-shop="arctic"]{--bg:linear-gradient(160deg,#e0f2ff,#ffffff,#c9e8fa)!important;--peach:#e8f6ff!important;--peach-2:#c9e8fa!important;--peach-dark:#4fa3d9!important;--text:#163a57!important;--card:#f5fbff!important;--white:#ffffff!important;--accent:#2b8fd6!important;--head:#163a57!important}
-body[data-shop="gold"]{--bg:linear-gradient(120deg,#3a2a05,#120d02,#4a3606)!important;--peach:#1d1505!important;--peach-2:#33260a!important;--peach-dark:#fbbf24!important;--text:#fff6d6!important;--card:#2a1f08!important;--white:#3d2d0c!important;--accent:#fbbf24!important;--head:#fff6d6!important}
-body[data-shop="sakura"]{--bg:linear-gradient(160deg,#ffe4ef,#fff5fa,#ffd1e4)!important;--peach:#ffeef5!important;--peach-2:#ffd1e4!important;--peach-dark:#f472b6!important;--text:#6b2146!important;--card:#ffffff!important;--white:#fff7fb!important;--accent:#ec4899!important;--head:#6b2146!important}
-body[data-shop="aurora"]{--bg:linear-gradient(135deg,#0f766e,#4c1d95,#1e1b4b,#0f766e)!important;--peach:#0b2e3a!important;--peach-2:#134e4a!important;--peach-dark:#5eead4!important;--text:#ecfeff!important;--card:#0f3d44!important;--white:#155e63!important;--accent:#5eead4!important;--head:#ecfeff!important}
-body[data-shop="cyber"]{--bg:linear-gradient(135deg,#0a0a0a,#1a1400,#0a0a0a)!important;--peach:#0d0d0d!important;--peach-2:#1f1a00!important;--peach-dark:#facc15!important;--text:#fef9c3!important;--card:#161200!important;--white:#1f1a00!important;--accent:#facc15!important;--head:#fef9c3!important}
-body[data-shop="nebula"]{--bg:linear-gradient(120deg,#1e003f,#00e5ff,#ff00aa,#1e003f)!important;--peach:#14002b!important;--peach-2:#240048!important;--peach-dark:#ff00aa!important;--text:#fbe8ff!important;--card:#2a0a4a!important;--white:#3a0f63!important;--accent:#00e5ff!important;--head:#fbe8ff!important}
-body[data-shop="prizma"]{--bg:linear-gradient(120deg,#ff6ec7,#7afcff,#fff27a,#b388ff,#ff6ec7)!important;--peach:#fff0fa!important;--peach-2:#e6f7ff!important;--peach-dark:#b388ff!important;--text:#2e1a47!important;--card:#ffffff!important;--white:#ffffff!important;--accent:#ff6ec7!important;--head:#2e1a47!important}
-
-/* Profil ramkalari */
-body[data-frame="gold"] #profil .avatar { box-shadow: 0 0 0 4px #fbbf24, 0 0 18px #fbbf24; }
-body[data-frame="neon"] #profil .avatar { box-shadow: 0 0 0 4px #00f5d4, 0 0 22px #00f5d4; }
-body[data-frame="rainbow"] #profil .avatar { box-shadow: 0 0 0 4px #f43f5e, 0 0 0 7px #facc15, 0 0 0 10px #22c55e, 0 0 0 13px #3b82f6; animation: ezhue 6s linear infinite; }
-body[data-frame="fire"] #profil .avatar { box-shadow: 0 0 0 4px #ff4500, 0 0 22px #ff8c00, 0 0 40px #ff3d00; }
-body[data-frame="ice"] #profil .avatar { box-shadow: 0 0 0 4px #bae6fd, 0 0 20px #7dd3fc; }
-@keyframes ezhue { to { filter: hue-rotate(360deg); } }
-.rank-row.ez-fr-gold { box-shadow: inset 4px 0 0 #fbbf24; }
-.rank-row.ez-fr-neon { box-shadow: inset 4px 0 0 #00f5d4, 0 0 14px rgba(0,245,212,.35); }
-.rank-row.ez-fr-rainbow { box-shadow: inset 4px 0 0 #f43f5e, inset 8px 0 0 #facc15, inset 12px 0 0 #22c55e; }
-.rank-row.ez-fr-fire { box-shadow: inset 4px 0 0 #ff4500, 0 0 14px rgba(255,69,0,.35); }
-.rank-row.ez-fr-ice { box-shadow: inset 4px 0 0 #7dd3fc; }
+/* ===== EZI v4 ===== */
+#bj-area,#dn-area{position:relative;border-radius:24px}
+#bj-board{gap:6px!important;padding:12px;border-radius:18px;background:rgba(0,0,0,.08);box-shadow:inset 0 2px 10px rgba(0,0,0,.15)}
+.bj-c{border-radius:8px!important;transition:transform .12s}
+.bj-c:active{transform:scale(.9)}
+.bj-p{border-radius:14px!important;box-shadow:0 6px 16px rgba(0,0,0,.12);transition:transform .18s,box-shadow .18s}
+.bj-p.sel{transform:translateY(-6px) scale(1.05);box-shadow:0 14px 26px rgba(0,0,0,.22)}
+#dn-canvas{max-width:100%;height:auto;border-radius:16px;box-shadow:0 10px 26px rgba(0,0,0,.15)}
+.ez-fs{float:right;margin:0 0 10px 10px;padding:9px 16px;border:none;border-radius:12px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.ez-chip{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border-radius:999px;background:var(--white);font-weight:800;box-shadow:0 4px 12px rgba(0,0,0,.1);margin:0 0 14px}
+.ez-chip::before{content:"";width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff7b0,#f5b400 60%,#b07800)}
+.ez-medals{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:14px;margin-top:14px}
+.ez-b{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:14px 10px;border-radius:16px;background:var(--white)}
+.ez-b .m{width:62px;height:62px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;font-size:20px;box-shadow:0 8px 18px rgba(0,0,0,.25),inset 0 0 0 3px rgba(255,255,255,.35);text-shadow:0 2px 4px rgba(0,0,0,.4)}
+.ez-b.lock{filter:grayscale(1);opacity:.45}
+.ez-b small{opacity:.75;font-size:12px}
+.ez-gt{margin:18px 0 4px;font-weight:800;font-size:1.05rem}
+.ez-shop{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-top:14px}
+.ez-sh{border-radius:18px;padding:14px;color:#fff;min-height:150px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+.ez-sh b{font-size:1.1rem;text-shadow:0 2px 6px rgba(0,0,0,.35)}
+.ez-sh span{font-size:.9rem;opacity:.95}
+.ez-sh button{margin-top:10px;padding:9px;border:none;border-radius:12px;background:rgba(255,255,255,.92);color:#222;font:inherit;font-weight:800;cursor:pointer}
+.ez-sh.act{outline:3px solid #fff;outline-offset:-6px}
+.ez-sub{margin:22px 0 4px;font-weight:800}
+.ez-pick{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+.ez-pick button{padding:9px 14px;border-radius:12px;border:2px solid var(--peach-2);background:var(--white);color:var(--text);font:inherit;font-weight:700;cursor:pointer}
+.ez-pick button.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.ez-ch{display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;background:var(--white);margin-top:10px}
+.ez-ch .tx{flex:1;min-width:0}
+.ez-ch .bar{height:8px;border-radius:6px;background:var(--peach-2);margin-top:6px;overflow:hidden}
+.ez-ch .bar i{display:block;height:100%;background:var(--accent)}
+.ez-ch button{padding:8px 12px;border:none;border-radius:10px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.ez-ch button:disabled{opacity:.5}
+/* reyting */
+.ez-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.ez-tabs button{padding:8px 14px;border-radius:999px;border:2px solid var(--peach-2);background:var(--white);color:var(--text);font:inherit;font-weight:700;cursor:pointer}
+.ez-tabs button.on{border-color:var(--accent);background:var(--accent);color:#fff}
+.rank-row{padding:10px 8px!important;gap:12px!important}
+.rank-row .rk{width:44px;flex-shrink:0;text-align:center;font-weight:800;display:flex;justify-content:center;align-items:center}
+.rank-row .rk svg{width:28px;height:28px}
+.rank-row .nm{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.rank-row .sc{flex-shrink:0;font-weight:800}
+.rank-row .ez-av{flex-shrink:0;width:36px;height:36px;border-radius:50%;overflow:hidden;display:inline-grid;place-items:center;background:var(--peach-2);font-weight:800}
+.rank-row .ez-av img{width:100%;height:100%;object-fit:cover}
+.ez-av.fr-gold{box-shadow:0 0 0 2px #fbbf24}
+.ez-av.fr-neon{box-shadow:0 0 0 2px #00f5d4,0 0 10px #00f5d4}
+.ez-av.fr-rainbow{box-shadow:0 0 0 2px #f43f5e,0 0 0 4px #facc15,0 0 0 6px #22c55e}
+.ez-av.fr-fire{box-shadow:0 0 0 2px #ff4500,0 0 12px #ff8c00}
+.ez-av.fr-ice{box-shadow:0 0 0 2px #bae6fd,0 0 10px #7dd3fc}
+.ez-tt{font-size:12px;opacity:.8;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ez-pbs{display:inline-flex;gap:3px;flex-shrink:0}
+.ez-pbs i{display:inline-grid;place-items:center;width:20px;height:20px;border-radius:50%;color:#fff;font:700 9px/1 system-ui}
+.rank-row.me{background:var(--white);border-radius:10px}
+/* profil ramkasi */
+body[data-frame="gold"] #profil .ez-big{box-shadow:0 0 0 4px #fbbf24,0 0 18px #fbbf24}
+body[data-frame="neon"] #profil .ez-big{box-shadow:0 0 0 4px #00f5d4,0 0 22px #00f5d4}
+body[data-frame="rainbow"] #profil .ez-big{box-shadow:0 0 0 4px #f43f5e,0 0 0 7px #facc15,0 0 0 10px #22c55e}
+body[data-frame="fire"] #profil .ez-big{box-shadow:0 0 0 4px #ff4500,0 0 22px #ff8c00}
+body[data-frame="ice"] #profil .ez-big{box-shadow:0 0 0 4px #bae6fd,0 0 20px #7dd3fc}
+.ez-big{width:110px;height:110px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:var(--peach-2);margin:6px 0 14px;font-size:38px;font-weight:800}
+.ez-big img{width:100%;height:100%;object-fit:cover}
+/* tugma bezaklari */
+body[data-btn="0"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button){background:linear-gradient(135deg,#f97316,#ec4899)!important;color:#fff!important}
+body[data-btn="1"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button){box-shadow:0 0 18px var(--accent)!important}
+body[data-btn="2"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button){background:transparent!important;color:var(--accent)!important;border:2px solid var(--accent)!important}
+body[data-btn="3"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button){background:#000!important;color:#0ff!important;box-shadow:0 0 12px #0ff,inset 0 0 8px #0ff!important}
+body[data-btn="4"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button){background:rgba(255,255,255,.2)!important;backdrop-filter:blur(8px);color:#fff!important;border:1px solid rgba(255,255,255,.4)!important}
+body[data-btn="5"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button){border-radius:999px!important;padding-left:28px!important;padding-right:28px!important}
+body[data-btn="6"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button){box-shadow:0 6px 0 rgba(0,0,0,.35),0 8px 14px rgba(0,0,0,.3)!important}
+body[data-btn="7"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button){background:linear-gradient(90deg,#f43f5e,#facc15,#22c55e,#3b82f6,#a855f7,#f43f5e)!important;background-size:300% 100%!important;animation:ezbg 3s linear infinite!important;color:#fff!important}
+body[data-btn="8"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button){background-image:linear-gradient(110deg,var(--accent) 40%,#fff 50%,var(--accent) 60%)!important;background-size:250% 100%!important;animation:ezbg 2.2s linear infinite!important}
+body[data-btn="9"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button){border-radius:0!important;border:2px solid #000!important;box-shadow:4px 4px 0 #000!important}
+body[data-btn="10"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button){border-radius:22px!important;box-shadow:0 10px 30px -8px var(--accent)!important}
+body[data-btn="11"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button){animation:ezpulse 1.6s ease-in-out infinite!important}
+@keyframes ezpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+/* animatsiyalar */
+@keyframes ezbg{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes eFadeDown{from{opacity:0;transform:translateY(-22px)}to{opacity:1;transform:none}}
+@keyframes eSlideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+@keyframes eZoom{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@keyframes eBounce{0%{transform:translateY(-30px);opacity:0}60%{transform:translateY(8px);opacity:1}100%{transform:none}}
+@keyframes eWobble{0%,100%{transform:rotate(0)}25%{transform:rotate(-2deg)}75%{transform:rotate(2deg)}}
+@keyframes eSpin{from{transform:rotate(-180deg) scale(.4);opacity:0}to{transform:none;opacity:1}}
+@keyframes eGlow{0%,100%{box-shadow:0 0 0 rgba(255,255,255,0)}50%{box-shadow:0 0 22px var(--accent)}}
+@keyframes eFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes eShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+@keyframes eSlideL{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:none}}
+@keyframes eBlur{from{opacity:0;filter:blur(10px)}to{opacity:1;filter:none}}
+@keyframes eFlip{from{opacity:0;transform:perspective(600px) rotateX(-80deg)}to{opacity:1;transform:none}}
+body[data-anim="0"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eFadeDown .6s both}
+body[data-anim="1"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eSlideUp .6s both}
+body[data-anim="2"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eZoom .5s both}
+body[data-anim="3"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eBounce .7s both}
+body[data-anim="4"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eWobble 3s ease-in-out infinite}
+body[data-anim="5"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eSpin .7s both}
+body[data-anim="6"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eGlow 2.4s ease-in-out infinite}
+body[data-anim="7"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eFloat 3s ease-in-out infinite}
+body[data-anim="8"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eShake .5s both}
+body[data-anim="9"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eSlideL .6s both}
+body[data-anim="10"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eBlur .8s both}
+body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eFlip .7s both}
 </style>
 <script>
 (function () {
   var TX = {
-    uz: { shop: 'Do\'kon', buy: 'Sotib olish', equip: 'Qo\'llash', applied: 'qo\'llandi', active: '✓ Faol', bought: 'Sotib olingan', bal: 'Balans', coin: 'coin', need: 'Coin yetarli emas', login: 'Avval kiring', fs: '⛶ Tuliq ekran', nish: 'Nishonlar', sub_th: 'Mavzular', sub_fr: 'Profil ramkalari', sub_pb: 'Profil nishonlari', sub_ti: 'Titullar', pb_max: 'Eng ko\'pi 3 ta', none: 'Yo\'q', got: 'olindi', u_blk: 'ta blok', u_ball: 'ball', u_row: 'ta qator', u_play: 'marta', std: 'Standart', std_sub: 'Asosiy mavzu', prof_t: 'Titul tanlang', prof_f: 'Ramka tanlang', prof_b: 'Profil nishonlari (3 tagacha)', title_pick: 'Titul', dev_title: 'Coin, nishon, titul va mavzu', dev_name: 'Foydalanuvchi nomi (bo\'sh bo\'lsa — o\'zingiz)', dev_amt: 'Coin miqdori', dev_give: 'Coin qo\'shish', dev_bd: 'Nishon', dev_bdb: 'Nishon berish', dev_th: 'Mavzu / ramka', dev_thb: 'Ochish', dev_ok: 'bajarildi', dev_noname: 'Nom kiriting', shop_note: 'Mavzu, ramka va profil nishonlarini coin bilan sotib oling.', badge_note: 'Har bir o\'yinning o\'z nishonlari va titullari bor.' },
-    en: { shop: 'Shop', buy: 'Buy', equip: 'Use', applied: 'applied', active: '✓ Active', bought: 'Owned', bal: 'Balance', coin: 'coins', need: 'Not enough coins', login: 'Log in first', fs: '⛶ Fullscreen', nish: 'Badges', sub_th: 'Themes', sub_fr: 'Profile frames', sub_pb: 'Profile badges', sub_ti: 'Titles', pb_max: 'Up to 3', none: 'None', got: 'unlocked', u_blk: 'blocks', u_ball: 'points', u_row: 'rows', u_play: 'plays', std: 'Default', std_sub: 'Main theme', prof_t: 'Pick a title', prof_f: 'Pick a frame', prof_b: 'Profile badges (up to 3)', title_pick: 'Title', dev_title: 'Coins, badges, titles and themes', dev_name: 'Username (empty = yourself)', dev_amt: 'Coin amount', dev_give: 'Add coins', dev_bd: 'Badge', dev_bdb: 'Give badge', dev_th: 'Theme / frame', dev_thb: 'Unlock', dev_ok: 'done', dev_noname: 'Enter a name', shop_note: 'Buy themes, frames and profile badges with coins.', badge_note: 'Each game has its own badges and titles.' },
-    ru: { shop: 'Магазин', buy: 'Купить', equip: 'Применить', applied: 'применено', active: '✓ Активно', bought: 'Куплено', bal: 'Баланс', coin: 'монет', need: 'Недостаточно монет', login: 'Сначала войдите', fs: '⛶ Полный экран', nish: 'Значки', sub_th: 'Темы', sub_fr: 'Рамки профиля', sub_pb: 'Значки профиля', sub_ti: 'Титулы', pb_max: 'До 3', none: 'Нет', got: 'получено', u_blk: 'блоков', u_ball: 'очков', u_row: 'рядов', u_play: 'раз', std: 'Стандарт', std_sub: 'Основная тема', prof_t: 'Выберите титул', prof_f: 'Выберите рамку', prof_b: 'Значки профиля (до 3)', title_pick: 'Титул', dev_title: 'Монеты, значки, титулы и темы', dev_name: 'Имя пользователя (пусто = вы)', dev_amt: 'Количество монет', dev_give: 'Добавить монеты', dev_bd: 'Значок', dev_bdb: 'Выдать значок', dev_th: 'Тема / рамка', dev_thb: 'Открыть', dev_ok: 'готово', dev_noname: 'Введите имя', shop_note: 'Покупайте темы, рамки и значки профиля за монеты.', badge_note: 'У каждой игры свои значки и титулы.' }
+    uz: { shop: 'Do\'kon', buy: 'Sotib olish', use: 'Qo\'llash', on: '✓ Faol', bought: 'Sotib olingan', bal: 'Balans', coin: 'coin', need: 'Coin yetarli emas', login: 'Avval kiring', fs: '⛶ Tuliq ekran', nish: 'Nishonlar', sub_th: 'Mavzular (12 ta)', sub_fr: 'Profil ramkalari', sub_pb: 'Profil nishonlari', sub_bt: 'Tugma bezaklari', sub_an: 'Animatsiyalar', pb_max: 'Eng ko\'pi 3 ta', none: 'Yo\'q', got: 'olindi', u_blk: 'ta blok', u_ball: 'ball', u_row: 'ta qator', u_play: 'marta', std: 'Standart', std_sub: 'Asosiy mavzu', prof_t: 'Titul', prof_f: 'Ramka', prof_b: 'Profil nishonlari (3 tagacha)', prof_bt: 'Tugma bezagi', prof_an: 'Animatsiya', dev_title: 'Dasturchi: coin, buyum, nishon', dev_name: 'Foydalanuvchi nomi (bo\'sh = o\'zingiz)', dev_amt: 'Coin miqdori', dev_give: 'Coin qo\'shish', dev_it: 'Buyum', dev_itb: 'Buyumni berish', dev_bd: 'Nishon', dev_bdb: 'Nishon berish', dev_ok: 'bajarildi', dev_noname: 'Nom kiriting', shop_note: 'Mavzu, ramka, nishon, tugma bezagi va animatsiyalarni coin bilan sotib oling.', badge_note: 'Har bir o\'yinning o\'z nishonlari, titullari va chellenjlari bor.', rec: 'Rekord', rate_all: 'Umumiy', claim: 'Olish', done: 'Olindi', ch_pl: 'Marta o\'ynang', ch_bs: 'Rekord', tab_all: 'Umumiy reyting', lb_empty: 'Hali natija yo\'q', rank: 'O\'rin', chal_h: 'Chellenjlar', ch_wait: 'Bajarilmagan', title_pick: 'Titul tanlang', sets: 'Sozlamalar' },
+    en: { shop: 'Shop', buy: 'Buy', use: 'Use', on: '✓ Active', bought: 'Owned', bal: 'Balance', coin: 'coins', need: 'Not enough coins', login: 'Log in first', fs: '⛶ Fullscreen', nish: 'Badges', sub_th: 'Themes (12)', sub_fr: 'Profile frames', sub_pb: 'Profile badges', sub_bt: 'Button styles', sub_an: 'Animations', pb_max: 'Up to 3', none: 'None', got: 'unlocked', u_blk: 'blocks', u_ball: 'points', u_row: 'rows', u_play: 'plays', std: 'Default', std_sub: 'Main theme', prof_t: 'Title', prof_f: 'Frame', prof_b: 'Profile badges (up to 3)', prof_bt: 'Button style', prof_an: 'Animation', dev_title: 'Developer: coins, items, badges', dev_name: 'Username (empty = yourself)', dev_amt: 'Coin amount', dev_give: 'Add coins', dev_it: 'Item', dev_itb: 'Give item', dev_bd: 'Badge', dev_bdb: 'Give badge', dev_ok: 'done', dev_noname: 'Enter a name', shop_note: 'Buy themes, frames, badges, button styles and animations with coins.', badge_note: 'Each game has its own badges, titles and challenges.', rec: 'Record', rate_all: 'Overall', claim: 'Claim', done: 'Claimed', ch_pl: 'Play times', ch_bs: 'Record', tab_all: 'Overall leaderboard', lb_empty: 'No results yet', rank: 'Rank', chal_h: 'Challenges', ch_wait: 'Not done', title_pick: 'Pick a title', sets: 'Settings' },
+    ru: { shop: 'Магазин', buy: 'Купить', use: 'Применить', on: '✓ Активно', bought: 'Куплено', bal: 'Баланс', coin: 'монет', need: 'Недостаточно монет', login: 'Сначала войдите', fs: '⛶ Полный экран', nish: 'Значки', sub_th: 'Темы (12)', sub_fr: 'Рамки профиля', sub_pb: 'Значки профиля', sub_bt: 'Стили кнопок', sub_an: 'Анимации', pb_max: 'До 3', none: 'Нет', got: 'получено', u_blk: 'блоков', u_ball: 'очков', u_row: 'рядов', u_play: 'раз', std: 'Стандарт', std_sub: 'Основная тема', prof_t: 'Титул', prof_f: 'Рамка', prof_b: 'Значки профиля (до 3)', prof_bt: 'Стиль кнопок', prof_an: 'Анимация', dev_title: 'Разработчик: монеты, предметы, значки', dev_name: 'Имя (пусто = вы)', dev_amt: 'Количество монет', dev_give: 'Добавить монеты', dev_it: 'Предмет', dev_itb: 'Выдать предмет', dev_bd: 'Значок', dev_bdb: 'Выдать значок', dev_ok: 'готово', dev_noname: 'Введите имя', shop_note: 'Покупайте темы, рамки, значки, стили кнопок и анимации за монеты.', badge_note: 'У каждой игры свои значки, титулы и челленджи.', rec: 'Рекорд', rate_all: 'Общий', claim: 'Забрать', done: 'Получено', ch_pl: 'Сыграйте раз', ch_bs: 'Рекорд', tab_all: 'Общий рейтинг', lb_empty: 'Результатов пока нет', rank: 'Место', chal_h: 'Челленджи', ch_wait: 'Не выполнено', title_pick: 'Выберите титул', sets: 'Настройки' }
   };
-  var NM = {
-    uz: ['Birinchi qadam', 'Mahir', 'Galaxy', 'Legendary', 'Mythic', 'Master', 'Lopi'],
-    en: ['First Step', 'Expert', 'Galaxy', 'Legendary', 'Mythic', 'Master', 'Lopi'],
-    ru: ['Первый шаг', 'Эксперт', 'Galaxy', 'Legendary', 'Mythic', 'Master', 'Lopi']
-  };
-  var GT = {
-    uz: { bj: 'Block Juggle', tap: 'Tez bos', type: 'Yozish', lv: 'Ezi Level', dn: 'Dino Run' },
-    en: { bj: 'Block Juggle', tap: 'Tap Rush', type: 'Typing', lv: 'Ezi Level', dn: 'Dino Run' },
-    ru: { bj: 'Block Juggle', tap: 'Быстрый тап', type: 'Печать', lv: 'Ezi Level', dn: 'Dino Run' }
-  };
+  var NM = { uz: ['Birinchi qadam', 'Mahir', 'Galaxy', 'Legendary', 'Mythic', 'Master', 'Lopi'], en: ['First Step', 'Expert', 'Galaxy', 'Legendary', 'Mythic', 'Master', 'Lopi'], ru: ['Первый шаг', 'Эксперт', 'Galaxy', 'Legendary', 'Mythic', 'Master', 'Lopi'] };
+  var GT = { uz: { bj: 'Block Juggle', tap: 'Tez bos', type: 'Yozish', lv: 'Ezi Level', dn: 'Dino Run' }, en: { bj: 'Block Juggle', tap: 'Tap Rush', type: 'Typing', lv: 'Ezi Level', dn: 'Dino Run' }, ru: { bj: 'Block Juggle', tap: 'Быстрый тап', type: 'Печать', lv: 'Ezi Level', dn: 'Dino Run' } };
   var GRAD = ['linear-gradient(135deg,#e7b07a,#8a5a2b)', 'linear-gradient(135deg,#60a5fa,#1d4ed8)', 'linear-gradient(135deg,#c084fc,#6d28d9)', 'linear-gradient(135deg,#fdba74,#ea580c)', 'linear-gradient(135deg,#fca5a5,#b91c1c)', 'linear-gradient(135deg,#111 50%,#fff 50%)', 'linear-gradient(135deg,#86efac,#15803d)'];
   var CH = ['1', 'M', 'G', 'L', 'M', '★', 'LO'];
-  var PB_PRICE = [50, 120, 250, 400, 700, 1000, 1500];
   var GAMES = {
-    bj:   { hash: 'game-bj',    th: [['placed', 1], ['best', 300], ['best', 1000], ['best', 1500], ['best', 3000], ['best', 5000], ['rows', 20]] },
-    tap:  { hash: 'game-tap',   th: [['plays', 1], ['best', 15], ['best', 25], ['best', 35], ['best', 50], ['best', 70], ['plays', 10]] },
-    type: { hash: 'game-type',  th: [['plays', 1], ['best', 20], ['best', 35], ['best', 50], ['best', 65], ['best', 80], ['plays', 10]] },
-    lv:   { hash: 'game-level', th: [['plays', 1], ['plays', 3], ['plays', 5], ['plays', 8], ['plays', 12], ['plays', 16], ['plays', 20]] },
-    dn:   { hash: 'game-dn',    th: [['plays', 1], ['best', 100], ['best', 300], ['best', 600], ['best', 1000], ['best', 1500], ['plays', 10]] }
+    bj:   { hash: 'game-bj',    sec: 'bj-area',    th: [['placed', 1], ['best', 300], ['best', 1000], ['best', 1500], ['best', 3000], ['best', 5000], ['rows', 20]] },
+    tap:  { hash: 'game-tap',   sec: 'game-tap',   th: [['plays', 1], ['best', 15], ['best', 25], ['best', 35], ['best', 50], ['best', 70], ['plays', 10]] },
+    type: { hash: 'game-type',  sec: 'game-type',  th: [['plays', 1], ['best', 20], ['best', 35], ['best', 50], ['best', 65], ['best', 80], ['plays', 10]] },
+    lv:   { hash: 'game-level', sec: 'game-level', th: [['plays', 1], ['plays', 3], ['plays', 5], ['plays', 8], ['plays', 12], ['plays', 16], ['plays', 20]] },
+    dn:   { hash: 'game-dn',    sec: 'dn-area',    th: [['plays', 1], ['best', 100], ['best', 300], ['best', 600], ['best', 1000], ['best', 1500], ['plays', 10]] }
   };
+  var PB_PRICE = [50, 120, 250, 400, 700, 1000, 1500];
+  var FR_ID = ['gold', 'neon', 'rainbow', 'fire', 'ice'], FR_P = [150, 200, 350, 400, 250];
+  var FR_N = [['Oltin ramka', 'Gold frame', 'Золотая'], ['Neon ramka', 'Neon frame', 'Неон'], ['Kamalak', 'Rainbow', 'Радуга'], ['Olov', 'Fire', 'Огонь'], ['Muz ramka', 'Ice frame', 'Лёд']];
+  var BT_N = [['Gradient', 'Gradient', 'Градиент'], ['Yorqin', 'Glow', 'Свечение'], ['Kontur', 'Outline', 'Контур'], ['Neon', 'Neon', 'Неон'], ['Shisha', 'Glass', 'Стекло'], ['Kapsula', 'Pill', 'Капсула'], ['3D', '3D', '3D'], ['Kamalak', 'Rainbow', 'Радуга'], ['Yaltiroq', 'Shimmer', 'Блеск'], ['Retro', 'Retro', 'Ретро'], ['Yumshoq', 'Soft', 'Мягкий'], ['Pulsatsiya', 'Pulse', 'Пульс']];
+  var BT_P = [120, 150, 180, 300, 260, 200, 240, 420, 380, 220, 200, 500];
+  var AN_N = [['Pastga', 'Fade down', 'Сверху'], ['Yuqoriga', 'Slide up', 'Снизу'], ['Zoom', 'Zoom', 'Зум'], ['Sakrash', 'Bounce', 'Прыжок'], ['Silkinish', 'Wobble', 'Покачивание'], ['Aylanish', 'Spin', 'Вращение'], ['Porlash', 'Glow', 'Свечение'], ['Suzish', 'Float', 'Парение'], ['Titrash', 'Shake', 'Тряска'], ['Yon', 'Slide left', 'Слева'], ['Xira', 'Blur', 'Размытие'], ['Flip', 'Flip', 'Переворот']];
+  var AN_P = [200, 220, 240, 280, 260, 300, 350, 320, 260, 240, 300, 450];
+  // 12 ta yangi mavzu (animatsiyali ikki rangli fon)
   var THEMES = [
-    { id: 'galaxy', p: 450, g: 'linear-gradient(120deg,#4c1d95,#0b0320)', n: ['Galaxy', 'Galaxy', 'Галактика'] },
-    { id: 'neon', p: 380, g: 'linear-gradient(120deg,#0b0b1a,#00f5d4)', n: ['Neon', 'Neon', 'Неон'] },
-    { id: 'forest', p: 300, g: 'linear-gradient(160deg,#17402b,#34d399)', n: ['Orman', 'Forest', 'Лес'] },
-    { id: 'lava', p: 520, g: 'linear-gradient(160deg,#4a1408,#ff6b35)', n: ['Lava', 'Lava', 'Лава'] },
-    { id: 'candy', p: 220, g: 'linear-gradient(135deg,#ffc2e2,#ff5fa8)', n: ['Shirin', 'Candy', 'Конфета'] },
-    { id: 'arctic', p: 300, g: 'linear-gradient(160deg,#c9e8fa,#4fa3d9)', n: ['Muz', 'Arctic', 'Арктика'] },
-    { id: 'gold', p: 750, g: 'linear-gradient(120deg,#33260a,#fbbf24)', n: ['Oltin', 'Gold', 'Золото'] },
-    { id: 'sakura', p: 330, g: 'linear-gradient(160deg,#ffd1e4,#f472b6)', n: ['Sakura', 'Sakura', 'Сакура'] },
-    { id: 'aurora', p: 600, g: 'linear-gradient(135deg,#0f766e,#4c1d95)', n: ['Aurora', 'Aurora', 'Аврора'] },
-    { id: 'cyber', p: 420, g: 'linear-gradient(135deg,#0a0a0a,#facc15)', n: ['Kiber', 'Cyber', 'Кибер'] },
-    { id: 'nebula', p: 900, g: 'linear-gradient(120deg,#1e003f,#00e5ff,#ff00aa)', n: ['Tumanlik', 'Nebula', 'Туманность'] },
-    { id: 'prizma', p: 1200, g: 'linear-gradient(120deg,#ff6ec7,#7afcff,#fff27a,#b388ff)', n: ['Prizma', 'Prism', 'Призма'] }
+    { id: 'galaxy', p: 450, c: ['#4c1d95', '#0b0320', '#7c3aed'], tx: '#f5f0ff', ac: '#c084fc', n: ['Galaxy', 'Galaxy', 'Галактика'] },
+    { id: 'neon', p: 380, c: ['#0b0b1a', '#00f5d4', '#0b0b1a'], tx: '#e6fffb', ac: '#00f5d4', n: ['Neon', 'Neon', 'Неон'] },
+    { id: 'forest', p: 300, c: ['#17402b', '#06140e', '#34d399'], tx: '#e8fff4', ac: '#34d399', n: ['Orman', 'Forest', 'Лес'] },
+    { id: 'lava', p: 520, c: ['#4a1408', '#140202', '#ff6b35'], tx: '#ffe9de', ac: '#ff6b35', n: ['Lava', 'Lava', 'Лава'] },
+    { id: 'candy', p: 220, c: ['#ffc2e2', '#d6f0ff', '#ff5fa8'], tx: '#5a1a40', ac: '#ff5fa8', n: ['Shirin', 'Candy', 'Конфета'] },
+    { id: 'arctic', p: 300, c: ['#c9e8fa', '#ffffff', '#4fa3d9'], tx: '#163a57', ac: '#2b8fd6', n: ['Muz', 'Arctic', 'Арктика'] },
+    { id: 'gold', p: 750, c: ['#33260a', '#120d02', '#fbbf24'], tx: '#fff6d6', ac: '#fbbf24', n: ['Oltin', 'Gold', 'Золото'] },
+    { id: 'sakura', p: 330, c: ['#ffd1e4', '#fff5fa', '#f472b6'], tx: '#6b2146', ac: '#ec4899', n: ['Sakura', 'Sakura', 'Сакура'] },
+    { id: 'aurora', p: 600, c: ['#0f766e', '#1e1b4b', '#4c1d95'], tx: '#ecfeff', ac: '#5eead4', n: ['Aurora', 'Aurora', 'Аврора'] },
+    { id: 'cyber', p: 420, c: ['#0a0a0a', '#1a1400', '#facc15'], tx: '#fef9c3', ac: '#facc15', n: ['Kiber', 'Cyber', 'Кибер'] },
+    { id: 'nebula', p: 900, c: ['#1e003f', '#00e5ff', '#ff00aa'], tx: '#fbe8ff', ac: '#00e5ff', n: ['Tumanlik', 'Nebula', 'Туманность'] },
+    { id: 'prizma', p: 1200, c: ['#ff6ec7', '#7afcff', '#b388ff'], tx: '#2e1a47', ac: '#ff6ec7', n: ['Prizma', 'Prism', 'Призма'] },
+    { id: 'ember', p: 1000, c: ['#7c2d12', '#f97316', '#fde047'], tx: '#fff7ed', ac: '#fb923c', n: ['Olovli', 'Ember', 'Уголь'] },
+    { id: 'glacier', p: 950, c: ['#0c4a6e', '#38bdf8', '#e0f2fe'], tx: '#f0f9ff', ac: '#38bdf8', n: ['Muzlik', 'Glacier', 'Ледник'] },
+    { id: 'vapor', p: 1100, c: ['#ff71ce', '#01cdfe', '#b967ff'], tx: '#1a0033', ac: '#ff71ce', n: ['Vapor', 'Vapor', 'Вапор'] },
+    { id: 'matrix', p: 800, c: ['#001a00', '#003b00', '#00ff41'], tx: '#b6ffb6', ac: '#00ff41', n: ['Matritsa', 'Matrix', 'Матрица'] },
+    { id: 'pulse', p: 700, c: ['#1e1b4b', '#7c3aed', '#f472b6'], tx: '#faf5ff', ac: '#f472b6', n: ['Pulsatsiya', 'Pulse', 'Пульс'] },
+    { id: 'deepsea', p: 880, c: ['#022c22', '#0e7490', '#14b8a6'], tx: '#ecfeff', ac: '#2dd4bf', n: ['Chuqur dengiz', 'Deep sea', 'Глубина'] },
+    { id: 'crimson', p: 760, c: ['#450a0a', '#991b1b', '#f87171'], tx: '#fef2f2', ac: '#f87171', n: ['Qirmizi', 'Crimson', 'Багрянец'] },
+    { id: 'emerald', p: 840, c: ['#022c22', '#059669', '#6ee7b7'], tx: '#ecfdf5', ac: '#6ee7b7', n: ['Zumrad', 'Emerald', 'Изумруд'] },
+    { id: 'midnight', p: 1300, c: ['#020617', '#1e3a8a', '#0f172a'], tx: '#dbeafe', ac: '#60a5fa', n: ['Yarim tun', 'Midnight', 'Полночь'] },
+    { id: 'opal', p: 1500, c: ['#fbcfe8', '#bae6fd', '#ddd6fe'], tx: '#3b0764', ac: '#c084fc', n: ['Opal', 'Opal', 'Опал'] },
+    { id: 'volcano', p: 1800, c: ['#1c0a00', '#dc2626', '#fb923c'], tx: '#fff1e6', ac: '#ef4444', n: ['Vulqon', 'Volcano', 'Вулкан'] }
   ];
-  var FRAMES = [
-    { id: 'gold', p: 150, n: ['Oltin ramka', 'Gold frame', 'Золотая'] },
-    { id: 'neon', p: 200, n: ['Neon ramka', 'Neon frame', 'Неон'] },
-    { id: 'rainbow', p: 350, n: ['Kamalak', 'Rainbow', 'Радуга'] },
-    { id: 'fire', p: 400, n: ['Olov', 'Fire', 'Огонь'] },
-    { id: 'ice', p: 250, n: ['Muz ramka', 'Ice frame', 'Лёд'] }
-  ];
-  var SHAPES = [
-    [[0,0]], [[0,0],[0,1]], [[0,0],[0,1],[0,2]], [[0,0],[0,1],[0,2],[0,3]], [[0,0],[0,1],[0,2],[0,3],[0,4]],
-    [[0,0],[1,0],[1,1]], [[0,0],[0,1],[1,0],[1,1]], [[0,0],[0,1],[0,2],[1,1]], [[0,0],[0,1],[1,1],[1,2]],
-    [[0,0],[0,1],[0,2],[1,0]], [[0,0],[1,0],[2,0],[2,1]], [[0,0],[0,1],[1,0],[2,0]], [[0,0],[0,1],[1,1],[1,2],[2,2]]
-  ];
+  var SHAPES = [[[0,0]],[[0,0],[0,1]],[[0,0],[0,1],[0,2]],[[0,0],[0,1],[0,2],[0,3]],[[0,0],[0,1],[0,2],[0,3],[0,4]],[[0,0],[1,0],[1,1]],[[0,0],[0,1],[1,0],[1,1]],[[0,0],[0,1],[0,2],[1,1]],[[0,0],[0,1],[1,1],[1,2]],[[0,0],[0,1],[0,2],[1,0]],[[0,0],[1,0],[2,0],[2,1]],[[0,0],[0,1],[1,0],[2,0]],[[0,0],[0,1],[1,1],[1,2],[2,2]]];
 
+  // ---- Yordamchilar ----
   function L() { return TX[lang] ? lang : 'en'; }
-  function T_(key) { return (TX[L()][key]) || TX.en[key] || key; }
+  function T_(key) { return TX[L()][key] || TX.en[key] || key; }
   function tierName(i) { return (NM[L()] || NM.en)[i]; }
   function gameTitle(g) { return (GT[L()] || GT.en)[g]; }
   function nameOf(arr) { var i = { uz: 0, en: 1, ru: 2 }[L()]; return arr[i === undefined ? 1 : i]; }
@@ -4707,15 +4745,15 @@ body[data-frame="ice"] #profil .avatar { box-shadow: 0 0 0 4px #bae6fd, 0 0 20px
   function spent() { return J('ezsp_' + k(), 0); }
   function wallet() { return Math.max(0, (bestOf(getPlayer()) || 0) - spent()); }
   function gameOf() { var h = location.hash.slice(1); for (var g in GAMES) if (GAMES[g].hash === h) return g; return null; }
-  function eqGet() { return J('ezeq_' + k(), { tk: '', f: '', b: [] }); }
+  function eqGet() { return J('ezeq_' + k(), { tk: '', f: '', b: [], bt: '', an: '' }); }
   function unitOf(key) { return { placed: T_('u_blk'), best: T_('u_ball'), rows: T_('u_row'), plays: T_('u_play') }[key]; }
-
-  function titleText(tk) {
-    if (!tk) return '';
-    var p = tk.split(':'); return tierName(+p[1]) + ' · ' + gameTitle(p[0]);
+  function titleText(tk) { if (!tk) return ''; var p = tk.split(':'); return tierName(+p[1]) + ' · ' + gameTitle(p[0]); }
+  function myAvatar() {
+    try { var a = readProfile().avatar || ''; return (a && a.length < 70000) ? a : ''; } catch (e) { return ''; }
   }
-  function curEq() { var e = eqGet(); return { tt: titleText(e.tk), f: e.f || '', b: e.b || [] }; }
+  function curEq() { var e = eqGet(); return { tt: titleText(e.tk), f: e.f || '', b: e.b || [], bt: e.bt || '', an: e.an || '', av: myAvatar() }; }
 
+  // ---- Coin, reyting, Firestore ----
   function addCoins(name, amt) {
     if (!amt) return;
     var a = loadRating(), kk = String(name).toLowerCase();
@@ -4723,7 +4761,7 @@ body[data-frame="ice"] #profil .avatar { box-shadow: 0 0 0 4px #bae6fd, 0 0 20px
     if (!r) { r = { name: name, score: 0, best: 0, eq: curEq() }; a.push(r); }
     r.score = (r.score || 0) + amt;
     a.sort(function (x, y) { return y.score - x.score; });
-    try { localStorage.setItem('eziplay-rating', JSON.stringify(a.slice(0, 50))); } catch (e) {}
+    try { localStorage.setItem('eziplay-rating', JSON.stringify(a.slice(0, 100))); } catch (e) {}
     try { if (fbDb) fbDb.collection('ratings').doc(String(r.name)).set({ name: r.name, score: r.score, best: r.best || 0, eq: r.eq || null }, { merge: true }); } catch (e) {}
   }
   function pushEq() {
@@ -4736,25 +4774,61 @@ body[data-frame="ice"] #profil .avatar { box-shadow: 0 0 0 4px #bae6fd, 0 0 20px
       try { if (fbDb) fbDb.collection('ratings').doc(String(r.name)).set({ eq: eq }, { merge: true }); } catch (e) {}
     }
   }
+  // O'yin bo'yicha reyting (rekordlar)
+  function lbLocal(g) { return J('ezlb_' + g, []); }
+  function lbWrite(g, best) {
+    var name = getPlayer(); if (!name) return;
+    var list = lbLocal(g), kk = name.toLowerCase();
+    var r = list.find(function (x) { return x.name.toLowerCase() === kk; });
+    if (!r) { r = { name: name, best: 0 }; list.push(r); }
+    if (best > r.best) r.best = best;
+    r.eq = curEq();
+    list.sort(function (x, y) { return y.best - x.best; });
+    SV('ezlb_' + g, list.slice(0, 100));
+    try { if (fbDb) fbDb.collection('lb_' + g).doc(String(name)).set({ name: name, best: r.best, eq: r.eq }, { merge: true }); } catch (e) {}
+  }
 
-  // ---- Nishon render ----
+  // ---- Nishonlar ----
   function badgeHtml(g) {
     var o = gOwned(g);
     return GAMES[g].th.map(function (th, i) {
       var on = o.indexOf(i) >= 0;
-      var need = th[1] + ' ' + unitOf(th[0]);
-      return '<div class="ez-b' + (on ? '' : ' lock') + '"><div class="m" style="background:' + GRAD[i] + '">' + CH[i] + '</div><b>' + tierName(i) + '</b><small>' + (on ? T_('got') + ' ✓' : need) + '</small></div>';
+      return '<div class="ez-b' + (on ? '' : ' lock') + '"><div class="m" style="background:' + GRAD[i] + '">' + CH[i] + '</div><b>' + tierName(i) + '</b><small>' + (on ? T_('got') + ' ✓' : th[1] + ' ' + unitOf(th[0])) + '</small></div>';
     }).join('');
   }
   function renderBadges() {
-    Object.keys(GAMES).forEach(function (g) {
-      document.querySelectorAll('[data-ezbadge="' + g + '"]').forEach(function (e) { e.innerHTML = badgeHtml(g); });
-    });
+    Object.keys(GAMES).forEach(function (g) { document.querySelectorAll('[data-ezbadge="' + g + '"]').forEach(function (e) { e.innerHTML = badgeHtml(g); }); });
     var all = document.getElementById('ez-badges');
-    if (all) all.innerHTML = '<p>' + T_('badge_note') + '</p>' + Object.keys(GAMES).map(function (g) {
-      return '<div class="ez-gt">' + gameTitle(g) + '</div><div class="ez-medals">' + badgeHtml(g) + '</div>';
-    }).join('');
+    if (all) all.innerHTML = '<p>' + T_('badge_note') + '</p>' + Object.keys(GAMES).map(function (g) { return '<div class="ez-gt">' + gameTitle(g) + '</div><div class="ez-medals">' + badgeHtml(g) + '</div>'; }).join('');
   }
+
+  // ---- Chellenjlar (har bo'limda 10 ta) ----
+  function challenges(g) {
+    var th = GAMES[g].th, out = [];
+    [['plays', 1, 20], ['plays', 5, 40], ['plays', 15, 80], ['plays', 30, 150], ['plays', 60, 300]].forEach(function (c) { out.push({ m: c[0], v: c[1], r: c[2] }); });
+    var rew = [50, 100, 150, 250, 400];
+    for (var i = 1; i <= 5; i++) out.push({ m: th[i][0], v: th[i][1], r: rew[i - 1] });
+    return out;
+  }
+  function renderChallenges() {
+    Object.keys(GAMES).forEach(function (g) {
+      document.querySelectorAll('[data-ezchal="' + g + '"]').forEach(function (box) {
+        var st = gs(g), claimed = J('ezch_' + g + '_' + k(), []);
+        box.innerHTML = '<h3 style="margin-top:20px">' + T_('chal_h') + '</h3>' + challenges(g).map(function (c, j) {
+          var val = st[c.m] || 0, done = val >= c.v, got = claimed.indexOf(j) >= 0;
+          var label = (c.m === 'plays' ? T_('ch_pl') : T_('ch_bs') + ' ' + unitOf(c.m)) + ': ' + c.v;
+          return '<div class="ez-ch"><div class="tx"><b>' + label + '</b> · +' + c.r + ' ' + T_('coin') + '<div class="bar"><i style="width:' + Math.min(100, Math.round(val / c.v * 100)) + '%"></i></div></div>' +
+            '<button ' + (done && !got ? '' : 'disabled') + ' onclick="ezClaim(\'' + g + '\',' + j + ',' + c.r + ')">' + (got ? T_('done') : (done ? T_('claim') : T_('ch_wait'))) + '</button></div>';
+        }).join('');
+      });
+    });
+  }
+  window.ezClaim = function (g, j, r) {
+    var claimed = J('ezch_' + g + '_' + k(), []);
+    if (claimed.indexOf(j) >= 0) return;
+    claimed.push(j); SV('ezch_' + g + '_' + k(), claimed);
+    addCoins(getPlayer(), r); toast('+' + r + ' ' + T_('coin')); refresh(); renderRating();
+  };
 
   // ---- Do'kon ----
   function card(name, sub, grad, label, fn, act) {
@@ -4762,31 +4836,40 @@ body[data-frame="ice"] #profil .avatar { box-shadow: 0 0 0 4px #bae6fd, 0 0 20px
   }
   function renderShop() {
     var e = document.getElementById('ez-shop'); if (!e) return;
-    var own = items(), act = document.body.dataset.shop || '';
+    var own = items(), act = document.body.dataset.shop || '', eq = eqGet();
     var th = THEMES.map(function (x) {
-      var has = own.indexOf(x.id) >= 0, on = act === x.id;
-      return card(nameOf(x.n), has ? T_('bought') : x.p + ' ' + T_('coin'), x.g, has ? (on ? T_('active') : T_('equip')) : T_('buy'), 'ezTheme(\'' + x.id + '\')', on);
+      var has = own.indexOf('th:' + x.id) >= 0, on = act === x.id;
+      return card(nameOf(x.n), has ? T_('bought') : x.p + ' ' + T_('coin'), 'linear-gradient(120deg,' + x.c.join(',') + ')', has ? (on ? T_('on') : T_('use')) : T_('buy'), 'ezCat(\'th\',\'' + x.id + '\',' + x.p + ')', on);
     }).join('');
-    var fr = FRAMES.map(function (x) {
-      var has = own.indexOf('fr:' + x.id) >= 0;
-      return card(nameOf(x.n), has ? T_('bought') : x.p + ' ' + T_('coin'), 'linear-gradient(135deg,#1f2937,#6b7280)', has ? T_('bought') : T_('buy'), 'ezBuyFrame(\'' + x.id + '\')', has);
+    var fr = FR_ID.map(function (id, i) {
+      var has = own.indexOf('fr:' + id) >= 0, on = eq.f === id;
+      return card(nameOf(FR_N[i]), has ? (on ? T_('on') : T_('bought')) : FR_P[i] + ' ' + T_('coin'), 'linear-gradient(135deg,#1f2937,#6b7280)', has ? (on ? T_('on') : T_('use')) : T_('buy'), 'ezCat(\'fr\',\'' + id + '\',' + FR_P[i] + ')', on);
     }).join('');
     var pb = NM[L()].map(function (n, i) {
-      var has = own.indexOf('pb:' + i) >= 0;
-      return card(n, has ? T_('bought') : PB_PRICE[i] + ' ' + T_('coin'), GRAD[i], has ? T_('bought') : T_('buy'), 'ezBuyPb(' + i + ')', has);
+      var has = own.indexOf('pb:' + i) >= 0, on = eq.b.indexOf(i) >= 0;
+      return card(n, has ? (on ? T_('on') : T_('bought')) : PB_PRICE[i] + ' ' + T_('coin'), GRAD[i], has ? (on ? T_('on') : T_('use')) : T_('buy'), 'ezCat(\'pb\',' + i + ',' + PB_PRICE[i] + ')', on);
     }).join('');
-    e.innerHTML = '<p>' + T_('shop_note') + '</p><div class="ez-sub">' + T_('sub_th') + '</div><div class="ez-shop">' + th +
-      '<div class="ez-sh" style="background:linear-gradient(135deg,#e5e7eb,#9ca3af);color:#111"><div><b>' + T_('std') + '</b><br><span>' + T_('std_sub') + '</span></div><button onclick="ezApply(\'\')">' + T_('equip') + '</button></div></div>' +
+    var bt = BT_N.map(function (n, i) {
+      var has = own.indexOf('bt:' + i) >= 0, on = eq.bt === String(i);
+      return card(nameOf(n), has ? (on ? T_('on') : T_('bought')) : BT_P[i] + ' ' + T_('coin'), 'linear-gradient(135deg,#334155,#64748b)', has ? (on ? T_('on') : T_('use')) : T_('buy'), 'ezCat(\'bt\',' + i + ',' + BT_P[i] + ')', on);
+    }).join('');
+    var an = AN_N.map(function (n, i) {
+      var has = own.indexOf('an:' + i) >= 0, on = eq.an === String(i);
+      return card(nameOf(n), has ? (on ? T_('on') : T_('bought')) : AN_P[i] + ' ' + T_('coin'), 'linear-gradient(135deg,#312e81,#a78bfa)', has ? (on ? T_('on') : T_('use')) : T_('buy'), 'ezCat(\'an\',' + i + ',' + AN_P[i] + ')', on);
+    }).join('');
+    e.innerHTML = '<p>' + T_('shop_note') + '</p>' +
+      '<div class="ez-sub">' + T_('sub_th') + '</div><div class="ez-shop">' + th + '</div>' +
       '<div class="ez-sub">' + T_('sub_fr') + '</div><div class="ez-shop">' + fr + '</div>' +
-      '<div class="ez-sub">' + T_('sub_pb') + '</div><div class="ez-shop">' + pb + '</div>';
+      '<div class="ez-sub">' + T_('sub_pb') + '</div><div class="ez-shop">' + pb + '</div>' +
+      '<div class="ez-sub">' + T_('sub_bt') + '</div><div class="ez-shop">' + bt + '</div>' +
+      '<div class="ez-sub">' + T_('sub_an') + '</div><div class="ez-shop">' + an + '</div>';
   }
-  function refresh() {
-    var w = wallet();
-    document.querySelectorAll('[data-ezchip]').forEach(function (e) { e.textContent = T_('bal') + ': ' + w + ' ' + T_('coin'); });
-    var wl = document.getElementById('ez-wallet'); if (wl) wl.textContent = T_('bal') + ': ' + w + ' ' + T_('coin');
-    renderBadges(); renderShop(); renderProfile();
+  function applyCosmetics() {
+    var eq = eqGet(), b = document.body;
+    b.dataset.frame = eq.f || '';
+    b.dataset.btn = eq.bt || '';
+    b.dataset.anim = eq.an || '';
   }
-
   function buy(id, price) {
     if (items().indexOf(id) >= 0) return true;
     if (typeof loggedIn !== 'undefined' && !loggedIn) { toast(T_('login')); return false; }
@@ -4795,76 +4878,91 @@ body[data-frame="ice"] #profil .avatar { box-shadow: 0 0 0 4px #bae6fd, 0 0 20px
     var o = items(); o.push(id); SV('ezown_' + k(), o);
     return true;
   }
+  // Sotib olish yoki qo'llash (kategoriya, indeks, narx)
+  window.ezCat = function (cat, idx, price) {
+    var own = items(), id = cat + ':' + idx;
+    if (own.indexOf(id) < 0 && !buy(id, price)) return;
+    var eq = eqGet();
+    if (cat === 'th') { window.ezApply(idx); return; }
+    if (cat === 'fr') eq.f = (eq.f === idx ? '' : idx);
+    if (cat === 'bt') eq.bt = String(idx);
+    if (cat === 'an') eq.an = String(idx);
+    if (cat === 'pb') {
+      var p = eq.b.indexOf(idx);
+      if (p >= 0) eq.b.splice(p, 1); else { if (eq.b.length >= 3) { toast(T_('pb_max')); return; } eq.b.push(idx); }
+    }
+    SV('ezeq_' + k(), eq); applyCosmetics(); pushEq(); refresh(); renderRating();
+  };
   window.ezApply = function (id) { document.body.dataset.shop = id || ''; SV('ezact_' + k(), id || ''); refresh(); };
-  window.ezTheme = function (id) {
-    var x = THEMES.find(function (t) { return t.id === id; });
-    if (items().indexOf(id) < 0 && !buy(id, x.p)) return;
-    window.ezApply(id); toast(nameOf(x.n) + ' ' + T_('applied'));
-  };
-  window.ezBuyFrame = function (id) {
-    var x = FRAMES.find(function (f) { return f.id === id; });
-    if (buy('fr:' + id, x.p)) { toast(nameOf(x.n) + ' ✓'); refresh(); }
-  };
-  window.ezBuyPb = function (i) {
-    if (buy('pb:' + i, PB_PRICE[i])) { toast(NM[L()][i] + ' ✓'); refresh(); }
-  };
+  window.ezTitle = function (tk) { var e = eqGet(); e.tk = tk; SV('ezeq_' + k(), e); pushEq(); refresh(); };
 
-  // ---- Profil: titul, ramka, nishonlar ----
-  function earnedTitles() {
-    var out = [];
-    Object.keys(GAMES).forEach(function (g) { gOwned(g).forEach(function (i) { out.push(g + ':' + i); }); });
-    return out;
-  }
-  function applyFrame() { document.body.dataset.frame = eqGet().f || ''; }
-  window.ezSetTitle = function (tk) { var e = eqGet(); e.tk = tk; SV('ezeq_' + k(), e); pushEq(); renderProfile(); };
-  window.ezSetFrame = function (f) { var e = eqGet(); e.f = f; SV('ezeq_' + k(), e); applyFrame(); pushEq(); renderProfile(); };
-  window.ezTogglePb = function (i) {
-    var e = eqGet(), p = e.b.indexOf(i);
-    if (p >= 0) e.b.splice(p, 1);
-    else { if (e.b.length >= 3) { toast(T_('pb_max')); return; } e.b.push(i); }
-    SV('ezeq_' + k(), e); pushEq(); renderProfile();
-  };
+  // Profil
+  function earnedTitles() { var out = []; Object.keys(GAMES).forEach(function (g) { gOwned(g).forEach(function (i) { out.push(g + ':' + i); }); }); return out; }
   function renderProfile() {
     var box = document.getElementById('ez-prof'); if (!box) return;
-    var e = eqGet(), own = items();
-    var ti = earnedTitles().map(function (tk) {
-      var p = tk.split(':');
-      return '<button class="' + (e.tk === tk ? 'on' : '') + '" onclick="ezSetTitle(\'' + tk + '\')">' + titleText(tk) + '</button>';
-    }).join('');
-    var fr = '<button class="' + (!e.f ? 'on' : '') + '" onclick="ezSetFrame(\'\')">' + T_('none') + '</button>' + FRAMES.filter(function (f) { return own.indexOf('fr:' + f.id) >= 0; }).map(function (f) {
-      return '<button class="' + (e.f === f.id ? 'on' : '') + '" onclick="ezSetFrame(\'' + f.id + '\')">' + nameOf(f.n) + '</button>';
-    }).join('');
-    var pb = NM[L()].map(function (n, i) {
-      if (own.indexOf('pb:' + i) < 0) return '';
-      return '<button class="' + (e.b.indexOf(i) >= 0 ? 'on' : '') + '" onclick="ezTogglePb(' + i + ')">' + CH[i] + ' ' + n + '</button>';
-    }).join('');
-    box.innerHTML = '<h3>' + T_('title_pick') + '</h3><div class="ez-pick">' + (ti || '<span>' + T_('none') + '</span>') + '</div>' +
-      '<h3 style="margin-top:18px">' + T_('sub_fr') + '</h3><div class="ez-pick">' + fr + '</div>' +
-      '<h3 style="margin-top:18px">' + T_('prof_b') + '</h3><div class="ez-pick">' + (pb || '<span>' + T_('none') + '</span>') + '</div>';
-    applyFrame();
+    var eq = eqGet(), av = myAvatar(), own = items();
+    var pic = av ? '<img src="' + av + '">' : '<span>' + esc((getPlayer() || '?').charAt(0).toUpperCase()) + '</span>';
+    var ti = earnedTitles().map(function (tk) { return '<button class="' + (eq.tk === tk ? 'on' : '') + '" onclick="ezTitle(\'' + tk + '\')">' + titleText(tk) + '</button>'; }).join('');
+    var pbs = NM[L()].map(function (n, i) { return own.indexOf('pb:' + i) < 0 ? '' : '<button class="' + (eq.b.indexOf(i) >= 0 ? 'on' : '') + '" onclick="ezCat(\'pb\',' + i + ',0)">' + CH[i] + ' ' + n + '</button>'; }).join('');
+    box.innerHTML = '<div class="ez-big fr-' + (eq.f || 'none') + '">' + pic + '</div>' +
+      '<h3>' + T_('prof_t') + '</h3><div class="ez-pick">' + (ti || '<span>' + T_('none') + '</span>') + '</div>' +
+      '<h3 style="margin-top:18px">' + T_('prof_b') + '</h3><div class="ez-pick">' + (pbs || '<span>' + T_('none') + '</span>') + '</div>';
   }
 
-  // Reyting: titul, ramka va nishonlar hamma uchun ko'rinadi
-  function decorate() {
-    var rows = document.querySelectorAll('#rating-list .rank-row'), a = loadRating().slice(0, 10);
-    rows.forEach(function (row, i) {
-      var r = a[i]; if (!r || !r.eq) return;
-      if (r.eq.f) row.classList.add('ez-fr-' + r.eq.f);
-      var nm = row.querySelector('.nm'); if (!nm || nm.querySelector('.ez-tt')) return;
-      var pbs = (r.eq.b || []).map(function (x) { return '<i style="background:' + GRAD[x] + '">' + CH[x] + '</i>'; }).join('');
-      nm.insertAdjacentHTML('beforeend', (r.eq.tt ? '<div class="ez-tt">' + esc(r.eq.tt) + '</div>' : '') + (pbs ? '<span class="ez-pbs">' + pbs + '</span>' : ''));
-    });
+  // ---- Reyting (1 dan 100 gacha, o'yin bo'yicha tablar) ----
+  var tab = 'all';
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function rowHtml(i, name, eq, score, me) {
+    eq = eq || {};
+    var rk = i < 3 ? MEDAL_SVG(i) : (i + 1);
+    var av = eq.av ? '<img src="' + eq.av + '">' : '<span>' + esc((name || '?').charAt(0).toUpperCase()) + '</span>';
+    var pbs = (eq.b || []).map(function (x) { return '<i style="background:' + GRAD[x] + '">' + CH[x] + '</i>'; }).join('');
+    return '<div class="rank-row' + (me ? ' me' : '') + '"><span class="rk">' + rk + '</span><span class="ez-av fr-' + (eq.f || 'none') + '">' + av + '</span>' +
+      '<span class="nm">' + esc(name || t('g_guest')) + (isPremiumName(name) ? PREM_MINI : '') + (isDevName(name) ? DEV_MINI : '') + (eq.tt ? '<div class="ez-tt">' + esc(eq.tt) + '</div>' : '') + '</span>' +
+      '<span class="ez-pbs">' + pbs + '</span><span class="sc">' + score + '</span></div>';
   }
-  var _rr = window.renderRating;
-  window.renderRating = function () { _rr(); decorate(); };
+  function tabsHtml() {
+    return '<div class="ez-tabs">' + ['all'].concat(Object.keys(GAMES)).map(function (g) {
+      return '<button class="' + (tab === g ? 'on' : '') + '" onclick="ezTab(\'' + g + '\')">' + (g === 'all' ? T_('tab_all') : gameTitle(g)) + '</button>';
+    }).join('') + '</div>';
+  }
+  window.ezTab = function (g) { tab = g; renderRating(); if (g !== 'all' && fbDb) loadBoard(g); };
+  var boardCache = {};
+  function loadBoard(g) {
+    try {
+      fbDb.collection('lb_' + g).orderBy('best', 'desc').limit(100).get().then(function (sn) {
+        var arr = []; sn.forEach(function (d) { var x = d.data(); if (x && x.name) arr.push({ name: x.name, best: x.best || 0, eq: x.eq || null }); });
+        boardCache[g] = arr; if (tab === g) renderRating();
+      });
+    } catch (e) {}
+  }
+  window.renderRating = function () {
+    var box = document.getElementById('rating-list'); if (!box) return;
+    var me = getPlayer().toLowerCase();
+    var tabBox = document.getElementById('ez-tabs');
+    if (!tabBox) { box.insertAdjacentHTML('beforebegin', '<div id="ez-tabs"></div>'); tabBox = document.getElementById('ez-tabs'); }
+    tabBox.innerHTML = tabsHtml();
+    var rows;
+    if (tab === 'all') {
+      rows = loadRating().slice(0, 100).map(function (r, i) { return rowHtml(i, r.name, r.eq, r.score || 0, (r.name || '').toLowerCase() === me && me); });
+    } else {
+      var list = boardCache[tab] || lbLocal(tab);
+      rows = list.slice(0, 100).map(function (r, i) { return rowHtml(i, r.name, r.eq, r.best || 0, (r.name || '').toLowerCase() === me && me); });
+    }
+    box.innerHTML = rows.length ? rows.join('') : '<p style="padding:16px 0;opacity:.8">' + T_('lb_empty') + '</p>';
+    var b = bestSingle(getPlayer()), bb = document.getElementById('rating-best');
+    if (bb) bb.textContent = b ? t('your_best') + ': ' + b : '';
+  };
 
+  // ---- Rekord + nishon + chellenj tekshiruvi ----
   function checkBadges(g) {
     var st = gs(g), o = gOwned(g), nw = [];
     GAMES[g].th.forEach(function (th, i) { if (o.indexOf(i) < 0 && (st[th[0]] || 0) >= th[1]) { o.push(i); nw.push(i); } });
-    if (nw.length) {
-      SV('ezbd_' + g + '_' + k(), o);
-      nw.forEach(function (i) { toast('🏅 ' + gameTitle(g) + ': ' + tierName(i)); });
-    }
+    if (nw.length) { SV('ezbd_' + g + '_' + k(), o); nw.forEach(function (i) { toast('🏅 ' + gameTitle(g) + ': ' + tierName(i)); }); }
+  }
+  function recordGame(g, best) {
+    var s = gs(g); if (best > s.best) { s.best = best; gsave(g, s); lbWrite(g, best); }
+    checkBadges(g);
   }
 
   window.ezFs = function (id) {
@@ -4875,22 +4973,32 @@ body[data-frame="ice"] #profil .avatar { box-shadow: 0 0 0 4px #bae6fd, 0 0 20px
     else el.classList.add('ez-fake');
   };
 
+  function refresh() {
+    var w = wallet();
+    document.querySelectorAll('[data-ezchip]').forEach(function (e) {
+      var g = e.dataset.ezchip, rec = g ? ' · ' + T_('rec') + ': ' + gs(g).best : '';
+      e.textContent = T_('bal') + ': ' + w + ' ' + T_('coin') + rec;
+    });
+    var wl = document.getElementById('ez-wallet'); if (wl) wl.textContent = T_('bal') + ': ' + w + ' ' + T_('coin');
+    renderBadges(); renderChallenges(); renderShop(); renderProfile();
+  }
+
   // Dasturchi paneli
   function devName() { return (document.getElementById('ez-dv-name').value || '').trim() || getPlayer(); }
   window.ezDevCoins = function () {
     var n = devName(), a = parseInt(document.getElementById('ez-dv-amt').value, 10) || 0;
     if (!n) { toast(T_('dev_noname')); return; }
-    addCoins(n, a); if (typeof renderDev === 'function') renderDev(); renderRating(); refresh();
+    addCoins(n, a); if (typeof renderDev === 'function') renderDev(); window.renderRating(); refresh();
     toast(n + ': +' + a + ' ' + T_('coin'));
+  };
+  window.ezDevItem = function () {
+    var n = devName(), id = document.getElementById('ez-dv-it').value, key = 'ezown_' + String(n).toLowerCase();
+    var o = J(key, []); if (o.indexOf(id) < 0) o.push(id); SV(key, o); refresh(); toast(n + ': ' + T_('dev_ok'));
   };
   window.ezDevBadge = function () {
     var n = devName(), v = document.getElementById('ez-dv-bd').value.split(':');
     var key = 'ezbd_' + v[0] + '_' + String(n).toLowerCase(), o = J(key, []);
     if (o.indexOf(+v[1]) < 0) o.push(+v[1]); SV(key, o); refresh(); toast(n + ': ' + T_('dev_ok'));
-  };
-  window.ezDevItem = function () {
-    var n = devName(), id = document.getElementById('ez-dv-th').value, key = 'ezown_' + String(n).toLowerCase();
-    var o = J(key, []); if (o.indexOf(id) < 0) o.push(id); SV(key, o); refresh(); toast(n + ': ' + T_('dev_ok'));
   };
 
   // ---- O'yin hooklari ----
@@ -4901,10 +5009,9 @@ body[data-frame="ice"] #profil .avatar { box-shadow: 0 0 0 4px #bae6fd, 0 0 20px
     if (p && p.used && !was) {
       var s = gs('bj'); s.placed++;
       var cl = Math.max(0, Math.round((BJ.score - sc - n) / 10));
-      s.rows += cl; if (BJ.score > s.best) s.best = BJ.score;
-      gsave('bj', s);
+      s.rows += cl; gsave('bj', s);
       addCoins(getPlayer(), Math.floor(BJ.score / 10) - Math.floor(sc / 10));
-      checkBadges('bj'); refresh(); renderRating();
+      recordGame('bj', BJ.score); refresh(); window.renderRating();
     }
   };
   var _bs = window.bjStart; window.bjStart = function () { _bs(); refresh(); };
@@ -4913,24 +5020,20 @@ body[data-frame="ice"] #profil .avatar { box-shadow: 0 0 0 4px #bae6fd, 0 0 20px
   window.dnUpdate = function () {
     var sc = DN.score; _du();
     var cc = Math.floor(DN.score / 10) - Math.floor(sc / 10);
-    if (cc > 0) {
-      addCoins(getPlayer(), cc);
-      var s = gs('dn'); if (DN.score > s.best) { s.best = DN.score; gsave('dn', s); checkBadges('dn'); }
-      refresh(); renderRating();
-    }
+    if (cc > 0) { addCoins(getPlayer(), cc); recordGame('dn', DN.score); refresh(); window.renderRating(); }
   };
   var _ss = window.saveScore;
   window.saveScore = function (gained) {
     _ss(gained);
     var g = gameOf(); if (!g) return;
-    var s = gs(g); if (gained > s.best) s.best = gained; gsave(g, s); checkBadges(g); refresh();
+    recordGame(g, gained); refresh(); window.renderRating();
   };
   window.addEventListener('hashchange', function () {
     var g = gameOf(); if (!g) return;
     var s = gs(g); s.plays++; gsave(g, s); checkBadges(g); refresh();
   });
 
-  // Block Juggle: gorizontal, vertikal va aylantirilgan shakllar
+  // Block Juggle: gorizontal va vertikal shakllar
   function norm(cells) {
     var mr = Math.min.apply(null, cells.map(function (x) { return x[0]; }));
     var mc = Math.min.apply(null, cells.map(function (x) { return x[1]; }));
@@ -4946,61 +5049,69 @@ body[data-frame="ice"] #profil .avatar { box-shadow: 0 0 0 4px #bae6fd, 0 0 20px
     });
     BJ.sel = -1;
   };
-
   var _st = window.setTheme;
   window.setTheme = function (id) { _st(id); window.ezApply(''); };
 
+  // ---- Mavzu CSS (12+12 ta) ----
+  var css = THEMES.map(function (x) {
+    var c = x.c;
+    return 'body[data-shop="' + x.id + '"]{--bg:linear-gradient(120deg,' + c.join(',') + ',' + c[0] + ')!important;background-size:260% 260%!important;animation:ezbg 14s ease-in-out infinite!important;--peach:' + c[0] + '!important;--peach-2:' + c[1] + '!important;--peach-dark:' + x.ac + '!important;--text:' + x.tx + '!important;--card:' + c[0] + 'cc!important;--white:' + c[1] + '99!important;--accent:' + x.ac + '!important;--head:' + x.tx + '!important}';
+  }).join('\n');
+  var st = document.createElement('style'); st.id = 'ez-theme-css'; st.textContent = css + '\n' +
+    'body[data-frame]{}';
+  document.head.appendChild(st);
+
   // ---- Interfeys ----
   function build() {
-    var chip = '<div class="ez-chip" data-ezchip></div>';
+    var chip = function (g) { return '<div class="ez-chip" data-ezchip="' + (g || '') + '"></div>'; };
     var fs = function (id) { return '<button class="ez-fs" onclick="ezFs(\'' + id + '\')">' + T_('fs') + '</button>'; };
     var bj = document.getElementById('bj-area');
     if (bj && !bj.querySelector('[data-ezchip]')) {
-      bj.insertAdjacentHTML('afterbegin', fs('bj-area') + chip + '<div style="clear:both"></div>');
-      bj.insertAdjacentHTML('beforeend', '<h3 style="margin-top:22px">' + T_('nish') + '</h3><div class="ez-medals" data-ezbadge="bj"></div>');
+      bj.insertAdjacentHTML('afterbegin', fs('bj-area') + chip('bj') + '<div style="clear:both"></div>');
+      bj.insertAdjacentHTML('beforeend', '<div data-ezchal="bj"></div><h3 style="margin-top:22px">' + T_('nish') + '</h3><div class="ez-medals" data-ezbadge="bj"></div>');
     }
     var dn = document.getElementById('dn-area');
     if (dn && !dn.querySelector('[data-ezchip]')) {
-      dn.insertAdjacentHTML('afterbegin', fs('dn-area') + chip + '<div style="clear:both"></div>');
-      dn.insertAdjacentHTML('beforeend', '<h3 style="margin-top:22px">' + T_('nish') + '</h3><div class="ez-medals" data-ezbadge="dn"></div>');
+      dn.insertAdjacentHTML('afterbegin', fs('dn-area') + chip('dn') + '<div style="clear:both"></div>');
+      dn.insertAdjacentHTML('beforeend', '<div data-ezchal="dn"></div><h3 style="margin-top:22px">' + T_('nish') + '</h3><div class="ez-medals" data-ezbadge="dn"></div>');
     }
     [['tap', 'game-tap'], ['type', 'game-type'], ['lv', 'game-level']].forEach(function (p) {
       var sec = document.getElementById(p[1]);
-      if (sec && !sec.querySelector('[data-ezbadge="' + p[0] + '"]')) {
-        sec.insertAdjacentHTML('beforeend', '<div class="card" style="margin-top:20px"><h3>' + T_('nish') + ' — ' + gameTitle(p[0]) + '</h3><div class="ez-medals" data-ezbadge="' + p[0] + '"></div></div>');
+      if (sec && !sec.querySelector('[data-ezchip]')) {
+        sec.insertAdjacentHTML('beforeend', '<div class="card" style="margin-top:20px">' + chip(p[0]) + '<div data-ezchal="' + p[0] + '"></div><h3 style="margin-top:18px">' + T_('nish') + '</h3><div class="ez-medals" data-ezbadge="' + p[0] + '"></div></div>');
       }
     });
     var mv = document.getElementById('mavzular');
     if (mv && !document.getElementById('ez-shop')) {
-      mv.insertAdjacentHTML('beforeend',
-        '<div class="card"><h3>' + T_('shop') + '</h3><div id="ez-wallet" class="ez-chip"></div><div id="ez-shop"></div></div>' +
+      mv.insertAdjacentHTML('beforeend', '<div class="card"><h3>' + T_('shop') + '</h3><div id="ez-wallet" class="ez-chip"></div><div id="ez-shop"></div></div>' +
         '<div class="card"><h3>' + T_('nish') + '</h3><div id="ez-badges"></div></div>');
     }
     var pr = document.getElementById('profil');
-    if (pr && !document.getElementById('ez-prof')) {
-      pr.insertAdjacentHTML('beforeend', '<div class="card" id="ez-prof"></div>');
-    }
+    if (pr && !document.getElementById('ez-prof')) pr.insertAdjacentHTML('beforeend', '<div class="card" id="ez-prof"></div>');
     var dv = document.getElementById('devpanel');
     if (dv && !document.getElementById('ez-dev')) {
       var bo = [];
       Object.keys(GAMES).forEach(function (g) { GAMES[g].th.forEach(function (x, i) { bo.push('<option value="' + g + ':' + i + '">' + gameTitle(g) + ' · ' + tierName(i) + '</option>'); }); });
-      var to = THEMES.map(function (x) { return '<option value="' + x.id + '">' + nameOf(x.n) + '</option>'; }).concat(FRAMES.map(function (x) { return '<option value="fr:' + x.id + '">' + nameOf(x.n) + '</option>'; })).concat(NM[L()].map(function (n, i) { return '<option value="pb:' + i + '">' + n + '</option>'; })).join('');
-      dv.insertAdjacentHTML('beforeend',
-        '<div class="card" id="ez-dev"><h3>' + T_('dev_title') + '</h3>' +
+      var io = [];
+      THEMES.forEach(function (x) { io.push('<option value="th:' + x.id + '">' + nameOf(x.n) + '</option>'); });
+      FR_ID.forEach(function (id, i) { io.push('<option value="fr:' + id + '">' + nameOf(FR_N[i]) + '</option>'); });
+      NM[L()].forEach(function (n, i) { io.push('<option value="pb:' + i + '">' + n + '</option>'); });
+      BT_N.forEach(function (n, i) { io.push('<option value="bt:' + i + '">' + nameOf(n) + '</option>'); });
+      AN_N.forEach(function (n, i) { io.push('<option value="an:' + i + '">' + nameOf(n) + '</option>'); });
+      dv.insertAdjacentHTML('beforeend', '<div class="card" id="ez-dev"><h3>' + T_('dev_title') + '</h3>' +
         '<div class="field"><label>' + T_('dev_name') + '</label><input id="ez-dv-name"></div>' +
         '<div class="field"><label>' + T_('dev_amt') + '</label><input id="ez-dv-amt" type="number" value="100"></div>' +
         '<button class="btn" onclick="ezDevCoins()">' + T_('dev_give') + '</button>' +
+        '<div class="field" style="margin-top:20px"><label>' + T_('dev_it') + '</label><select id="ez-dv-it">' + io.join('') + '</select></div>' +
+        '<button class="btn" onclick="ezDevItem()">' + T_('dev_itb') + '</button>' +
         '<div class="field" style="margin-top:20px"><label>' + T_('dev_bd') + '</label><select id="ez-dv-bd">' + bo.join('') + '</select></div>' +
-        '<button class="btn" onclick="ezDevBadge()">' + T_('dev_bdb') + '</button>' +
-        '<div class="field" style="margin-top:20px"><label>' + T_('dev_th') + '</label><select id="ez-dv-th">' + to + '</select></div>' +
-        '<button class="btn" onclick="ezDevItem()">' + T_('dev_thb') + '</button></div>');
+        '<button class="btn" onclick="ezDevBadge()">' + T_('dev_bdb') + '</button></div>');
     }
   }
   function sync() {
     var a = J('ezact_' + k(), ''), own = items();
-    document.body.dataset.shop = (a && own.indexOf(a) >= 0) ? a : '';
-    applyFrame();
-    refresh();
+    document.body.dataset.shop = (a && own.indexOf('th:' + a) >= 0) ? a : '';
+    applyCosmetics(); pushEq(); refresh(); window.renderRating();
   }
   build();
   sync();
