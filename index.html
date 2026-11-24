@@ -1045,6 +1045,17 @@ body:not(.isadmin) aside a[data-page="admin"]{display:none}
       <button class="btn" onclick="fbAddDoc()">Hujjat qo'shish / yangilash</button>
     </div>
 
+    <div class="card" id="rules-card">
+      <h3>Firestore Rules va tekshiruv</h3>
+      <p class="fb-doc">1) «Tekshirish» ni bosing. 2) «Permission» xatosi chiqsa, qoidalarni nusxalab Firebase'da Publish qiling. 3) Qayta tekshiring.</p>
+      <div class="field"><label>Rules (Firestore &gt; Rules ga qo'ying)</label><textarea id="rules-txt" rows="12" readonly style="font-family:monospace;font-size:12px"></textarea></div>
+      <button class="btn" onclick="rulesCopy()">Rules'ni nusxalash</button>
+      <button class="btn" onclick="rulesOpen('firestore/rules')">Rules sahifasini ochish</button>
+      <button class="btn" onclick="rulesOpen('authentication/providers')">Anonymous yoqish sahifasi</button>
+      <button class="btn" onclick="rulesCheck()">Tekshirish</button>
+      <div id="rules-out" style="margin-top:12px"></div>
+    </div>
+
     <div class="card" id="soc-card">
       <h3>Kirish usullari</h3>
       <p class="fb-doc">Yoqilgan tugmalar Kirish va Ro'yxatdan o'tish sahifasida chiqadi.</p>
@@ -2838,7 +2849,14 @@ function fbInit(cfg) {
   fbDb = firebase.firestore ? firebase.firestore() : null;
   fbAuth.onAuthStateChanged(u => {
     const el = document.getElementById("fb-user");
-    if (el) el.textContent = "Firebase foydalanuvchisi: " + (u ? u.email + " (" + u.uid + ")" : "yo'q");
+    if (el) el.textContent = "Firebase foydalanuvchisi: " + (u ? (u.isAnonymous ? "anonim" : u.email) + " (" + u.uid + ")" : "yo'q");
+    /* Hech kim kirmagan bo'lsa, avtomatik anonim kirish: Rules'dagi request.auth != null shu bilan o'tadi */
+    if (!u && fbAuth && !window.__fbAnonBusy) {
+      window.__fbAnonBusy = true;
+      fbAuth.signInAnonymously().then(() => { window.__fbAnonErr = null; try { if (window.ezAfterAuth) window.ezAfterAuth(); } catch (e) {} })
+        .catch(e => { window.__fbAnonErr = e.code || e.message; })
+        .then(() => { window.__fbAnonBusy = false; });
+    }
   });
   fbSetStatus(true, "Ulangan: " + (cfg.projectId || "firebase"));
   try { fbListen(); } catch (e) {}
@@ -5797,6 +5815,84 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
   setInterval(function () { try { if (CL.id) syncStats(); if (location.hash === '#chellenj') renderChal(); } catch (e) {} }, 15000);
   try { applyI18n(); renderMnav(); renderMnavOpts(); } catch (e) {}
   route();
+})();
+</script>
+
+<script>
+/* ===== Firestore Rules + diagnostika (Developer panel) ===== */
+(function(){
+  var RULES = "rules_version = '2';\n" +
+"service cloud.firestore {\n" +
+"  match /databases/{database}/documents {\n\n" +
+"    function signedIn() { return request.auth != null; }\n\n" +
+"    // O'qish: kirgan (anonim ham) hamma uchun\n" +
+"    match /{document=**} { allow read: if signedIn(); }\n\n" +
+"    // Klanlar (ichida messages va stats)\n" +
+"    match /clans/{clanId} {\n" +
+"      allow create: if signedIn() && request.resource.data.name is string\n" +
+"                    && request.resource.data.name.size() <= 16;\n" +
+"      allow update, delete: if signedIn();\n" +
+"      match /{sub=**} { allow write: if signedIn(); }\n" +
+"    }\n\n" +
+"    // Umumiy chat\n" +
+"    match /chat_global/{id} {\n" +
+"      allow create: if signedIn() && request.resource.data.text is string\n" +
+"                    && request.resource.data.text.size() <= 300;\n" +
+"      allow update, delete: if signedIn();\n" +
+"    }\n\n" +
+"    // Reyting, akkaunt, sozlama, admin, ban\n" +
+"    match /ratings/{id}  { allow write: if signedIn(); }\n" +
+"    match /accounts/{id} { allow write: if signedIn(); }\n" +
+"    match /settings/{id} { allow write: if signedIn(); }\n" +
+"    match /admins/{id}   { allow write: if signedIn(); }\n" +
+"    match /bans/{id}     { allow write: if signedIn(); }\n\n" +
+"    // O'yin reytinglari: lb_<o'yin>\n" +
+"    match /{lb}/{id} { allow write: if lb.matches('lb_.*') && signedIn(); }\n" +
+"  }\n}\n";
+  function pid(){ try { return (FIREBASE_CONFIG && FIREBASE_CONFIG.projectId) || 'eziplay-uz'; } catch(e){ return 'eziplay-uz'; } }
+  function fill(){ var t=document.getElementById('rules-txt'); if(t && !t.value) t.value=RULES; }
+  window.rulesCopy=function(){
+    var done=function(){ toast("Rules nusxalandi. Firebase > Firestore > Rules ga qo'ying va Publish bosing"); };
+    if(navigator.clipboard) navigator.clipboard.writeText(RULES).then(done).catch(function(){});
+    else { var a=document.createElement('textarea'); a.value=RULES; document.body.appendChild(a); a.select(); document.execCommand('copy'); a.remove(); done(); }
+  };
+  window.rulesOpen=function(path){ window.open('https://console.firebase.google.com/project/'+pid()+'/'+path,'_blank'); };
+  function row(name, ok, note){
+    return '<div class="ck"><span>'+name+(note?' <small>'+note+'</small>':'')+'</span><b class="'+(ok?'fb-ok':'fb-off')+'">'+(ok?'OK':'Xato')+'</b></div>';
+  }
+  window.rulesCheck=function(){
+    var out=document.getElementById('rules-out'); if(!out) return;
+    fill();
+    try { if(!fbDb && typeof firebase!=='undefined') fbInit(FIREBASE_CONFIG); } catch(e){}
+    if(!fbDb||!fbAuth){ out.innerHTML=row('Firebase ulanishi',false,'config/SDK yo\'q'); return; }
+    out.innerHTML='<p>Tekshirilmoqda…</p>';
+    var h='', hints=[];
+    var go=function(){
+      var u=fbAuth.currentUser;
+      h+=row('Firebase Auth',!!u, u?(u.isAnonymous?'anonim':u.email):(window.__fbAnonErr||'kirmagan'));
+      if(!u){
+        if(/operation-not-allowed|admin-restricted/.test(window.__fbAnonErr||'')) hints.push("Anonymous kirish o'chiq: Authentication &gt; Sign-in method &gt; Anonymous ni yoqing (tugma yuqorida).");
+        else hints.push("Firebase'ga kirilmagan. Yuqoridagi Authentication bo'limidan email bilan kiring yoki Anonymous ni yoqing.");
+      }
+      var cols=['clans','chat_global','ratings','accounts','settings','admins','bans','lb_snake'];
+      var jobs=cols.map(function(c){
+        return fbDb.collection(c).limit(1).get().then(function(){ h+=row('O\'qish: '+c,true); })
+          .catch(function(e){ h+=row('O\'qish: '+c,false,e.code||e.message); if(e.code==='permission-denied') window.__rulesDenied=true; });
+      });
+      jobs.push(
+        fbDb.collection('settings').doc('_diag').set({t:Date.now()}).then(function(){ return fbDb.collection('settings').doc('_diag').delete(); })
+          .then(function(){ h+=row('Yozish (settings)',true); })
+          .catch(function(e){ h+=row('Yozish (settings)',false,e.code||e.message); if(e.code==='permission-denied') window.__rulesDenied=true; })
+      );
+      Promise.all(jobs).then(function(){
+        if(window.__rulesDenied){ hints.push("Rules ruxsat bermayapti: «Rules'ni nusxalash» ni bosing, «Rules sahifasini ochish» da hammasini o'chirib qo'ying va Publish bosing, 20 soniya kutib qayta tekshiring."); window.__rulesDenied=false; }
+        if(!hints.length) hints.push("Hammasi ishlayapti. Saytni yangilang (Ctrl+Shift+R).");
+        out.innerHTML=h+'<p class="fb-doc" style="margin-top:10px">'+hints.join('<br>')+'</p>';
+      });
+    };
+    if(fbAuth.currentUser) go(); else setTimeout(go,2500);
+  };
+  document.addEventListener('DOMContentLoaded',fill); fill(); setTimeout(fill,1500);
 })();
 </script>
 
