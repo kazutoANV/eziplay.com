@@ -4572,5 +4572,233 @@ function eziFbLogin(acc, p) {
 })();
 </script>
 
+<style>
+/* ===== EZI PACK: dizayn, to'liq ekran, coin, nishon, do'kon ===== */
+#bj-area, #dn-area { position: relative; border-radius: 24px; }
+#bj-board { gap: 6px !important; padding: 12px; border-radius: 18px; background: rgba(0,0,0,.08); box-shadow: inset 0 2px 10px rgba(0,0,0,.15); }
+.bj-c { border-radius: 8px !important; transition: transform .12s, filter .12s; }
+.bj-c:active { transform: scale(.9); }
+.bj-p { border-radius: 14px !important; box-shadow: 0 6px 16px rgba(0,0,0,.12); transition: transform .18s, box-shadow .18s; }
+.bj-p.sel { transform: translateY(-6px) scale(1.05); box-shadow: 0 14px 26px rgba(0,0,0,.22); }
+#dn-canvas { max-width: 100%; height: auto; border-radius: 16px; box-shadow: 0 10px 26px rgba(0,0,0,.15); }
+.ez-fs { float: right; margin: 0 0 10px 10px; padding: 9px 16px; border: none; border-radius: 12px; background: var(--accent); color: #fff; font: inherit; font-weight: 700; cursor: pointer; box-shadow: 0 6px 16px rgba(0,0,0,.18); }
+.ez-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; background: var(--white); font-weight: 800; box-shadow: 0 4px 12px rgba(0,0,0,.1); margin: 0 0 14px; }
+.ez-chip::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #fff7b0, #f5b400 60%, #b07800); }
+.ez-medals { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 14px; margin-top: 14px; }
+.ez-b { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; padding: 14px 10px; border-radius: 16px; background: var(--white); transition: transform .2s; }
+.ez-b:hover { transform: translateY(-3px); }
+.ez-b .m { width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 900; font-size: 20px; box-shadow: 0 8px 18px rgba(0,0,0,.25), inset 0 0 0 3px rgba(255,255,255,.35); text-shadow: 0 2px 4px rgba(0,0,0,.4); }
+.ez-b.lock { filter: grayscale(1); opacity: .45; }
+.ez-b small { opacity: .75; font-size: 12px; }
+.ez-shop { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; margin-top: 14px; }
+.ez-sh { border-radius: 18px; padding: 14px; color: #fff; min-height: 150px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 8px 20px rgba(0,0,0,.2); }
+.ez-sh b { font-size: 1.1rem; text-shadow: 0 2px 6px rgba(0,0,0,.35); }
+.ez-sh span { font-size: .9rem; opacity: .95; }
+.ez-sh button { margin-top: 10px; padding: 9px; border: none; border-radius: 12px; background: rgba(255,255,255,.92); color: #222; font: inherit; font-weight: 800; cursor: pointer; }
+.ez-sh.act { outline: 3px solid #fff; outline-offset: -6px; }
+#bj-area:fullscreen, #dn-area:fullscreen, #bj-area.ez-fake, #dn-area.ez-fake {
+  background: var(--card); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; overflow: auto; border-radius: 0; }
+#bj-area.ez-fake, #dn-area.ez-fake { position: fixed; inset: 0; z-index: 999; }
+#dn-area:fullscreen #dn-canvas, #dn-area.ez-fake #dn-canvas { width: min(96vw, calc(88vh * 600 / 160)); height: auto; }
+#bj-area:fullscreen #bj-board, #bj-area.ez-fake #bj-board { width: min(92vmin, 640px) !important; height: min(92vmin, 640px) !important; }
+
+/* Shop themes */
+body[data-shop="galaxy"]{--bg:radial-gradient(circle at 20% 10%,#4c1d95,#0b0320 70%);--peach:#1e1140;--peach-2:#2c1a5c;--peach-dark:#a855f7;--text:#f5f0ff;--card:#2a1a52;--white:#3b2470;--accent:#c084fc;--head:#f5f0ff}
+body[data-shop="neon"]{--bg:linear-gradient(135deg,#050510,#0f0f2a);--peach:#0b0b1a;--peach-2:#15152e;--peach-dark:#00f5d4;--text:#e6fffb;--card:#12122a;--white:#1b1b3a;--accent:#00f5d4;--head:#00f5d4}
+body[data-shop="forest"]{--bg:linear-gradient(160deg,#0d2b1f,#06140e);--peach:#10301f;--peach-2:#17402b;--peach-dark:#6ee7b7;--text:#e8fff4;--card:#134030;--white:#1a5438;--accent:#34d399;--head:#e8fff4}
+body[data-shop="lava"]{--bg:linear-gradient(160deg,#3b0a04,#140202);--peach:#2a0b05;--peach-2:#4a1408;--peach-dark:#ff6b35;--text:#ffe9de;--card:#3d1208;--white:#55190b;--accent:#ff6b35;--head:#ffe9de}
+body[data-shop="candy"]{--bg:linear-gradient(135deg,#ffd6ec,#d6f0ff);--peach:#ffe3f2;--peach-2:#ffc2e2;--peach-dark:#ff6fb5;--text:#5a1a40;--card:#fff0f8;--white:#ffffff;--accent:#ff5fa8;--head:#5a1a40}
+body[data-shop="arctic"]{--bg:linear-gradient(160deg,#e0f2ff,#ffffff);--peach:#e8f6ff;--peach-2:#c9e8fa;--peach-dark:#4fa3d9;--text:#163a57;--card:#f5fbff;--white:#ffffff;--accent:#2b8fd6;--head:#163a57}
+body[data-shop="gold"]{--bg:radial-gradient(circle at 50% 0%,#3a2a05,#120d02 70%);--peach:#1d1505;--peach-2:#33260a;--peach-dark:#fbbf24;--text:#fff6d6;--card:#2a1f08;--white:#3d2d0c;--accent:#fbbf24;--head:#fff6d6}
+</style>
+<script>
+(function () {
+  var EZ_BADGES = [
+    { id: 'first', name: 'Birinchi qadam', desc: 'Birinchi blokni joylang', g: 'linear-gradient(135deg,#e7b07a,#8a5a2b)', ch: '1', ok: function (s) { return s.placed >= 1; } },
+    { id: 'mahir', name: 'Mahir', desc: '300 ball', g: 'linear-gradient(135deg,#60a5fa,#1d4ed8)', ch: 'M', ok: function (s) { return s.best >= 300; } },
+    { id: 'galaxy', name: 'Galaxy', desc: '1000 ball', g: 'linear-gradient(135deg,#c084fc,#6d28d9)', ch: 'G', ok: function (s) { return s.best >= 1000; } },
+    { id: 'legendary', name: 'Legendary', desc: '1500 ball', g: 'linear-gradient(135deg,#fdba74,#ea580c)', ch: 'L', ok: function (s) { return s.best >= 1500; } },
+    { id: 'mythic', name: 'Mythic', desc: '3000 ball', g: 'linear-gradient(135deg,#fca5a5,#b91c1c)', ch: 'M', ok: function (s) { return s.best >= 3000; } },
+    { id: 'master', name: 'Master', desc: '5000 ball', g: 'linear-gradient(135deg,#000 50%,#fff 50%)', ch: '★', ok: function (s) { return s.best >= 5000; } },
+    { id: 'lopi', name: 'Lopi', desc: '20 ta qator tozalash', g: 'linear-gradient(135deg,#86efac,#15803d)', ch: 'LO', ok: function (s) { return s.rows >= 20; } }
+  ];
+  var EZ_SHOP = [
+    { id: 'galaxy', name: 'Galaxy', price: 300, g: 'radial-gradient(circle at 20% 10%,#7c3aed,#0b0320 75%)' },
+    { id: 'neon', name: 'Neon', price: 250, g: 'linear-gradient(135deg,#0b0b1a,#00f5d4)' },
+    { id: 'forest', name: 'Orman', price: 200, g: 'linear-gradient(160deg,#17402b,#34d399)' },
+    { id: 'lava', name: 'Lava', price: 350, g: 'linear-gradient(160deg,#4a1408,#ff6b35)' },
+    { id: 'candy', name: 'Shirin', price: 150, g: 'linear-gradient(135deg,#ffc2e2,#ff5fa8)' },
+    { id: 'arctic', name: 'Muz', price: 200, g: 'linear-gradient(160deg,#c9e8fa,#4fa3d9)' },
+    { id: 'gold', name: 'Oltin', price: 500, g: 'linear-gradient(135deg,#33260a,#fbbf24)' }
+  ];
+
+  function who() { return getPlayer() || 'mehmon'; }
+  function k() { return who().toLowerCase(); }
+  function J(key, def) { try { var v = JSON.parse(localStorage.getItem(key)); return v == null ? def : v; } catch (e) { return def; } }
+  function SV(key, v) { try { localStorage.setItem(key, JSON.stringify(v)); } catch (e) {} }
+  function stats() { return J('ezst_' + k(), { placed: 0, best: 0, rows: 0 }); }
+  function owned() { return J('ezbd_' + k(), []); }
+  function themes() { return J('ezown_' + k(), []); }
+  function wallet() { var tot = bestOf(getPlayer()) || 0; return Math.max(0, tot - J('ezsp_' + k(), 0)); }
+
+  function addCoins(name, amt) {
+    var a = loadRating(), kk = String(name).toLowerCase();
+    var r = a.find(function (x) { return (x.name || '').toLowerCase() === kk; });
+    if (!r) { r = { name: name, score: 0, best: 0 }; a.push(r); }
+    r.score = (r.score || 0) + amt;
+    a.sort(function (x, y) { return y.score - x.score; });
+    try { localStorage.setItem('eziplay-rating', JSON.stringify(a.slice(0, 50))); } catch (e) {}
+    try { if (fbDb) fbDb.collection('ratings').doc(String(r.name)).set({ name: r.name, score: r.score, best: r.best || 0 }, { merge: true }); } catch (e) {}
+  }
+
+  function renderBadges() {
+    var o = owned();
+    var h = EZ_BADGES.map(function (b) {
+      var on = o.indexOf(b.id) >= 0;
+      return '<div class="ez-b' + (on ? '' : ' lock') + '"><div class="m" style="background:' + b.g + '">' + b.ch + '</div><b>' + b.name + '</b><small>' + (on ? 'Olingan ✓' : b.desc) + '</small></div>';
+    }).join('');
+    ['ez-bj-badges', 'ez-badges'].forEach(function (id) { var e = document.getElementById(id); if (e) e.innerHTML = h; });
+  }
+  function renderShop() {
+    var e = document.getElementById('ez-shop'); if (!e) return;
+    var own = themes(), act = document.body.dataset.shop || '';
+    e.innerHTML = EZ_SHOP.map(function (s) {
+      var has = own.indexOf(s.id) >= 0, on = act === s.id;
+      var btn = has ? (on ? '✓ Faol' : 'Qo\'llash') : 'Sotib olish · ' + s.price;
+      return '<div class="ez-sh' + (on ? ' act' : '') + '" style="background:' + s.g + '"><div><b>' + s.name + '</b><br><span>' + (has ? 'Sotib olingan' : s.price + ' coin') + '</span></div><button onclick="ezBuy(\'' + s.id + '\')">' + btn + '</button></div>';
+    }).join('') + '<div class="ez-sh" style="background:linear-gradient(135deg,#e5e7eb,#9ca3af);color:#111"><div><b>Standart</b><br><span>Asosiy mavzu</span></div><button onclick="ezApply(\'\')">Qo\'llash</button></div>';
+  }
+  function refresh() {
+    var w = wallet();
+    ['ez-bj-chip', 'ez-dn-chip'].forEach(function (id) { var e = document.getElementById(id); if (e) e.textContent = 'Coin: ' + w; });
+    var wl = document.getElementById('ez-wallet'); if (wl) wl.textContent = 'Balans: ' + w + ' coin';
+    renderBadges(); renderShop();
+  }
+  function checkBadges() {
+    var st = stats(), o = owned(), nw = [];
+    EZ_BADGES.forEach(function (b) { if (o.indexOf(b.id) < 0 && b.ok(st)) { o.push(b.id); nw.push(b); } });
+    if (nw.length) { SV('ezbd_' + k(), o); nw.forEach(function (b) { toast('🏅 ' + b.name + ' nishoni olindi!'); }); }
+  }
+
+  window.ezApply = function (id) {
+    document.body.dataset.shop = id || '';
+    SV('ezact_' + k(), id || '');
+    refresh();
+  };
+  window.ezBuy = function (id) {
+    var s = EZ_SHOP.find(function (x) { return x.id === id; }); if (!s) return;
+    var own = themes();
+    if (own.indexOf(id) < 0) {
+      if (typeof loggedIn !== 'undefined' && !loggedIn) { toast(t('t_login_first')); return; }
+      var w = wallet();
+      if (w < s.price) { toast('Coin yetarli emas (kerak: ' + s.price + ')'); return; }
+      SV('ezsp_' + k(), J('ezsp_' + k(), 0) + s.price);
+      own.push(id); SV('ezown_' + k(), own);
+    }
+    window.ezApply(id);
+    toast(s.name + ' mavzusi qo\'llandi');
+  };
+
+  window.ezFs = function (id) {
+    var el = document.getElementById(id); if (!el) return;
+    if (document.fullscreenElement) { document.exitFullscreen && document.exitFullscreen(); return; }
+    if (el.classList.contains('ez-fake')) { el.classList.remove('ez-fake'); return; }
+    if (el.requestFullscreen) {
+      var p = el.requestFullscreen({ navigationUI: 'hide' });
+      if (p && p.catch) p.catch(function () { el.classList.add('ez-fake'); });
+    } else { el.classList.add('ez-fake'); }
+  };
+
+  // Developer panel tools
+  window.ezDevCoins = function () {
+    var n = (document.getElementById('ez-dv-name').value || '').trim() || getPlayer();
+    var a = parseInt(document.getElementById('ez-dv-amt').value, 10) || 0;
+    if (!n) { toast('Nom kiriting'); return; }
+    addCoins(n, a); if (typeof renderDev === 'function') renderDev(); renderRating(); refresh();
+    toast(n + ': +' + a + ' coin');
+  };
+  window.ezDevBadge = function () {
+    var n = (document.getElementById('ez-dv-name').value || '').trim() || getPlayer();
+    var id = document.getElementById('ez-dv-bd').value, key = 'ezbd_' + String(n).toLowerCase();
+    var o = J(key, []); if (o.indexOf(id) < 0) o.push(id); SV(key, o); refresh(); toast(n + ': nishon berildi');
+  };
+  window.ezDevTheme = function () {
+    var n = (document.getElementById('ez-dv-name').value || '').trim() || getPlayer();
+    var id = document.getElementById('ez-dv-th').value, key = 'ezown_' + String(n).toLowerCase();
+    var o = J(key, []); if (o.indexOf(id) < 0) o.push(id); SV(key, o); refresh(); toast(n + ': mavzu ochildi');
+  };
+
+  // Hooks into existing game code (globals are reassigned so the game calls the new versions)
+  var _bjCell = window.bjCell;
+  window.bjCell = function (i) {
+    var p = BJ.tray[BJ.sel], was = !!(p && p.used), sc = BJ.score, n = p ? p.cells.length : 0;
+    _bjCell(i);
+    if (p && p.used && !was) {
+      var st = stats(); st.placed++;
+      var cl = Math.max(0, Math.round((BJ.score - sc - n) / 10));
+      st.rows += cl; if (BJ.score > st.best) st.best = BJ.score;
+      SV('ezst_' + k(), st);
+      var c = Math.floor(BJ.score / 10) - Math.floor(sc / 10);
+      if (c > 0) addCoins(getPlayer(), c);
+      checkBadges(); refresh(); renderRating();
+    }
+  };
+  var _bjStart = window.bjStart;
+  window.bjStart = function () { _bjStart(); refresh(); };
+  var _dnStart = window.dnStart;
+  window.dnStart = function () { _dnStart(); refresh(); };
+  var _dnUpdate = window.dnUpdate;
+  window.dnUpdate = function () {
+    var sc = DN.score; _dnUpdate();
+    var c = Math.floor(DN.score / 10) - Math.floor(sc / 10);
+    if (c > 0) { addCoins(getPlayer(), c); refresh(); renderRating(); }
+  };
+  var _setTheme = window.setTheme;
+  window.setTheme = function (id) { _setTheme(id); window.ezApply(''); };
+
+  function sync() {
+    var a = J('ezact_' + k(), ''), own = themes();
+    document.body.dataset.shop = (a && own.indexOf(a) >= 0) ? a : '';
+    refresh();
+  }
+
+  function build() {
+    var bj = document.getElementById('bj-area');
+    if (bj && !document.getElementById('ez-bj-chip')) {
+      bj.insertAdjacentHTML('afterbegin', '<button class="ez-fs" onclick="ezFs(\'bj-area\')">⛶ Tuliq ekran</button><div class="ez-chip" id="ez-bj-chip"></div><div style="clear:both"></div>');
+      bj.insertAdjacentHTML('beforeend', '<h3 style="margin-top:22px">Nishonlar</h3><div class="ez-medals" id="ez-bj-badges"></div>');
+    }
+    var dn = document.getElementById('dn-area');
+    if (dn && !document.getElementById('ez-dn-chip')) {
+      dn.insertAdjacentHTML('afterbegin', '<button class="ez-fs" onclick="ezFs(\'dn-area\')">⛶ Tuliq ekran</button><div class="ez-chip" id="ez-dn-chip"></div><div style="clear:both"></div>');
+    }
+    var mv = document.getElementById('mavzular');
+    if (mv && !document.getElementById('ez-shop')) {
+      mv.insertAdjacentHTML('beforeend',
+        '<div class="card"><h3>Coin do\'koni</h3><div id="ez-wallet" class="ez-chip"></div><p>Mavzularni coin evaziga sotib oling.</p><div class="ez-shop" id="ez-shop"></div></div>' +
+        '<div class="card"><h3>Nishonlar</h3><p>Nishonlar Block Juggle o\'yinida olinadi.</p><div class="ez-medals" id="ez-badges"></div></div>');
+    }
+    var dv = document.getElementById('devpanel');
+    if (dv && !document.getElementById('ez-dev')) {
+      var bo = EZ_BADGES.map(function (b) { return '<option value="' + b.id + '">' + b.name + '</option>'; }).join('');
+      var to = EZ_SHOP.map(function (s) { return '<option value="' + s.id + '">' + s.name + '</option>'; }).join('');
+      dv.insertAdjacentHTML('beforeend',
+        '<div class="card" id="ez-dev"><h3>Coin, nishon va mavzu boshqaruvi</h3>' +
+        '<div class="field"><label>Foydalanuvchi nomi (bo\'sh bo\'lsa — o\'zingiz)</label><input id="ez-dv-name"></div>' +
+        '<div class="field"><label>Coin miqdori</label><input id="ez-dv-amt" type="number" value="100"></div>' +
+        '<button class="btn" onclick="ezDevCoins()">Coin qo\'shish</button>' +
+        '<div class="field" style="margin-top:20px"><label>Nishon</label><select id="ez-dv-bd">' + bo + '</select></div>' +
+        '<button class="btn" onclick="ezDevBadge()">Nishon berish</button>' +
+        '<div class="field" style="margin-top:20px"><label>Mavzu</label><select id="ez-dv-th">' + to + '</select></div>' +
+        '<button class="btn" onclick="ezDevTheme()">Mavzuni ochish</button></div>');
+    }
+  }
+
+  build();
+  sync();
+  window.addEventListener('hashchange', sync);
+})();
+</script>
+
 </body>
 </html>
