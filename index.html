@@ -580,6 +580,23 @@ body:not(.loggedin) aside a[data-page="chellenj"],body:not(.loggedin) aside a[da
 .ch-form{display:flex;gap:8px;margin-top:10px}
 .ch-empty{opacity:.7;text-align:center;margin:auto}
 .cl-sec{font-weight:800;margin:18px 0 4px}
+
+/* ===== Oddiy animatsiyalar: suzish/aylanish/pulsatsiya o'chirildi ===== */
+body[data-shop]{animation:none!important;background-size:100% 100%!important}
+body[data-btn="7"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button),
+body[data-btn="8"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button),
+body[data-btn="11"] :is(.btn,.ez-fs,.ez-pick button,.ez-sh button,.ez-ch button){animation:none!important}
+body[data-anim="3"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip),
+body[data-anim="4"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip),
+body[data-anim="6"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip),
+body[data-anim="7"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip),
+body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eSlideUp .5s both!important}
+body[data-anim="5"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eZoom .45s both!important}
+body[data-anim="8"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:eFadeDown .5s both!important}
+.prem-badge::after{animation:none!important;display:none}
+.ch-msg{animation:eSlideUp .25s both}
+body:not(.isadmin) aside a[data-page="admin"]{display:none}
+.adm-mini{background:linear-gradient(135deg,#34d399,#059669)!important}
 </style>
 </head>
 <body>
@@ -596,6 +613,7 @@ body:not(.loggedin) aside a[data-page="chellenj"],body:not(.loggedin) aside a[da
     <a href="#chellenj" data-page="chellenj"><span class="icon"><svg viewBox="0 0 24 24"><path d="M5 21V4M5 4h11l-2 4 2 4H5"/></svg></span><span data-i18n="nav_chal"></span></a>
     <a href="#klan" data-page="klan"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-5.5 7-5.5s7 2 7 5.5"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14.5c3 0 5 1.6 5 4.5"/></svg></span><span data-i18n="nav_clan"></span></a>
     <a href="#chat" data-page="chat"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg></span><span data-i18n="nav_chat"></span></a>
+    <a href="#admin" data-page="admin"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span><span data-i18n="nav_admin"></span></a>
     <a href="#kompaniya" data-page="kompaniya"><span class="icon"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M10 21v-4h4v4"/></svg></span><span data-i18n="nav_company"></span></a>
     <a href="#profil" data-page="profil"><span class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></span><span data-i18n="nav_profile"></span></a>
     <a href="#devpanel" data-page="devpanel"><span class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 21h8M12 18v3M7 9l2 2-2 2M12 13h5"/></svg></span><span data-i18n="nav_dev"></span></a>
@@ -876,6 +894,14 @@ body:not(.loggedin) aside a[data-page="chellenj"],body:not(.loggedin) aside a[da
       <h2 data-i18n="nav_chat"></h2>
     </div>
     <div class="card"><div id="chat-box"></div></div>
+  </section>
+
+  <section class="page" id="admin">
+    <div class="page-head">
+      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+      <h2 data-i18n="nav_admin"></h2>
+    </div>
+    <div class="card"><div id="admin-box"></div></div>
   </section>
 
   <section class="page" id="kompaniya">
@@ -1333,7 +1359,7 @@ const T = {
 };
 
 let lang = "uz", notif = true, dark = false, loggedIn = false, theme = "peach", glass = false;
-const MNAV_ALL = ["uy","oyinlar","reyting","sozlamalar","mavzular","chellenj","klan","chat","kompaniya","profil","login","register","terms","policy","devpanel"];
+const MNAV_ALL = ["uy","oyinlar","reyting","sozlamalar","mavzular","chellenj","klan","chat","admin","kompaniya","profil","login","register","terms","policy","devpanel"];
 let mnav = ["uy","reyting","sozlamalar","profil"];
 
 try {
@@ -2709,6 +2735,7 @@ document.querySelectorAll("aside a[data-page]").forEach(a => a.addEventListener(
 /* ===== Phone bottom menu ===== */
 function mnavVisible(id) {
   if ((id === "oyinlar" || id === "profil" || id === "chellenj" || id === "klan" || id === "chat") && !loggedIn) return false;
+  if (id === "admin" && !(window.ezIsAdmin && window.ezIsAdmin())) return false;
   if ((id === "login" || id === "register") && loggedIn) return false;
   if (id === "devpanel" && !isDev()) return false;
   return true;
@@ -4940,8 +4967,8 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
     var eq = eqGet();
     if (cat === 'th') { window.ezApply(idx); return; }
     if (cat === 'fr') eq.f = (eq.f === idx ? '' : idx);
-    if (cat === 'bt') eq.bt = String(idx);
-    if (cat === 'an') eq.an = String(idx);
+    if (cat === 'bt') eq.bt = (eq.bt === String(idx) ? '' : String(idx));
+    if (cat === 'an') eq.an = (eq.an === String(idx) ? '' : String(idx));
     if (cat === 'pb') {
       var p = eq.b.indexOf(idx);
       if (p >= 0) eq.b.splice(p, 1); else { if (eq.b.length >= 3) { toast(T_('pb_max')); return; } eq.b.push(idx); }
@@ -4976,7 +5003,7 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
     var av = eq.av ? '<img src="' + eq.av + '">' : '<span>' + esc(ezInitial(name)) + '</span>';
     var pbs = (eq.b || []).map(function (x) { return '<i style="background:' + GRAD[x] + '">' + CH[x] + '</i>'; }).join('');
     return '<div class="rank-row' + (me ? ' me' : '') + '"><span class="rk">' + rk + '</span><span class="ez-av fr-' + (eq.f || 'none') + '">' + av + '</span>' +
-      '<span class="nm">' + esc(ezClean(name) || t('g_guest')) + (isPremiumName(name) ? PREM_MINI : '') + (isDevName(name) ? DEV_MINI : '') + (eq.tt ? '<div class="ez-tt">' + esc(eq.tt) + '</div>' : '') + '</span>' +
+      '<span class="nm">' + esc(ezClean(name) || t('g_guest')) + (isPremiumName(name) ? PREM_MINI : '') + (isDevName(name) ? DEV_MINI : '') + (window.ezAdminBadge ? window.ezAdminBadge(name) : '') + (eq.tt ? '<div class="ez-tt">' + esc(eq.tt) + '</div>' : '') + '</span>' +
       '<span class="ez-pbs">' + pbs + '</span><span class="sc">' + score + '</span></div>';
   }
   function tabsHtml() {
@@ -5180,6 +5207,156 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
 </script>
 
 <script>
+/* ===== Admin tizimi: dasturchi paneldan admin berish + Admin panel ===== */
+(function () {
+  'use strict';
+  var A = { set: new Set(), bans: new Set(), loaded: false, tab: 'chat', unA: null, unB: null, shell: false, q: '' };
+  var T = {
+    uz: { nav_admin: 'Admin panel', adm_h: 'Adminlar', adm_ph: 'Username', adm_add: 'Admin berish', adm_rm: 'Olib tashlash', adm_none: "Admin yo'q", adm_nouser: 'Bunday foydalanuvchi topilmadi', adm_ok: 'Admin berildi', adm_off: 'Admin olib tashlandi',
+      tab_chat: 'Chat', tab_users: 'Foydalanuvchilar', tab_clans: 'Klanlar', clear: 'Umumiy chatni tozalash', clear_q: "Umumiy chatdagi barcha xabarlar o'chadi. Davom etasizmi?", cleared: 'Chat tozalandi',
+      ban: 'Chatdan bloklash', unban: 'Blokni olish', banned: 'Chatdan bloklangan', banned_list: 'Bloklanganlar', none: "Yo'q", search: 'Qidirish…', del: "O'chirish", del_q: "Klan o'chiriladi. Davom etasizmi?", deleted: "O'chirildi", members: "a'zo", err: 'Xatolik: ', denied: 'Bu foydalanuvchini bloklab bo\'lmaydi', adm_badge: 'ADMIN', loading: 'Yuklanmoqda…' },
+    en: { nav_admin: 'Admin panel', adm_h: 'Admins', adm_ph: 'Username', adm_add: 'Make admin', adm_rm: 'Remove', adm_none: 'No admins', adm_nouser: 'User not found', adm_ok: 'Admin granted', adm_off: 'Admin removed',
+      tab_chat: 'Chat', tab_users: 'Users', tab_clans: 'Clans', clear: 'Clear global chat', clear_q: 'All global chat messages will be deleted. Continue?', cleared: 'Chat cleared',
+      ban: 'Ban from chat', unban: 'Unban', banned: 'Banned from chat', banned_list: 'Banned users', none: 'None', search: 'Search…', del: 'Delete', del_q: 'The clan will be deleted. Continue?', deleted: 'Deleted', members: 'members', err: 'Error: ', denied: 'This user cannot be banned', adm_badge: 'ADMIN', loading: 'Loading…' }
+  };
+  try { Object.keys(X).forEach(function (l) { X[l].nav_admin = (T[l] || T.en).nav_admin; }); } catch (e) {}
+  function Q(k) { return (T[lang] && T[lang][k]) || T.uz[k] || k; }
+  function kk(n) { return String(n || '').toLowerCase(); }
+  function sk(n) { return encodeURIComponent(String(n)).replace(/\./g, '%2E'); }
+  function E(s) { return esc(window.ezClean ? window.ezClean(s) : s); }
+  function me() { try { return getPlayer() || ''; } catch (e) { return ''; } }
+  function fbOk() { if (!fbDb) { try { if (typeof firebase !== 'undefined') fbInit(FIREBASE_CONFIG); } catch (e) {} } return !!fbDb; }
+  function FV() { return firebase.firestore.FieldValue; }
+  window.ADM_MINI = '<span class="dev-mini adm-mini">ADMIN</span>';
+  window.ezIsAdmin = function () { return isDev() || A.set.has(kk(me())); };
+  window.ezIsAdminName = function (n) { return A.set.has(kk(n)); };
+  window.ezAdminBadge = function (n) { return (!isDevName(n) && A.set.has(kk(n))) ? window.ADM_MINI : ''; };
+  window.ezBanned = function (n) { return A.bans.has(kk(n)); };
+
+  function ui() {
+    document.body.classList.toggle('isadmin', !!window.ezIsAdmin());
+    try { renderMnav(); renderMnavOpts(); } catch (e) {}
+    devCard();
+    if (location.hash === '#admin') renderAdmin();
+    try { renderRating(); } catch (e) {}
+  }
+  function listen() {
+    if (!loggedIn || A.unA || !fbOk()) return;
+    A.unA = fbDb.collection('admins').onSnapshot(function (sn) {
+      var s = new Set(); sn.forEach(function (d) { var x = d.data(); if (x && x.name) s.add(kk(x.name)); });
+      A.set = s; A.loaded = true; ui(); guard();
+    }, function () { A.loaded = true; ui(); guard(); });
+    A.unB = fbDb.collection('bans').onSnapshot(function (sn) {
+      var s = new Set(); sn.forEach(function (d) { var x = d.data(); if (x && x.name) s.add(kk(x.name)); });
+      A.bans = s; if (location.hash === '#admin') renderAdmin();
+    }, function () {});
+  }
+  function guard() { if (location.hash === '#admin' && A.loaded && !window.ezIsAdmin()) location.hash = 'uy'; }
+
+  /* ---- Dasturchi panel: admin berish ---- */
+  function devCard() {
+    var dv = document.getElementById('devpanel'); if (!dv || !isDev()) return;
+    var c = document.getElementById('ez-admins');
+    if (!c) { dv.insertAdjacentHTML('beforeend', '<div class="card" id="ez-admins"><h3>' + Q('adm_h') + '</h3><div class="cl-form" style="max-width:420px"><input id="adm-name" placeholder="' + Q('adm_ph') + '" autocomplete="off"><button onclick="ezAdminAdd()">' + Q('adm_add') + '</button></div><div id="adm-list"></div></div>'); }
+    var l = document.getElementById('adm-list'); if (!l) return;
+    var names = []; A.set.forEach(function (n) { names.push(n); });
+    l.innerHTML = names.length ? names.map(function (n, i) { return '<div class="cl-row"><div class="tx"><b>' + E(n) + '</b> ' + window.ADM_MINI + '</div><button onclick="ezAdminRemove(\'' + sk(n) + '\')">' + Q('adm_rm') + '</button></div>'; }).join('') : '<p>' + Q('adm_none') + '</p>';
+  }
+  window.ezAdminAdd = function () {
+    if (!isDev() || !fbOk()) return;
+    var inp = document.getElementById('adm-name'), name = (inp.value || '').trim(); if (!name) return;
+    var real = null;
+    getAccounts().forEach(function (a) { if (kk(a.username) === kk(name)) real = a.username; });
+    if (!real) loadRating().forEach(function (r) { if (kk(r.name) === kk(name)) real = r.name; });
+    if (!real) return toast(Q('adm_nouser'));
+    fbDb.collection('admins').doc(sk(kk(real))).set({ name: real, by: me(), ts: FV().serverTimestamp() })
+      .then(function () { inp.value = ''; toast(Q('adm_ok')); }).catch(function (e) { toast(Q('err') + e.message); });
+  };
+  window.ezAdminRemove = function (key) {
+    if (!isDev() || !fbOk()) return;
+    fbDb.collection('admins').doc(key).delete().then(function () { toast(Q('adm_off')); }).catch(function (e) { toast(Q('err') + e.message); });
+  };
+
+  /* ---- Admin panel sahifasi ---- */
+  function tabs() {
+    return '<div class="ez-tabs">' + [['chat', 'tab_chat'], ['users', 'tab_users'], ['clans', 'tab_clans']].map(function (t) {
+      return '<button class="' + (A.tab === t[0] ? 'on' : '') + '" onclick="ezAdTab(\'' + t[0] + '\')">' + Q(t[1]) + '</button>';
+    }).join('') + '</div>';
+  }
+  window.ezAdTab = function (t) { A.tab = t; renderAdmin(true); };
+  function renderAdmin(force) {
+    var box = document.getElementById('admin-box'); if (!box) return;
+    if (!window.ezIsAdmin()) { box.innerHTML = '<p>' + Q('loading') + '</p>'; return; }
+    if (!fbOk()) return;
+    if (A.tab === 'users' && !force && document.getElementById('ad-users')) { paintUsers(); return; }
+    var h = tabs();
+    if (A.tab === 'chat') {
+      var b = []; A.bans.forEach(function (n) { b.push(n); });
+      h += '<button class="cl-leave" style="margin:0 0 16px" onclick="ezAdClear()">' + Q('clear') + '</button><h3>' + Q('banned_list') + '</h3>' +
+        (b.length ? b.map(function (n) { return '<div class="cl-row"><div class="tx"><b>' + E(n) + '</b></div><button onclick="ezAdBan(\'' + sk(n) + '\',0)">' + Q('unban') + '</button></div>'; }).join('') : '<p>' + Q('none') + '</p>');
+      box.innerHTML = h;
+    } else if (A.tab === 'users') {
+      box.innerHTML = h + '<div class="cl-form"><input id="ad-q" placeholder="' + Q('search') + '" value="' + E(A.q) + '" oninput="ezAdQ(this.value)"></div><div id="ad-users"></div>'; paintUsers();
+    } else {
+      box.innerHTML = h + '<div id="ad-clans"><p>' + Q('loading') + '</p></div>'; loadClans();
+    }
+  }
+  window.ezAdQ = function (v) { A.q = v; paintUsers(); };
+  function allUsers() {
+    var m = {}; getAccounts().forEach(function (a) { if (a.username) m[kk(a.username)] = a.username; });
+    loadRating().forEach(function (r) { if (r.name && !m[kk(r.name)]) m[kk(r.name)] = r.name; });
+    return Object.keys(m).map(function (k) { return m[k]; }).sort(function (a, b) { return kk(a) < kk(b) ? -1 : 1; });
+  }
+  function paintUsers() {
+    var el = document.getElementById('ad-users'); if (!el) return; var q = kk(A.q);
+    var list = allUsers().filter(function (n) { return !q || kk(n).indexOf(q) >= 0; }).slice(0, 100);
+    el.innerHTML = list.map(function (n) {
+      var b = A.bans.has(kk(n)), protectedU = isDevName(n) || (A.set.has(kk(n)) && !isDev());
+      return '<div class="cl-row"><div class="tx"><b>' + E(n) + '</b> ' + (isDevName(n) ? DEV_MINI : '') + window.ezAdminBadge(n) + (b ? ' <small>· ' + Q('banned') + '</small>' : '') + '</div>' +
+        (protectedU ? '' : '<button onclick="ezAdBan(\'' + sk(n) + '\',' + (b ? 0 : 1) + ')">' + (b ? Q('unban') : Q('ban')) + '</button>') + '</div>';
+    }).join('') || '<p>' + Q('none') + '</p>';
+  }
+  window.ezAdBan = function (key, on) {
+    if (!window.ezIsAdmin() || !fbOk()) return;
+    var name = decodeURIComponent(key);
+    if (on && (isDevName(name) || (A.set.has(kk(name)) && !isDev()))) return toast(Q('denied'));
+    var ref = fbDb.collection('bans').doc(sk(kk(name)));
+    (on ? ref.set({ name: name, by: me(), ts: FV().serverTimestamp() }) : ref.delete()).catch(function (e) { toast(Q('err') + e.message); });
+  };
+  window.ezAdClear = function () {
+    if (!window.ezIsAdmin() || !fbOk() || !confirm(Q('clear_q'))) return;
+    var col = fbDb.collection('chat_global');
+    (function loop(n) {
+      col.limit(400).get().then(function (sn) {
+        if (sn.empty || n > 20) { toast(Q('cleared')); return; }
+        var b = fbDb.batch(); sn.forEach(function (d) { b.delete(d.ref); });
+        return b.commit().then(function () { loop(n + 1); });
+      }).catch(function (e) { toast(Q('err') + e.message); });
+    })(0);
+  };
+  function loadClans() {
+    fbDb.collection('clans').limit(100).get().then(function (sn) {
+      var el = document.getElementById('ad-clans'); if (!el) return; var a = [];
+      sn.forEach(function (d) { var x = d.data(); a.push({ id: d.id, name: x.name, owner: x.owner, n: (x.memberNames || []).length }); });
+      el.innerHTML = a.map(function (c) {
+        return '<div class="cl-row"><div class="tx"><b>' + E(c.name) + '</b><br><small>' + c.n + ' ' + Q('members') + ' · ' + E(c.owner) + '</small></div><button onclick="ezAdClanDel(\'' + c.id + '\')">' + Q('del') + '</button></div>';
+      }).join('') || '<p>' + Q('none') + '</p>';
+    }).catch(function (e) { var el = document.getElementById('ad-clans'); if (el) el.innerHTML = '<p>' + Q('err') + E(e.message) + '</p>'; });
+  }
+  function wipe(col) { return col.limit(400).get().then(function (sn) { if (sn.empty) return; var b = fbDb.batch(); sn.forEach(function (d) { b.delete(d.ref); }); return b.commit(); }); }
+  window.ezAdClanDel = function (id) {
+    if (!window.ezIsAdmin() || !fbOk() || !confirm(Q('del_q'))) return;
+    var ref = fbDb.collection('clans').doc(id);
+    Promise.all([wipe(ref.collection('messages')), wipe(ref.collection('stats'))]).catch(function () {}).then(function () { return ref.delete(); })
+      .then(function () { toast(Q('deleted')); loadClans(); }).catch(function (e) { toast(Q('err') + e.message); });
+  };
+
+  window.addEventListener('hashchange', function () { listen(); document.body.classList.toggle('isadmin', !!window.ezIsAdmin()); if (location.hash === '#admin') { renderAdmin(true); guard(); } devCard(); });
+  listen(); devCard(); document.body.classList.toggle('isadmin', !!window.ezIsAdmin());
+})();
+</script>
+
+<script>
 /* ===== Eziplay: Klan, Chat, Chellenjlar, ism almashtirish (akkaunt yo'qolmasligi) ===== */
 (function () {
   'use strict';
@@ -5199,7 +5376,7 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
       need: 'Coin yetarli emas (kerak: {n})', name_bad: "Klan nomi 3–16 belgi bo'lsin", name_taken: 'Bunday klan nomi band', created: 'Klan ochildi!', joined: "Klanga qo'shildingiz", left: 'Klandan chiqdingiz',
       tab_tasks: 'Vazifalar', tab_chat: 'Klan chati', tab_members: "A'zolar", leave: 'Klandan chiqish', leave_q: 'Klandan chiqasizmi?',
       owner: 'Rahbar', plays: "o'yin", earned: 'coin', score: 'Klan coini', t_plays: "Klan jami {v} ta o'yin o'ynasin", t_earned: "Klan jami {v} coin to'plasin", t_members: "Klanda {v} ta a'zo bo'lsin",
-      err: 'Xatolik: ', renamed: 'Username almashtirildi — barcha ma\'lumotlaringiz saqlandi', taken: 'Bu username band', bad_user: "Username 3–20 belgi: harf, raqam, _ . - bo'lsin", saved: 'Saqlandi', dev_lock: "Dasturchi username'ini o'zgartirib bo'lmaydi"
+      err: 'Xatolik: ', renamed: 'Username almashtirildi — barcha ma\'lumotlaringiz saqlandi', taken: 'Bu username band', bad_user: "Username 3–20 belgi: harf, raqam, _ . - bo'lsin", saved: 'Saqlandi', dev_lock: "Dasturchi username'ini o'zgartirib bo'lmaydi", rules: "Firestore qoidalari ruxsat bermayapti (Rules'ni tekshiring)", banned: 'Siz chatdan bloklangansiz', kick: 'Chiqarish', kick_q: "A'zoni klandan chiqarasizmi?"
     },
     en: {
       nav_chal: 'Challenges', nav_clan: 'Clan', nav_chat: 'Chat',
@@ -5213,7 +5390,7 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
       need: 'Not enough coins (need {n})', name_bad: 'Clan name must be 3–16 characters', name_taken: 'Clan name is taken', created: 'Clan created!', joined: 'You joined the clan', left: 'You left the clan',
       tab_tasks: 'Tasks', tab_chat: 'Clan chat', tab_members: 'Members', leave: 'Leave clan', leave_q: 'Leave the clan?',
       owner: 'Leader', plays: 'plays', earned: 'coins', score: 'Clan coins', t_plays: 'Clan plays {v} games in total', t_earned: 'Clan earns {v} coins in total', t_members: 'Clan has {v} members',
-      err: 'Error: ', renamed: 'Username changed — all your data was kept', taken: 'This username is taken', bad_user: 'Username: 3–20 chars, letters, digits, _ . -', saved: 'Saved', dev_lock: 'Developer username cannot be changed'
+      err: 'Error: ', renamed: 'Username changed — all your data was kept', taken: 'This username is taken', bad_user: 'Username: 3–20 chars, letters, digits, _ . -', saved: 'Saved', dev_lock: 'Developer username cannot be changed', rules: 'Firestore rules deny access (check Rules)', banned: 'You are banned from chat', kick: 'Kick', kick_q: 'Remove this member from the clan?'
     }
   };
   try {
@@ -5303,8 +5480,8 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
     var n = kk(me());
     return arr.map(function (m) {
       var mine = kk(m.name) === n;
-      return '<div class="ch-msg' + (mine ? ' me' : '') + '"><div class="ch-n">' + E(m.name) + (isDevName(m.name) ? DEV_MINI : '') + '<span class="ch-t">' + fmtT(m.ts) + '</span>' +
-        (isDev() ? '<button class="ch-x" title="O\'chirish" onclick="ezMsgDel(\'' + colRefGetter + '\',\'' + m.id + '\')">✕</button>' : '') + '</div>' + E(m.text) + '</div>';
+      return '<div class="ch-msg' + (mine ? ' me' : '') + '"><div class="ch-n">' + E(m.name) + (isDevName(m.name) ? DEV_MINI : '') + (window.ezAdminBadge ? window.ezAdminBadge(m.name) : '') + '<span class="ch-t">' + fmtT(m.ts) + '</span>' +
+        ((window.ezIsAdmin && window.ezIsAdmin()) ? '<button class="ch-x" title="O\'chirish" onclick="ezMsgDel(\'' + colRefGetter + '\',\'' + m.id + '\')">✕</button>' : '') + '</div>' + E(m.text) + '</div>';
     }).join('');
   }
   function paintMsgs(boxId, arr, tag) {
@@ -5319,14 +5496,16 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
     if (text.length > 300) return toast(Q('chat_long'));
     if (Date.now() - lastSend < 1200) return toast(Q('chat_wait'));
     var n = me(); if (!n || !ensureFb()) return toast(Q('nofb'));
+    if (window.ezBanned && window.ezBanned(n)) return toast(Q('banned'));
     lastSend = Date.now(); inp.value = '';
     colRef.add({ name: n, text: text, ts: FV().serverTimestamp() }).then(bumpChat).catch(function (e) { toast(Q('err') + e.message); });
   }
   window.ezMsgDel = function (tag, id) {
-    if (!isDev() || !fbDb) return;
+    if (!(window.ezIsAdmin && window.ezIsAdmin()) || !fbDb) return;
     var col = tag === 'g' ? fbDb.collection('chat_global') : (CL.id ? fbDb.collection('clans').doc(CL.id).collection('messages') : null);
     if (col) col.doc(id).delete().catch(function (e) { toast(Q('err') + e.message); });
   };
+  function showErr(id, e) { var b = document.getElementById(id), m = (e && e.code === 'permission-denied') ? Q('rules') : Q('err') + (e && e.message); if (b) b.innerHTML = '<div class="ch-empty">' + E(m) + '</div>'; toast(m); }
   function chatUi(boxId, inputId, btnId, sendFn) {
     return '<div class="ch-box" id="' + boxId + '"></div><div class="ch-form"><input id="' + inputId + '" maxlength="300" placeholder="' + Q('chat_ph') + '" autocomplete="off" onkeydown="if(event.key===\'Enter\'){' + sendFn + '()}">' +
       '<button id="' + btnId + '" onclick="' + sendFn + '()">' + Q('send') + '</button></div>';
@@ -5341,7 +5520,7 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
     if (!ensureFb()) { box.innerHTML = '<p>' + Q('nofb') + '</p>'; return; }
     if (!document.getElementById('gc-msgs')) box.innerHTML = '<h3 style="margin-bottom:10px">' + Q('chat_global') + '</h3>' + chatUi('gc-msgs', 'gc-in', 'gc-btn', 'ezGlobalSend');
     if (!GC.un) {
-      GC.un = fbDb.collection('chat_global').orderBy('ts', 'desc').limit(80).onSnapshot(function (sn) { GC.msgs = snapMsgs(sn); paintMsgs('gc-msgs', GC.msgs, 'g'); }, function (e) { toast(Q('err') + e.message); });
+      GC.un = fbDb.collection('chat_global').orderBy('ts', 'desc').limit(80).onSnapshot(function (sn) { GC.msgs = snapMsgs(sn); paintMsgs('gc-msgs', GC.msgs, 'g'); }, function (e) { GC.un = null; showErr('gc-msgs', e); });
     } else paintMsgs('gc-msgs', GC.msgs, 'g');
   }
   function stopChat() { if (GC.un) { GC.un(); GC.un = null; } }
@@ -5379,10 +5558,10 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
       var a = []; sn.forEach(function (d) { var x = d.data(); a.push({ key: d.id, name: x.name || '', plays: x.plays || 0, earned: x.earned || 0, claimed: x.claimed || [] }); });
       CL.stats = a; CL.hasStat = a.some(function (s) { return s.key === sk(me()); });
       renderClan(); syncStats();
-    });
+    }, function (e) { toast(Q('err') + e.message); });
     CL.unMsgs = fbDb.collection('clans').doc(CL.id).collection('messages').orderBy('ts', 'desc').limit(80).onSnapshot(function (sn) {
       CL.msgs = snapMsgs(sn); if (CL.tab === 'chat') paintMsgs('cl-msgs', CL.msgs, 'c');
-    });
+    }, function (e) { if (CL.tab === 'chat') showErr('cl-msgs', e); });
   }
   function syncStats() {
     if (!CL.id || !fbDb || CL.syncing || !me()) return;
@@ -5462,6 +5641,11 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
     var p = names.length ? ref.update({ memberNames: FV().arrayRemove(n), owner: CL.data.owner === n ? names[0] : CL.data.owner }) : ref.delete();
     p.then(function () { return statRef(id, n).delete().catch(function () {}); }).then(function () { try { localStorage.removeItem(clanBaseKey()); } catch (e) {} CL.list = null; toast(Q('left')); }).catch(function (e) { toast(Q('err') + e.message); });
   };
+  window.ezKick = function (i) {
+    var n = CL.names && CL.names[i]; if (!n || !CL.data || CL.data.owner !== me() || !confirm(Q('kick_q'))) return;
+    var id = CL.id;
+    fbDb.collection('clans').doc(id).update({ memberNames: FV().arrayRemove(n) }).then(function () { return statRef(id, n).delete().catch(function () {}); }).catch(function (e) { toast(Q('err') + e.message); });
+  };
   window.ezClTab = function (t) { CL.tab = t; paintTabs(); paintBody(true); };
   window.ezClanSend = function () { if (CL.id) sendTo(fbDb.collection('clans').doc(CL.id).collection('messages'), 'cl-in', 'cl-btn'); };
   window.ezTaskClaim = function (id) {
@@ -5497,10 +5681,11 @@ body[data-anim="11"] :is(.card,.hero,.ez-b,.ez-sh,.rank-row,.ez-chip){animation:
     } else if (CL.tab === 'members') {
       var st = {}; CL.stats.forEach(function (s) { st[kk(s.name)] = s; });
       var names = (CL.data.memberNames || []).slice().sort(function (a, b) { return ((st[kk(b)] || {}).earned || 0) - ((st[kk(a)] || {}).earned || 0); });
-      el.innerHTML = names.map(function (n) {
+      CL.names = names; var isOwner = CL.data.owner === me();
+      el.innerHTML = names.map(function (n, i) {
         var s = st[kk(n)] || { plays: 0, earned: 0 };
         return '<div class="cl-row"><div class="tx"><b>' + E(n) + '</b>' + (n === CL.data.owner ? ' <span class="cl-badge">' + Q('owner') + '</span>' : '') + (isDevName(n) ? DEV_MINI : '') +
-          '<br><small>' + s.plays + ' ' + Q('plays') + ' · ' + s.earned + ' ' + Q('earned') + '</small></div></div>';
+          '<br><small>' + s.plays + ' ' + Q('plays') + ' · ' + s.earned + ' ' + Q('earned') + '</small></div>' + (isOwner && n !== me() ? '<button onclick="ezKick(' + i + ')">' + Q('kick') + '</button>' : '') + '</div>';
       }).join('');
     } else if (force || !document.getElementById('cl-msgs')) {
       el.innerHTML = chatUi('cl-msgs', 'cl-in', 'cl-btn', 'ezClanSend'); paintMsgs('cl-msgs', CL.msgs, 'c');
