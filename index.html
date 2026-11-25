@@ -6953,7 +6953,7 @@ function register() {
     document.querySelectorAll('[onclick*="startGame(1)"],[onclick*="startGame(8)"]').forEach(function(b){
       var card = b.closest('.game'); (card || b).remove();
     });
-    document.querySelectorAll('#game-tap,#game-snake').forEach(function(el){ el.remove(); });
+    document.querySelectorAll('#game-tap,#game-snake').forEach(function(el){ el.style.display='none'; });
     document.querySelectorAll('[data-page="game-tap"],[data-page="game-snake"]').forEach(function(a){ a.remove(); });
     document.querySelectorAll('[data-ezchip]').forEach(function(){});
     if (REMOVED.indexOf((location.hash||'').slice(1))>=0) location.hash = '#oyinlar';
@@ -6977,6 +6977,553 @@ function register() {
   setInterval(run, 1500);
 })();
 </script>
+<style id="ezihoot-css">
+#eh-app{font-family:inherit}
+.ehk{max-width:820px}
+.ehk-card{background:var(--card);border-radius:20px;padding:28px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.ehk-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px;font-weight:700}
+.ehk-timer{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:1.5rem;font-weight:800;background:#46178F}
+.ehk-bar{height:10px;border-radius:6px;background:rgba(0,0,0,.1);overflow:hidden;margin-bottom:18px}
+.ehk-bar i{display:block;height:100%;background:#26890C;transition:width .3s}
+.ehk-q{font-size:1.5rem;font-weight:800;text-align:center;padding:26px 10px;border-radius:14px;background:#46178F;color:#fff;margin-bottom:18px;min-height:110px;display:grid;place-items:center}
+.ehk-opts{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.ehk-opt{border:none;border-radius:14px;padding:22px 16px;font:inherit;font-size:1.1rem;font-weight:700;color:#fff;cursor:pointer;text-align:left;min-height:84px;transition:transform .15s,opacity .3s;box-shadow:0 5px 0 rgba(0,0,0,.25)}
+.ehk-opt:hover:not(:disabled){transform:translateY(-2px)}
+.ehk-opt:disabled{cursor:default}
+.ehk-opt.dim{opacity:.35}
+.ehk-opt.ok{outline:5px solid #fff;outline-offset:-5px}
+.ehk-opt.no{opacity:.4}
+.ehk-c0{background:#E21B3C}.ehk-c1{background:#1368CE}.ehk-c2{background:#D89E00}.ehk-c3{background:#26890C}
+.ehk-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;font-weight:700;gap:10px;flex-wrap:wrap}
+.ehk-btn{border:none;border-radius:12px;padding:12px 22px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.ehk-lb{margin-top:10px}
+.ehk-row{display:flex;justify-content:space-between;padding:12px 16px;border-radius:12px;background:var(--white);margin-bottom:8px;font-weight:600}
+.ehk-big{font-size:2.6rem;font-weight:900;text-align:center;margin:10px 0}
+.ehk-sub{text-align:center;opacity:.8}
+.ehk-start{text-align:center;padding:30px 10px}
+.ehk-start h3{font-size:1.4rem;margin-bottom:8px}
+@media(max-width:600px){.ehk-opts{grid-template-columns:1fr}.ehk-q{font-size:1.2rem}}
+</style>
+<script>
+/* EziHoot: Kahoot uslubidagi to'liq ishlaydigan quiz */
+(function(){
+  var QS=[
+    {q:"Yorug‘lik tezligi taxminan?",o:["300 km/s","300 000 km/s","3 000 km/s","30 km/s"],a:1},
+    {q:"O‘zbekistonning poytaxti?",o:["Samarqand","Buxoro","Toshkent","Namangan"],a:2},
+    {q:"Suvning kimyoviy formulasi?",o:["CO₂","H₂O","O₂","NaCl"],a:1},
+    {q:"Bir yilda necha oy bor?",o:["10","11","12","13"],a:2},
+    {q:"Fotosintez natijasida qaysi gaz ajraladi?",o:["CO₂","Azot","Kislorod","Metan"],a:2},
+    {q:"2 + 2 × 2 = ?",o:["6","8","4","3"],a:0},
+    {q:"Eng katta okean?",o:["Atlantika","Hind","Tinch","Shimoliy Muz"],a:2},
+    {q:"HTML nima uchun ishlatiladi?",o:["Sahifa tuzilmasi","Ma’lumot bazasi","Grafika","Musiqa"],a:0},
+    {q:"Odam tanasida nechta suyak bor (taxminan)?",o:["106","206","306","406"],a:1},
+    {q:"Qaysi sayyora Quyoshga eng yaqin?",o:["Venera","Yer","Merkuriy","Mars"],a:2}
+  ];
+  var TIME=15, S=null, tmr=null;
+  function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function root(){return document.getElementById('eh-app');}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function stop(){clearInterval(tmr);tmr=null;}
+  function reset(){stop();S={order:shuffle(QS).slice(0,5),i:0,score:0,sel:-1,left:TIME,t0:0,done:false,answers:[]};}
+  function scoreFor(left){return 500+Math.round(500*left/TIME);}
+  function draw(){
+    var r=root(); if(!r) return;
+    if(!S){ r.innerHTML='<div class="ehk"><div class="ehk-card ehk-start"><h3>Tayyormisiz?</h3><p class="ehk-sub">5 ta savol. Har biriga '+TIME+' soniya. Qanchalik tez to‘g‘ri javob bersangiz, shuncha ko‘p ball olasiz.</p><div style="margin-top:20px"><button class="ehk-btn" data-eh="start">Boshlash</button></div></div></div>'; return; }
+    if(S.done){
+      var n=S.order.length, c=S.answers.filter(function(x){return x;}).length;
+      r.innerHTML='<div class="ehk"><div class="ehk-card"><h3 class="ehk-sub">Quiz tugadi!</h3><div class="ehk-big">'+S.score+' ball</div><p class="ehk-sub">To‘g‘ri javoblar: '+c+'/'+n+'</p>'
+        +'<div class="ehk-foot" style="justify-content:center;margin-top:24px"><button class="ehk-btn" data-eh="restart">Qayta boshlash</button></div></div></div>';
+      return;
+    }
+    var q=S.order[S.i], n=S.order.length, answered=S.sel>=0;
+    var opts=q.o.map(function(o,j){
+      var cls='ehk-opt ehk-c'+j;
+      if(answered){ if(j===q.a) cls+=' ok'; else if(j===S.sel) cls+=' no'; else cls+=' dim'; }
+      return '<button class="'+cls+'"'+(answered?' disabled':' data-eh="pick" data-j="'+j+'"')+'>'+esc(o)+'</button>';
+    }).join('');
+    var res = answered ? '<div class="ehk-sub" style="margin-top:12px;font-weight:700">'+(S.sel===q.a?'To‘g‘ri! +'+S.lastGain:'Noto‘g‘ri')+'</div>' : '';
+    var next = answered ? '<button class="ehk-btn" data-eh="next">'+(S.i+1<n?'Keyingi savol':'Natija')+'</button>' : '';
+    r.innerHTML='<div class="ehk"><div class="ehk-card">'
+      +'<div class="ehk-top"><span>Savol '+(S.i+1)+'/'+n+'</span><span>Ball: '+S.score+'</span></div>'
+      +'<div class="ehk-bar"><i style="width:'+((S.i)/n*100)+'%"></i></div>'
+      +'<div class="ehk-top" style="justify-content:center"><div class="ehk-timer" style="background:'+(S.left<=5?'#E21B3C':'#46178F')+'">'+S.left+'</div></div>'
+      +'<div class="ehk-q">'+esc(q.q)+'</div>'
+      +'<div class="ehk-opts">'+opts+'</div>'+res
+      +'<div class="ehk-foot"><span></span>'+next+'</div></div></div>';
+    if(!answered) startTimer();
+  }
+  function startTimer(){
+    stop(); S.t0=Date.now(); var start=S.left;
+    tmr=setInterval(function(){
+      if(!S||S.sel>=0) return stop();
+      S.left=Math.max(0,TIME-Math.floor((Date.now()-S.t0)/1000));
+      if(S.left<=0){ S.sel=-2; S.answers.push(false); stop(); draw(); return; }
+      var t=root() && root().querySelector('.ehk-timer'); if(t){ t.textContent=S.left; t.style.background=S.left<=5?'#E21B3C':'#46178F'; }
+    },250);
+  }
+  function pick(j){
+    if(!S||S.sel>=0) return; stop();
+    var q=S.order[S.i]; S.sel=j;
+    var ok=j===q.a; S.answers.push(ok);
+    S.lastGain=ok?scoreFor(S.left):0; S.score+=S.lastGain; draw();
+  }
+  function next(){ if(!S) return; if(S.i+1<S.order.length){S.i++;S.sel=-1;S.left=TIME;draw();} else {S.done=true;stop();draw();} }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-eh]'); if(!b||!root()||!root().contains(b)) return;
+    var a=b.dataset.eh;
+    if(a==='start'||a==='restart'){ reset(); S.left=TIME; draw(); }
+    else if(a==='pick') pick(+b.dataset.j);
+    else if(a==='next') next();
+  });
+  function sync(){
+    if(location.hash!=='#ezihoot') return;
+    var r=root(); if(!r) return;
+    if(!r.dataset.ehInit){ r.dataset.ehInit='1'; S=null; draw(); }
+  }
+  window.addEventListener('hashchange',function(){ if(location.hash==='#ezihoot'){ root()&&(root().dataset.ehInit=''); sync(); } });
+  setInterval(sync,500);
+})();
+</script>
+<style id="ezq2-css">
+#ezq-app{display:none!important}
+.q2{max-width:900px}
+.q2-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.q2-tabs button{border:none;border-radius:999px;padding:10px 18px;background:var(--white);color:var(--text);font:inherit;font-weight:700;cursor:pointer}
+.q2-tabs button.on{background:var(--accent);color:#fff}
+.q2-card{background:var(--card);border-radius:18px;padding:22px;margin-bottom:16px}
+.q2-card h3{margin-bottom:6px}
+.q2-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+.q2-qz{border:none;border-radius:14px;padding:18px;background:var(--white);color:var(--text);text-align:left;font:inherit;cursor:pointer}
+.q2-qz b{display:block;font-size:1.05rem;margin-bottom:4px}
+.q2-qz small{opacity:.75}
+.q2-qz.done{opacity:.6;cursor:default}
+.q2-st{display:block;margin-top:8px;font-weight:700;color:var(--accent)}
+.q2-hd{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700;margin-bottom:10px;flex-wrap:wrap}
+.q2-time{font-size:1.4rem;font-weight:800;padding:8px 14px;border-radius:12px;background:var(--accent);color:#fff}
+.q2-time.low{background:#E21B3C}
+.q2-bar{height:8px;border-radius:6px;background:rgba(0,0,0,.1);overflow:hidden;margin-bottom:16px}
+.q2-bar i{display:block;height:100%;background:var(--accent)}
+.q2-q{font-size:1.25rem;font-weight:700;margin-bottom:14px}
+.q2-opt{display:block;width:100%;margin:8px 0;padding:14px 16px;border:2px solid var(--peach-2);border-radius:12px;background:var(--white);color:var(--text);font:inherit;text-align:left;cursor:pointer}
+.q2-opt.right{border-color:#2e9d57;background:#e3f7ea}
+.q2-opt.wrong{border-color:#d64545;background:#fde6e6}
+.q2-opt:disabled{cursor:default}
+.q2-next{margin-top:12px;border:none;border-radius:12px;padding:12px 20px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.q2-big{font-size:2.4rem;font-weight:900;text-align:center;margin:10px 0}
+.q2-themes{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:10px}
+.q2-themes button{border:3px solid transparent;border-radius:14px;padding:26px 10px;font:inherit;font-weight:700;color:#333;cursor:pointer}
+.q2-themes button.sel{border-color:#333}
+</style>
+<script>
+/* EziQuizs v2: kunlik/haftalik/oylik bo'limlar, 5 savol, taymer, 0/5 hisob, restart, mavzular */
+(function(){
+  var POOL=[
+    {q:"Yorug‘lik tezligi taxminan?",o:["300 km/s","300 000 km/s","3 000 km/s","30 km/s"],a:1},
+    {q:"O‘zbekistonning poytaxti?",o:["Samarqand","Buxoro","Toshkent","Namangan"],a:2},
+    {q:"Suvning formulasi?",o:["CO₂","H₂O","O₂","NaCl"],a:1},
+    {q:"Bir yilda necha oy bor?",o:["10","11","12","13"],a:2},
+    {q:"Fotosintezda qaysi gaz ajraladi?",o:["CO₂","Azot","Kislorod","Metan"],a:2},
+    {q:"2 + 2 × 2 = ?",o:["6","8","4","3"],a:0},
+    {q:"Eng katta okean?",o:["Atlantika","Hind","Tinch","Shimoliy Muz"],a:2},
+    {q:"HTML nima uchun?",o:["Sahifa tuzilmasi","Ma’lumot bazasi","Grafika","Musiqa"],a:0},
+    {q:"Odam tanasida taxminan nechta suyak bor?",o:["106","206","306","406"],a:1},
+    {q:"Quyoshga eng yaqin sayyora?",o:["Venera","Yer","Merkuriy","Mars"],a:2},
+    {q:"Eng katta materik?",o:["Afrika","Osiyo","Yevropa","Amerika"],a:1},
+    {q:"Bir soatda necha daqiqa?",o:["30","45","60","100"],a:2},
+    {q:"Qaysi hayvon sutemizuvchi?",o:["Akula","Delfin","Ilon","Baliq"],a:1},
+    {q:"Inson qoni qaysi rangda?",o:["Ko‘k","Qizil","Yashil","Sariq"],a:1},
+    {q:"Pi soni taxminan?",o:["2,14","3,14","4,13","3,41"],a:1},
+    {q:"Eng katta mamlakat (maydon)?",o:["Xitoy","AQSH","Rossiya","Kanada"],a:2}
+  ];
+  var PERIODS=[
+    {id:'day',t:'Kunlik',quizzes:[['kun1','Kunlik test 1'],['kun2','Kunlik test 2']]},
+    {id:'week',t:'Haftalik',quizzes:[['hft1','Haftalik test 1'],['hft2','Haftalik test 2']]},
+    {id:'month',t:'Oylik',quizzes:[['oy1','Oylik test 1'],['oy2','Oylik test 2']]}
+  ];
+  var THEMES=[['peach','Shaftoli','#FFCBA4'],['blue','Ko‘k','#B9D7F5'],['green','Yashil','#BFE5CB'],['purple','Binafsha','#D8C4F5']];
+  var TIME=15, Q=5, TAB='quiz', ST=null, tmr=null, KEY='ezq2-v2';
+  function now(){return new Date();}
+  function stamp(p){
+    var d=now();
+    if(p==='day') return d.toISOString().slice(0,10);
+    if(p==='month') return d.getFullYear()+'-'+(d.getMonth()+1);
+    var t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())); var day=t.getUTCDay()||7; t.setUTCDate(t.getUTCDate()+4-day);
+    var y0=new Date(Date.UTC(t.getUTCFullYear(),0,1)); return t.getUTCFullYear()+'-W'+Math.ceil(((t-y0)/86400000+1)/7);
+  }
+  function load(){ try{return JSON.parse(localStorage.getItem(KEY))||{coins:0,done:{}};}catch(e){return {coins:0,done:{}};} }
+  function save(d){ try{localStorage.setItem(KEY,JSON.stringify(d));}catch(e){} }
+  function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function box(){return document.getElementById('ezq-app');}
+  function host(){
+    var sec=document.getElementById('ezquiz'); if(!sec) return null;
+    var h=document.getElementById('ezq2-host');
+    if(!h){ h=document.createElement('div'); h.id='ezq2-host'; sec.appendChild(h); }
+    return h;
+  }
+  function stop(){clearInterval(tmr);tmr=null;}
+  function doneKey(id,p){return id+'@'+stamp(p);}
+  function header(){
+    var d=load();
+    return '<div class="q2-hd"><span>Kristall: '+d.coins+'</span></div>'
+      +'<div class="q2-tabs"><button data-q2="tab" data-t="quiz" class="'+(TAB==='quiz'?'on':'')+'">Quizlar</button><button data-q2="tab" data-t="themes" class="'+(TAB==='themes'?'on':'')+'">Mavzular</button></div>';
+  }
+  function quizTab(){
+    var d=load();
+    return PERIODS.map(function(p){
+      return '<div class="q2-card"><h3>'+p.t+'</h3><small>Har '+(p.id==='day'?'kuni':p.id==='week'?'haftada':'oyda')+' yangilanadi</small><div class="q2-grid">'
+        +p.quizzes.map(function(z){
+          var k=doneKey(z[0],p.id), r=d.done[k];
+          return '<button class="q2-qz'+(r?' done':'')+'"'+(r?' disabled':' data-q2="start" data-id="'+z[0]+'" data-p="'+p.id+'"')+'><b>'+z[1]+'</b><small>'+Q+' savol · '+TIME+' s har savolga</small>'
+            +(r?'<span class="q2-st">'+r.score+'/'+Q+' · +'+r.reward+' kristall</span>':'<span class="q2-st">Boshlash →</span>')+'</button>';
+        }).join('')+'</div></div>';
+    }).join('');
+  }
+  function themesTab(){
+    var cur=(document.body.className.match(/th-\w+/)||[''])[0].replace('th-','');
+    return '<div class="q2-card"><h3>Mavzular</h3><p>Sayt rangini tanlang.</p><div class="q2-themes">'
+      +THEMES.map(function(t){return '<button class="'+((cur===t[0]||(!cur&&t[0]==='peach'))?'sel ':'')+'" style="background:'+t[2]+'" data-q2="theme" data-id="'+t[0]+'">'+t[1]+'</button>';}).join('')
+      +'</div></div>';
+  }
+  function playView(){
+    var q=ST.qs[ST.i], n=ST.qs.length, ans=ST.sel>=0;
+    var opts=q.o.map(function(o,j){
+      var c='q2-opt'; if(ans){ if(j===q.a)c+=' right'; else if(j===ST.sel)c+=' wrong'; }
+      return '<button class="'+c+'"'+(ans?' disabled':' data-q2="pick" data-j="'+j+'"')+'>'+esc(o)+'</button>';
+    }).join('');
+    var nx=ans?'<button class="q2-next" data-q2="next">'+(ST.i+1<n?'Keyingi savol':'Natijani ko‘rish')+'</button>':'';
+    return '<div class="q2-card"><div class="q2-hd"><span>'+esc(ST.title)+' · Savol '+(ST.i+1)+'/'+n+'</span><span class="q2-time'+(ST.left<=5?' low':'')+'" id="q2-t">'+ST.left+' s</span></div>'
+      +'<div class="q2-bar"><i style="width:'+(ST.i/n*100)+'%"></i></div><div class="q2-q">'+esc(q.q)+'</div>'+opts+nx+'</div>';
+  }
+  function resultView(){
+    var n=ST.qs.length, reward=ST.correct*10+(ST.correct===n?20:0);
+    return '<div class="q2-card" style="text-align:center"><h3>Quiz tugadi!</h3><div class="q2-big">'+ST.correct+'/'+n+'</div><p>+'+reward+' kristall</p>'
+      +'<div style="margin-top:14px"><button class="q2-next" data-q2="restart">Qayta boshlash</button> <button class="q2-next" data-q2="back">Ro‘yxatga qaytish</button></div></div>';
+  }
+  function render(){
+    var h=host(); if(!h) return;
+    var body = ST ? (ST.done?resultView():playView()) : (TAB==='quiz'?quizTab():themesTab());
+    h.innerHTML='<div class="q2">'+(ST?'':header())+body+'</div>';
+  }
+  function startTimer(){
+    stop(); var t0=Date.now(), start=ST.left;
+    tmr=setInterval(function(){
+      if(!ST||ST.sel>=0) return stop();
+      ST.left=Math.max(0,TIME-Math.floor((Date.now()-t0)/1000));
+      if(ST.left<=0){ ST.sel=-2; stop(); render(); return; }
+      var el=document.getElementById('q2-t'); if(el){el.textContent=ST.left+' s'; el.className='q2-time'+(ST.left<=5?' low':'');}
+    },250);
+  }
+  function start(id,p){
+    var z=null; PERIODS.forEach(function(pp){pp.quizzes.forEach(function(x){if(x[0]===id)z=x;});});
+    if(!z) return;
+    var d=load(); if(d.done[doneKey(id,p)]) return;
+    ST={id:id,p:p,title:z[1],qs:shuffle(POOL).slice(0,Q),i:0,sel:-1,left:TIME,correct:0,done:false};
+    render(); startTimer();
+    var h=host(); if(h) h.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  function pick(j){
+    if(!ST||ST.sel>=0) return; stop();
+    ST.sel=j; if(j===ST.qs[ST.i].a) ST.correct++;
+    render();
+  }
+  function next(){
+    if(!ST) return;
+    if(ST.i+1<ST.qs.length){ ST.i++; ST.sel=-1; ST.left=TIME; render(); startTimer(); return; }
+    var reward=ST.correct*10+(ST.correct===ST.qs.length?20:0);
+    var d=load(); d.done[doneKey(ST.id,ST.p)]={score:ST.correct,reward:reward}; d.coins+=reward; save(d);
+    ST.done=true; stop(); render();
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-q2]'); if(!b) return;
+    var h=host(); if(!h||!h.contains(b)) return;
+    var a=b.dataset.q2;
+    if(a==='tab'){ TAB=b.dataset.t; ST=null; render(); }
+    else if(a==='start') start(b.dataset.id,b.dataset.p);
+    else if(a==='pick') pick(+b.dataset.j);
+    else if(a==='next') next();
+    else if(a==='restart'){ var s=ST; ST=null; start(s.id,s.p); }
+    else if(a==='back'){ ST=null; TAB='quiz'; render(); }
+    else if(a==='theme'){ if(typeof setTheme==='function') setTheme(b.dataset.id); render(); }
+  });
+  function sync(){
+    if(location.hash!=='#ezquiz') return;
+    if(box()) box().style.display='none';
+    if(!host()) return;
+    if(!document.getElementById('ezq2-host').dataset.init){ document.getElementById('ezq2-host').dataset.init='1'; render(); }
+  }
+  window.addEventListener('hashchange',sync);
+  setInterval(sync,500);
+})();
+</script>
+<style id="chal-css">
+
+.ch2{max-width:900px}
+.ch2-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.ch2-tabs button{border:none;border-radius:999px;padding:10px 18px;background:var(--white);color:var(--text);font:inherit;font-weight:700;cursor:pointer}
+.ch2-tabs button.on{background:var(--accent);color:#fff}
+.ch2-task{background:var(--white);border-radius:14px;padding:16px 18px;margin-bottom:12px}
+.ch2-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700;margin-bottom:8px;flex-wrap:wrap}
+.ch2-bar{height:10px;border-radius:6px;background:rgba(0,0,0,.1);overflow:hidden}
+.ch2-bar i{display:block;height:100%;background:var(--accent)}
+.ch2-btn{margin-top:10px;border:none;border-radius:10px;padding:9px 16px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.ch2-btn:disabled{opacity:.5;cursor:default}
+.ch2-note{opacity:.8;font-size:.95rem}
+</style>
+<script>
+/* Chellenjlar: kunlik, haftalik, oylik. Progress avtomatik hisoblanadi. */
+(function(){
+  var KEY='chal-v2', WALLET='ezq2-v2';
+  var PER={
+    daily:{t:'Kunlik chellenj',goals:[['ez',1,'EziQuizs testini yakunlang'],['eh',1,'EziHoot o‘yinini yakunlang'],['ty',3,'Yozish tezligi o‘yinini 3 marta tugating']],reward:50},
+    weekly:{t:'Haftalik chellenj',goals:[['ez',5,'EziQuizs testini 5 marta yakunlang'],['eh',5,'EziHoot o‘yinini 5 marta yakunlang'],['ty',10,'Yozish tezligi o‘yinini 10 marta tugating']],reward:300},
+    monthly:{t:'Oylik chellenj',goals:[['ez',15,'EziQuizs testini 15 marta yakunlang'],['eh',15,'EziHoot o‘yinini 15 marta yakunlang'],['ty',30,'Yozish tezligi o‘yinini 30 marta tugating']],reward:1000}
+  };
+  var TAB='daily';
+  function stamp(p){
+    var d=new Date();
+    if(p==='daily') return d.toISOString().slice(0,10);
+    if(p==='monthly') return d.getFullYear()+'-'+(d.getMonth()+1);
+    var t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())); var day=t.getUTCDay()||7; t.setUTCDate(t.getUTCDate()+4-day);
+    var y0=new Date(Date.UTC(t.getUTCFullYear(),0,1)); return t.getUTCFullYear()+'-W'+Math.ceil(((t-y0)/86400000+1)/7);
+  }
+  function load(){ try{return JSON.parse(localStorage.getItem(KEY))||{};}catch(e){return {};} }
+  function save(d){ try{localStorage.setItem(KEY,JSON.stringify(d));}catch(e){} }
+  function slot(p){
+    var d=load(), k=stamp(p);
+    if(!d[p]||d[p].k!==k) d[p]={k:k,ez:0,eh:0,ty:0,claimed:false};
+    save(d); return d;
+  }
+  function bump(kind){
+    ['daily','weekly','monthly'].forEach(function(p){
+      var d=load(), k=stamp(p);
+      var key=p; if(!d[key]||d[key].k!==k) d[key]={k:k,ez:0,eh:0,ty:0,claimed:false};
+      d[key][kind]=(d[key][kind]||0)+1; save(d);
+    });
+    render();
+  }
+  function wallet(){ try{return JSON.parse(localStorage.getItem(WALLET))||{coins:0,done:{}};}catch(e){return {coins:0,done:{}};} }
+  function addCoins(n){ var w=wallet(); w.coins=(w.coins||0)+n; try{localStorage.setItem(WALLET,JSON.stringify(w));}catch(e){} }
+  function box(){ var s=document.getElementById('chellenj'); if(!s) return null;
+    var h=document.getElementById('ch2-host'); if(!h){ h=document.createElement('div'); h.id='ch2-host'; s.appendChild(h); } return h; }
+  function render(){
+    var h=box(); if(!h) return;
+    var d=load();
+    var body=TAB;
+    h.innerHTML='<div class="ch2"><div class="ch2-tabs">'
+      +['daily','weekly','monthly'].map(function(p){return '<button class="'+(TAB===p?'on':'')+'" data-ch="'+p+'">'+PER[p].t.replace(' chellenj','')+'</button>';}).join('')
+      +'</div>'+card(TAB)+'</div>';
+  }
+  function card(p){
+    var cfg=PER[p], s=slot(p);
+    var all=cfg.goals.every(function(g){return (s[g[0]]||0)>=g[1];});
+    var rows=cfg.goals.map(function(g){
+      var v=Math.min(s[g[0]]||0,g[1]), pct=v/g[1]*100;
+      return '<div class="ch2-task"><div class="ch2-head"><span>'+g[2]+'</span><span>'+v+'/'+g[1]+'</span></div><div class="ch2-bar"><i style="width:'+pct+'%"></i></div></div>';
+    }).join('');
+    var btn = s.claimed ? '<button class="ch2-btn" disabled>Olingan</button>'
+      : '<button class="ch2-btn" data-ch="claim" data-p="'+p+'"'+(all?'':' disabled')+'>'+(all?'Mukofotni olish (+'+cfg.reward+' kristall)':'Barcha vazifalarni bajaring')+'</button>';
+    return '<div><h3 style="margin-bottom:6px">'+cfg.t+'</h3><p class="ch2-note">Yangilanadi: '+({daily:'har kuni',weekly:'har hafta',monthly:'har oy'})[p]+' · Mukofot: '+cfg.reward+' kristall</p>'+rows+btn+'</div>';
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-ch]'); if(!b) return;
+    var h=box(); if(!h||!h.contains(b)) return;
+    var a=b.dataset.ch;
+    if(a==='claim'){
+      var p=b.dataset.p, d=load(); if(!d[p]||d[p].k!==stamp(p)) return;
+      d[p].claimed=true; save(d); addCoins(PER[p].reward); render();
+    } else { TAB=a; render(); }
+  });
+  /* Hisoblash: EziQuizs, EziHoot, yozish tezligi */
+  function watch(id,kind){
+    var el=document.getElementById(id); if(!el) return;
+    var mo=new MutationObserver(function(){
+      var txt=el.textContent||'';
+      if(/Quiz tugadi|Natija|Tugadi/.test(txt) && /(Quiz tugadi|To‘g‘ri javoblar|ball)/.test(txt)){
+        if(!el.dataset.cnt){ el.dataset.cnt='1'; bump(kind); }
+      } else { delete el.dataset.cnt; }
+    });
+    mo.observe(el,{childList:true,subtree:true,characterData:true});
+  }
+  var wrapped=false;
+  function wrapType(){
+    if(wrapped || typeof window.finishType!=='function') return;
+    wrapped=true; var orig=window.finishType;
+    window.finishType=function(){ var r=orig.apply(this,arguments); bump('ty'); return r; };
+  }
+  watch('eh-app','eh');
+  watch('ezq2-host','ez');
+  setInterval(function(){ wrapType(); },500);
+  window.addEventListener('hashchange',function(){ if(location.hash==='#chellenj') render(); });
+  setInterval(function(){ if(location.hash==='#chellenj') render(); },3000);
+})();
+</script>
+<style id="toast-fix">
+/* Pastdagi oq bildirishnoma tuzatildi: yashirin holatda hech narsa ko'rinmaydi */
+.toast{position:fixed!important;left:50%!important;bottom:24px!important;top:auto!important;right:auto!important;
+  background:#3A2820!important;color:#FFF7F0!important;padding:12px 22px!important;border-radius:12px!important;
+  font-weight:600!important;font-size:.95rem!important;max-width:90vw!important;text-align:center!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.25)!important;border:0!important;width:auto!important;height:auto!important;min-height:0!important;
+  opacity:0!important;visibility:hidden!important;pointer-events:none!important;
+  transform:translateX(-50%) translateY(20px)!important;transition:opacity .25s ease,transform .25s ease,visibility .25s!important;z-index:1100!important}
+.toast.show{opacity:1!important;visibility:visible!important;transform:translateX(-50%) translateY(0)!important}
+@media (max-width:800px){.toast{bottom:calc(118px + env(safe-area-inset-bottom,0px))!important}}
+</style>
+
+<style id="dino-css">
+#dn-canvas{border-radius:16px!important;box-shadow:0 12px 30px rgba(0,0,0,.15)}
+#dn-area{background:linear-gradient(180deg,#bfe6ff 0%,#eaf7ff 70%,#fff 100%)!important;padding:18px!important;border-radius:20px!important}
+#dn-area .gstats b{color:#2a4a6b}
+</style>
+<script>
+/* Dino Run: yangi dizayn va to'g'rilangan kaktus masofasi.
+   Kaktuslar orasidagi masofa sakrash vaqtiga qarab hisoblanadi, shuning uchun 3 ta ketma-ket kaktus chiqmaydi. */
+var DN_AIR = 37; /* sakrashning taxminiy davomiyligi (kadrlarda) */
+function dnUpdate() {
+  DN.t++;
+  if (DN.h > 0 || DN.vy > 0) { DN.h += DN.vy; DN.vy -= 0.6; if (DN.h <= 0) { DN.h = 0; DN.vy = 0; } }
+  DN.score = Math.floor(DN.t / 5);
+  DN.speed = Math.min(13, 6 + DN.score / 250);
+  /* kaktuslar orasidagi minimal masofa: sakrash davomida uchib o'tadigan masofa + zaxira */
+  var minGap = DN.speed * DN_AIR + 40;
+  var last = DN.obs[DN.obs.length - 1];
+  if (!last || DN_W - last.x > DN.gap) {
+    DN.obs.push({ x: DN_W + 10, w: 16 + Math.floor(Math.random() * 2) * 8, h: 30 + Math.floor(Math.random() * 2) * 10 });
+    DN.gap = minGap + Math.random() * 140;
+  }
+  DN.obs.forEach(function (o) { o.x -= DN.speed; });
+  DN.obs = DN.obs.filter(function (o) { return o.x > -40; });
+  var dl = 50, dr = 72, dt = DN_G - 30 - DN.h, db = DN_G - DN.h;
+  for (var i = 0; i < DN.obs.length; i++) {
+    var o = DN.obs[i];
+    var ol = o.x, or = o.x + o.w, ot = DN_G - o.h, ob = DN_G;
+    if (dr - 4 > ol + 4 && dl + 4 < or - 4 && db - 4 > ot + 4 && dt + 4 < ob) {
+      DN.over = true;
+      if (DN.score > DN.best) DN.best = DN.score;
+      var b = document.getElementById('dn-best'); if (b) b.textContent = DN.best;
+      document.getElementById('dn-msg').textContent = t('dn_over_msg');
+      break;
+    }
+  }
+  document.getElementById('dn-score').textContent = DN.score;
+}
+var DN_CLOUDS = [{x:120,y:26,s:1},{x:360,y:40,s:.8},{x:520,y:20,s:1.1}];
+function dnRR(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function dnDraw() {
+  var cv = document.getElementById('dn-canvas'); if (!cv) return;
+  var ctx = cv.getContext('2d');
+  var g = ctx.createLinearGradient(0,0,0,DN_H);
+  g.addColorStop(0,'#9fd8ff'); g.addColorStop(1,'#eef9ff');
+  ctx.fillStyle = g; ctx.fillRect(0,0,DN_W,DN_H);
+  /* quyosh */
+  ctx.fillStyle = '#ffd86b'; ctx.beginPath(); ctx.arc(540,34,14,0,Math.PI*2); ctx.fill();
+  /* bulutlar (sekin harakat) */
+  ctx.fillStyle = 'rgba(255,255,255,.9)';
+  DN_CLOUDS.forEach(function(c){
+    var x = ((c.x - DN.t*0.3) % (DN_W+120) + DN_W+120) % (DN_W+120) - 60;
+    ctx.beginPath(); ctx.arc(x,c.y,12*c.s,0,Math.PI*2); ctx.arc(x+14*c.s,c.y-6*c.s,15*c.s,0,Math.PI*2); ctx.arc(x+30*c.s,c.y,11*c.s,0,Math.PI*2); ctx.fill();
+  });
+  /* yer */
+  ctx.fillStyle = '#e8c48a'; ctx.fillRect(0,DN_G,DN_W,DN_H-DN_G);
+  ctx.fillStyle = '#c99a57'; ctx.fillRect(0,DN_G,DN_W,3);
+  /* yer chiziqlari */
+  ctx.fillStyle = '#c99a57';
+  for (var i=0;i<12;i++){ var x=((i*70 - DN.t*DN.speed) % (DN_W+70) + DN_W+70) % (DN_W+70) - 35; ctx.fillRect(x, DN_G+12+(i%3)*8, 22, 3); }
+  /* dinozavr */
+  var x = 50, top = DN_G - 30 - DN.h, f = Math.floor(DN.t / 6) % 2;
+  ctx.fillStyle = '#4caf50';
+  dnRR(ctx,x,top+6,26,20,7); ctx.fill();
+  dnRR(ctx,x+12,top-4,18,16,6); ctx.fill();
+  ctx.fillStyle = '#2e7d32'; ctx.beginPath(); ctx.moveTo(x-2,top+14); ctx.lineTo(x-10,top+10); ctx.lineTo(x-2,top+22); ctx.fill();
+  ctx.fillStyle = '#2e7d32';
+  ctx.fillRect(x+6, top+22, 5, 10 + (DN.h===0 && f ? 2 : 0));
+  ctx.fillRect(x+15, top+22, 5, 10 + (DN.h===0 && !f ? 2 : 0));
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x+24,top+1,4,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#1b2a1b'; ctx.beginPath(); ctx.arc(x+25,top+1,2,0,Math.PI*2); ctx.fill();
+  /* kaktuslar */
+  DN.obs.forEach(function(o){
+    ctx.fillStyle = '#2e8b57';
+    dnRR(ctx,o.x,DN_G-o.h,o.w,o.h,6); ctx.fill();
+    dnRR(ctx,o.x-6,DN_G-o.h*0.6,6,14,3); ctx.fill();
+    dnRR(ctx,o.x+o.w,DN_G-o.h*0.5,6,14,3); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fillRect(o.x+3,DN_G-o.h+6,3,o.h-12);
+  });
+  /* ball */
+  ctx.font = 'bold 16px system-ui,sans-serif'; ctx.textAlign = 'right'; ctx.fillStyle = '#2a4a6b';
+  ctx.fillText(String(DN.score).padStart(5,'0'), DN_W-16, 24);
+}
+</script>
+<style id="theme-css">
+#mv-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px;margin:18px 0}
+#mv-pick button{border:3px solid transparent;border-radius:16px;padding:0;overflow:hidden;background:var(--white);cursor:pointer;font:inherit;color:var(--text);text-align:left}
+#mv-pick button .sw{height:96px;position:relative}
+#mv-pick button .sw::after{content:"";position:absolute;left:12px;right:12px;bottom:12px;height:12px;border-radius:6px;background:rgba(255,255,255,.7)}
+#mv-pick button span{display:block;padding:10px 12px;font-weight:700}
+#mv-pick button.sel{border-color:var(--accent)}
+#mv-pick button.sel span::after{content:" ✓"}
+</style>
+<script>
+/* Mavzular: aniq tanlagich. Har bir tugma mavjud setTheme() ni chaqiradi. */
+(function(){
+  var LIST=[['peach','Shaftoli','linear-gradient(135deg,#FFE5D0,#F4A27A)'],
+            ['blue','Ko‘k','linear-gradient(135deg,#E3F0FF,#6FA8DC)'],
+            ['green','Yashil','linear-gradient(135deg,#E6F5EA,#6DBE8A)'],
+            ['purple','Binafsha','linear-gradient(135deg,#F0E8FF,#A784DB)'],
+            ['sunset','Quyosh','linear-gradient(135deg,#FFD6A5,#FF7E5F)'],
+            ['ocean','Okean','linear-gradient(135deg,#D4F1F4,#2A9D8F)'],
+            ['light','Yorug‘','linear-gradient(135deg,#FFFFFF,#9CA3AF)'],
+            ['dark','Qorong‘i','linear-gradient(135deg,#2B1D17,#7A4A36)']];
+  function cur(){ try { return (typeof dark!=='undefined' && dark) ? 'dark' : (typeof theme!=='undefined' ? theme : 'peach'); } catch(e){ return 'peach'; } }
+  function render(){
+    var sec=document.getElementById('mavzular'); if(!sec) return;
+    var h=document.getElementById('mv-host');
+    if(!h){ h=document.createElement('div'); h.id='mv-host'; sec.insertBefore(h, sec.children[1]||null); }
+    var c=cur();
+    h.innerHTML='<div class="card"><h3>Mavzuni tanlang</h3><p style="opacity:.8">Tanlangan mavzu darhol qo‘llanadi va saqlanadi. 🔒 belgisi bilan ko‘rsatilgan mavzular Premium talab qiladi.</p><div id="mv-pick">'
+      +LIST.map(function(x){var lk=(typeof isLocked==='function')?isLocked(x[0]):false; return '<button class="'+(c===x[0]?'sel':'')+'" data-mv="'+x[0]+'"><div class="sw" style="background:'+x[2]+'"></div><span>'+x[1]+(lk?' 🔒':'')+'</span></button>';}).join('')
+      +'</div></div>';
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-mv]'); if(!b) return;
+    var id=b.dataset.mv;
+    if(typeof setTheme==='function') setTheme(id);
+    render();
+  });
+  window.addEventListener('hashchange',function(){ if(location.hash==='#mavzular') render(); });
+  setInterval(function(){ if(location.hash==='#mavzular') render(); },1500);
+})();
+</script>
+<style id="old-themes-hide">#mavzular .presets,#mavzular .swatches,#eski-mavzular{display:none!important}</style><style id="clan-duel-modern">
+/* Klan va Duel: zamonaviy ko'rinish (faqat CSS, haqiqiy tizim o'zgarmaydi) */
+.cl-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:14px}
+.cl-badge{padding:6px 12px;border-radius:999px;background:var(--white);font-weight:700;font-size:.85rem;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.cl-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.cl-tabs button{border:none;border-radius:999px;padding:9px 16px;background:var(--white);color:var(--text);font:inherit;font-weight:700;cursor:pointer;transition:transform .15s}
+.cl-tabs button:hover{transform:translateY(-1px)}
+.cl-tabs button.on,.cl-tabs button.active{background:var(--accent);color:#fff}
+.cl-msgs{display:flex;flex-direction:column;gap:8px;max-height:460px;overflow-y:auto;padding:14px;border-radius:18px;background:var(--card)}
+.cl-msgs>*{max-width:78%;padding:10px 14px;border-radius:16px;background:var(--white);word-break:break-word;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+.cl-in{display:flex;gap:8px;margin-top:12px}
+.cl-in input{flex:1;min-width:0;border:2px solid var(--peach-2);border-radius:14px;padding:12px 14px;font:inherit;background:var(--white);color:var(--text)}
+.cl-btn,.cl-form button,.cl-create-name{border-radius:12px}
+.cl-btn{border:none;padding:12px 18px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.cl-sec{border-radius:18px;padding:16px;background:var(--card);margin-top:12px}
+.duel-box{display:flex;flex-direction:column;gap:12px}
+.duel-form{display:flex;gap:10px;flex-wrap:wrap}
+.duel-input{flex:1;min-width:180px;border:2px solid var(--peach-2);border-radius:14px;padding:12px 14px;font:inherit;background:var(--white);color:var(--text)}
+.duel-btn{border:none;border-radius:12px;padding:11px 18px;background:var(--accent);color:#fff;font:inherit;font-weight:700;cursor:pointer;transition:transform .12s,filter .12s}
+.duel-btn:hover{filter:brightness(1.05)}
+.duel-btn:active{transform:scale(.97)}
+.duel-btn.ghost{background:var(--white);color:var(--text)}
+.duel-item{background:var(--white);border-radius:16px;padding:16px;box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.duel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:800;margin-bottom:10px;flex-wrap:wrap}
+.duel-badge{padding:5px 12px;border-radius:999px;background:var(--accent);color:#fff;font-size:.8rem;font-weight:700}
+.duel-bar{height:10px;border-radius:6px;background:rgba(0,0,0,.08);overflow:hidden;margin:8px 0}
+.duel-bar i{display:block;height:100%;background:var(--accent)}
+.duel-score{font-weight:800;font-size:1.1rem}
+.duel-empty{opacity:.7;text-align:center;padding:18px}
+.duel-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+</style>
 </body>
 </html>
 
