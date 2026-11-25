@@ -6944,6 +6944,39 @@ function register() {
   if (document.body) start(); else document.addEventListener('DOMContentLoaded', start);
 })();
 </script>
+
+<script>
+/* Eziplay tuzatishlari: Tez bos va Qurt o'yinni olib tashlash, o'qilmaydigan matnni tuzatish */
+(function(){
+  var REMOVED = ['game-tap','game-snake'];
+  function removeGames(){
+    document.querySelectorAll('[onclick*="startGame(1)"],[onclick*="startGame(8)"]').forEach(function(b){
+      var card = b.closest('.game'); (card || b).remove();
+    });
+    document.querySelectorAll('#game-tap,#game-snake').forEach(function(el){ el.remove(); });
+    document.querySelectorAll('[data-page="game-tap"],[data-page="game-snake"]').forEach(function(a){ a.remove(); });
+    document.querySelectorAll('[data-ezchip]').forEach(function(){});
+    if (REMOVED.indexOf((location.hash||'').slice(1))>=0) location.hash = '#oyinlar';
+  }
+  function fixContrast(){
+    document.querySelectorAll('button, .btn, .duel-btn, a.btn').forEach(function(b){
+      var bg = getComputedStyle(b).backgroundColor, m = bg.match(/\d+(\.\d+)?/g);
+      if(!m || m.length<3) return;
+      var a = m.length>3 ? +m[3] : 1; if (a < .5) return;
+      var L = (0.299*m[0]+0.587*m[1]+0.114*m[2])/255;
+      var fg = getComputedStyle(b).color, f = (fg.match(/\d+(\.\d+)?/g)||[0,0,0]).map(Number);
+      var FL = (0.299*f[0]+0.587*f[1]+0.114*f[2])/255;
+      if (L > .7 && FL > .7) b.style.setProperty('color','#3a2a20','important');
+      else if (L < .3 && FL < .3) b.style.setProperty('color','#fff','important');
+    });
+  }
+  function run(){ removeGames(); fixContrast(); }
+  document.addEventListener('DOMContentLoaded', run);
+  window.addEventListener('load', run);
+  window.addEventListener('hashchange', removeGames);
+  setInterval(run, 1500);
+})();
+</script>
 </body>
 </html>
 
