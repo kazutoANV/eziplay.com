@@ -3642,7 +3642,7 @@ dnUpdate = function () {
 };
 
 /* ===== Themes: dark & light free, others need Eziplay Premium ===== */
-const FREE_THEMES = ['peach', 'dark', 'light', 'auto'];
+const FREE_THEMES = ['peach', 'dark', 'light', 'auto', 'blue', 'green', 'purple', 'sunset', 'ocean'];
 const PREM_T = { uz:"Eziplay Premium kerak", en:"Eziplay Premium required", ru:"Нужен Eziplay Premium", tr:"Eziplay Premium gerekli", de:"Eziplay Premium erforderlich", fr:"Eziplay Premium requis", es:"Requiere Eziplay Premium", it:"Richiede Eziplay Premium", pt:"Requer Eziplay Premium", zh:"需要 Eziplay Premium", ja:"Eziplay Premium が必要です", ko:"Eziplay Premium 필요", ar:"يتطلب Eziplay Premium", uk:"Потрібен Eziplay Premium", pl:"Wymaga Eziplay Premium", nl:"Eziplay Premium vereist", az:"Eziplay Premium tələb olunur", kk:"Eziplay Premium қажет", ky:"Eziplay Premium керек", tg:"Eziplay Premium лозим аст", tk:"Eziplay Premium gerek" };
 Object.keys(X).forEach(l => Object.assign(X[l], { prem_locked: PREM_T[l] || PREM_T.en }));
 
@@ -7085,7 +7085,7 @@ function register() {
 })();
 </script>
 <style id="ezq2-css">
-#ezq-app{display:none!important}
+body.ezq-v2-quiz #ezq-app{display:none!important}
 .q2{max-width:900px}
 .q2-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
 .q2-tabs button{border:none;border-radius:999px;padding:10px 18px;background:var(--white);color:var(--text);font:inherit;font-weight:700;cursor:pointer}
@@ -7140,7 +7140,7 @@ function register() {
     {id:'week',t:'Haftalik',quizzes:[['hft1','Haftalik test 1'],['hft2','Haftalik test 2']]},
     {id:'month',t:'Oylik',quizzes:[['oy1','Oylik test 1'],['oy2','Oylik test 2']]}
   ];
-  var THEMES=[['peach','Shaftoli','#FFCBA4'],['blue','Ko‘k','#B9D7F5'],['green','Yashil','#BFE5CB'],['purple','Binafsha','#D8C4F5']];
+  var THEMES=[['peach','Shaftoli','#FFCBA4'],['blue','Ko‘k','#B9D7F5'],['green','Yashil','#BFE5CB'],['purple','Binafsha','#D8C4F5'],['sunset','Quyosh','#FFB38A'],['ocean','Okean','#A8E0E5'],['light','Yorug‘','#E5E7EB'],['dark','Qorong‘i','#4A3026']];
   var TIME=15, Q=5, TAB='quiz', ST=null, tmr=null, KEY='ezq2-v2';
   function now(){return new Date();}
   function stamp(p){
@@ -7168,10 +7168,25 @@ function register() {
     return '<div class="q2-hd"><span>Kristall: '+d.coins+'</span></div>'
       +'<div class="q2-tabs"><button data-q2="tab" data-t="quiz" class="'+(TAB==='quiz'?'on':'')+'">Quizlar</button><button data-q2="tab" data-t="themes" class="'+(TAB==='themes'?'on':'')+'">Mavzular</button></div>';
   }
+  function nextReset(p){
+    var d=now();
+    if(p==='day') return new Date(d.getFullYear(),d.getMonth(),d.getDate()+1);
+    if(p==='week'){ var dow=d.getDay()||7; return new Date(d.getFullYear(),d.getMonth(),d.getDate()+(8-dow)); }
+    return new Date(d.getFullYear(),d.getMonth()+1,1);
+  }
+  function resetIn(p){
+    var ms=nextReset(p)-now(); if(ms<0) ms=0;
+    var s=Math.floor(ms/1000), dd=Math.floor(s/86400), hh=Math.floor(s%86400/3600), mm=Math.floor(s%3600/60), ss=s%60;
+    var pad=function(n){return String(n).padStart(2,'0');};
+    return (dd>0?dd+' kun ':'')+pad(hh)+':'+pad(mm)+':'+pad(ss);
+  }
+  setInterval(function(){
+    document.querySelectorAll('[data-q2reset]').forEach(function(el){ el.textContent=resetIn(el.dataset.q2reset); });
+  },1000);
   function quizTab(){
     var d=load();
     return PERIODS.map(function(p){
-      return '<div class="q2-card"><h3>'+p.t+'</h3><small>Har '+(p.id==='day'?'kuni':p.id==='week'?'haftada':'oyda')+' yangilanadi</small><div class="q2-grid">'
+      return '<div class="q2-card"><h3>'+p.t+'</h3><small>Yangilanishiga: <b data-q2reset="'+p.id+'">'+resetIn(p.id)+'</b></small><div class="q2-grid">'
         +p.quizzes.map(function(z){
           var k=doneKey(z[0],p.id), r=d.done[k];
           return '<button class="q2-qz'+(r?' done':'')+'"'+(r?' disabled':' data-q2="start" data-id="'+z[0]+'" data-p="'+p.id+'"')+'><b>'+z[1]+'</b><small>'+Q+' savol · '+TIME+' s har savolga</small>'
@@ -7182,7 +7197,7 @@ function register() {
   function themesTab(){
     var cur=(document.body.className.match(/th-\w+/)||[''])[0].replace('th-','');
     return '<div class="q2-card"><h3>Mavzular</h3><p>Sayt rangini tanlang.</p><div class="q2-themes">'
-      +THEMES.map(function(t){return '<button class="'+((cur===t[0]||(!cur&&t[0]==='peach'))?'sel ':'')+'" style="background:'+t[2]+'" data-q2="theme" data-id="'+t[0]+'">'+t[1]+'</button>';}).join('')
+      +THEMES.map(function(t){var lk=(typeof isLocked==='function')?isLocked(t[0]):false; return '<button class="'+((cur===t[0]||(!cur&&t[0]==='peach'))?'sel ':'')+'" style="background:'+t[2]+';color:'+(t[0]==='dark'?'#fff':'#3a2a20')+'" data-q2="theme" data-id="'+t[0]+'">'+t[1]+(lk?'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-2px;margin-left:4px" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>':'')+'</button>';}).join('')
       +'</div></div>';
   }
   function playView(){
@@ -7202,9 +7217,24 @@ function register() {
   }
   function render(){
     var h=host(); if(!h) return;
-    var body = ST ? (ST.done?resultView():playView()) : (TAB==='quiz'?quizTab():themesTab());
+    if(TAB==='themes'){
+      document.body.classList.remove('ezq-v2-quiz');
+      h.innerHTML='';
+      var ob=document.querySelector('#ezq-app [data-ezq="tab"][data-t="themes"]');
+      if(ob && !ob.classList.contains('on')) ob.click();
+      return;
+    }
+    document.body.classList.add('ezq-v2-quiz');
+    var body = ST ? (ST.done?resultView():playView()) : quizTab();
     h.innerHTML='<div class="q2">'+(ST?'':header())+body+'</div>';
   }
+  /* Asl mavzular ro'yxatiga o'tganda eski "Quizlar" tugmasi bizning quizlarni ochsin */
+  window.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('#ezq-app [data-ezq="tab"][data-t="quiz"]');
+    if(!b) return;
+    e.stopPropagation(); e.preventDefault();
+    TAB='quiz'; ST=null; render();
+  },true);
   function startTimer(){
     stop(); var t0=Date.now(), start=ST.left;
     tmr=setInterval(function(){
@@ -7248,7 +7278,6 @@ function register() {
   });
   function sync(){
     if(location.hash!=='#ezquiz') return;
-    if(box()) box().style.display='none';
     if(!host()) return;
     if(!document.getElementById('ezq2-host').dataset.init){ document.getElementById('ezq2-host').dataset.init='1'; render(); }
   }
@@ -7460,7 +7489,7 @@ function dnDraw() {
 #mv-pick button .sw::after{content:"";position:absolute;left:12px;right:12px;bottom:12px;height:12px;border-radius:6px;background:rgba(255,255,255,.7)}
 #mv-pick button span{display:block;padding:10px 12px;font-weight:700}
 #mv-pick button.sel{border-color:var(--accent)}
-#mv-pick button.sel span::after{content:" ✓"}
+#mv-pick button.sel span::after{content:"";display:inline-block;width:8px;height:8px;margin-left:6px;border-radius:50%;background:var(--accent);vertical-align:middle}
 </style>
 <script>
 /* Mavzular: aniq tanlagich. Har bir tugma mavjud setTheme() ni chaqiradi. */
@@ -7479,8 +7508,8 @@ function dnDraw() {
     var h=document.getElementById('mv-host');
     if(!h){ h=document.createElement('div'); h.id='mv-host'; sec.insertBefore(h, sec.children[1]||null); }
     var c=cur();
-    h.innerHTML='<div class="card"><h3>Mavzuni tanlang</h3><p style="opacity:.8">Tanlangan mavzu darhol qo‘llanadi va saqlanadi. 🔒 belgisi bilan ko‘rsatilgan mavzular Premium talab qiladi.</p><div id="mv-pick">'
-      +LIST.map(function(x){var lk=(typeof isLocked==='function')?isLocked(x[0]):false; return '<button class="'+(c===x[0]?'sel':'')+'" data-mv="'+x[0]+'"><div class="sw" style="background:'+x[2]+'"></div><span>'+x[1]+(lk?' 🔒':'')+'</span></button>';}).join('')
+    h.innerHTML='<div class="card"><h3>Mavzuni tanlang</h3><p style="opacity:.8">Tanlangan mavzu darhol qo‘llanadi va saqlanadi. qulf belgisi bilan ko‘rsatilgan mavzular Premium talab qiladi.</p><div id="mv-pick">'
+      +LIST.map(function(x){var lk=(typeof isLocked==='function')?isLocked(x[0]):false; return '<button class="'+(c===x[0]?'sel':'')+'" data-mv="'+x[0]+'"><div class="sw" style="background:'+x[2]+'"></div><span>'+x[1]+(lk?'<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-2px;margin-left:4px" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>':'')+'</span></button>';}).join('')
       +'</div></div>';
   }
   document.addEventListener('click',function(e){
@@ -7524,6 +7553,150 @@ function dnDraw() {
 .duel-empty{opacity:.7;text-align:center;padding:18px}
 .duel-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 </style>
+
+<style id="ez-theme-anim">
+body[class*="ezt-"]::after,body:not([class*="ezt-"])::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none}
+body:not([class*="ezt-"])::after{background:linear-gradient(160deg,rgba(255,244,236,.6),rgba(255,203,164,.5));background-size:200% 200%;animation:ezStd 16s ease-in-out infinite alternate}
+@keyframes ezStd{from{background-position:0% 0%}to{background-position:100% 100%}}
+body.ezt-ember::after{background:radial-gradient(ellipse 60% 55% at 35% 0%,rgba(255,180,100,.55),transparent 70%),linear-gradient(178deg,#2a1208 0%,#6e3016 40%,#b9622c 70%,#3a1a0c 100%);background-size:160% 160%,100% 100%;animation:ezEmber 12s ease-in-out infinite alternate}
+@keyframes ezEmber{from{background-position:0% 0%,0 0}to{background-position:100% 60%,0 0}}
+body.ezt-aurora::after{background:radial-gradient(ellipse 30% 85% at 18% 0%,rgba(120,240,170,.6),transparent 72%),radial-gradient(ellipse 28% 75% at 42% 0%,rgba(90,210,150,.38),transparent 72%),linear-gradient(180deg,#0c1220,#15201f 70%,#0b1a16);background-size:220% 100%,200% 100%,100% 100%;animation:ezAurora 18s ease-in-out infinite alternate}
+@keyframes ezAurora{from{background-position:0% 0,100% 0,0 0}to{background-position:100% 0,0% 0,0 0}}
+body.ezt-violet-hour::after{background:linear-gradient(115deg,#9fe7f7 0%,#b9c3ff 35%,#d6a6ff 66%,#8c6bff 100%);background-size:250% 250%;animation:ezViolet 14s ease-in-out infinite alternate}
+@keyframes ezViolet{from{background-position:0% 50%}to{background-position:100% 50%}}
+body.ezt-phosphor::after{background:radial-gradient(rgba(150,255,190,.22) 1px,transparent 1.6px) 0 0/5px 5px,radial-gradient(ellipse 80% 70% at 40% 60%,rgba(60,140,100,.5),transparent 70%),linear-gradient(180deg,#0d1f17,#2f6b4a);animation:ezPhos 6s steps(6) infinite}
+@keyframes ezPhos{0%{background-position:0 0,0 0,0 0;filter:brightness(1)}50%{background-position:0 9px,0 0,0 0;filter:brightness(1.15)}100%{background-position:0 0,0 0,0 0;filter:brightness(1)}}
+body.ezt-mirage::after{background:radial-gradient(rgba(70,30,10,.35) 1px,transparent 1.6px) 0 0/4px 4px,linear-gradient(180deg,#f5ebdd 0%,#ecd3b4 50%,#c57a3e 74%,#8a4a22 100%);animation:ezMirage 10s ease-in-out infinite alternate}
+@keyframes ezMirage{from{background-position:0 0,0 0;transform:translateY(0)}to{background-position:12px 6px,0 0;transform:translateY(-6px)}}
+body.ezt-nebula::after{background:radial-gradient(rgba(255,255,255,.35) 1px,transparent 1.5px) 0 0/7px 7px,radial-gradient(ellipse 50% 50% at 75% 80%,rgba(50,130,220,.7),transparent 70%),radial-gradient(ellipse 60% 60% at 20% 20%,rgba(40,60,140,.6),transparent 70%),linear-gradient(180deg,#070b1c,#0d1737);background-size:7px 7px,140% 140%,140% 140%,100% 100%;animation:ezNebula 20s linear infinite}
+@keyframes ezNebula{from{background-position:0 0,0% 0%,0% 0%,0 0}to{background-position:70px 140px,100% 60%,60% 100%,0 0}}
+body.ezt-frost::after{background:radial-gradient(rgba(255,255,255,.85) 1px,transparent 1.6px) 0 0/5px 5px,linear-gradient(160deg,#f3f7fd,#cbdbf0 65%,#9fbbe0);animation:ezFrost 9s linear infinite}
+@keyframes ezFrost{from{background-position:0 0,0 0}to{background-position:0 45px,0 0}}
+body.ezt-kanagawa::after{background:radial-gradient(circle at 84% 100%,#2c5b8a 0,#2c5b8a 20%,transparent 21%),radial-gradient(ellipse 40% 30% at 80% 70%,rgba(255,255,255,.75),transparent 70%),linear-gradient(180deg,#f5ecd6,#e4d2aa);background-size:120% 120%,140% 140%,100% 100%;animation:ezKana 15s ease-in-out infinite alternate}
+@keyframes ezKana{from{background-position:100% 100%,0% 0%,0 0}to{background-position:80% 100%,100% 60%,0 0}}
+@media (prefers-reduced-motion: reduce){body[class*="ezt-"]::after,body:not([class*="ezt-"])::after{animation:none!important}}
+</style>
+<style id="eh-nostalgia">
+#ezihoot .ehn-pick{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 18px}
+#ezihoot .ehn-pick button{border:3px solid transparent;border-radius:14px;padding:12px 16px;font:inherit;font-weight:800;cursor:pointer;color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.25)}
+#ezihoot .ehn-pick button.on{border-color:#fff}
+#ezihoot .ehn-pick .k{background:linear-gradient(90deg,#ff2e88,#3ad0ff)}
+#ezihoot .ehn-pick .p{background:#c9a66b;color:#3b2a14}
+#ezihoot .ehn-pick .s{background:linear-gradient(180deg,#ff6ad5,#5b1fa8)}
+#ezihoot.ehn-k{background:radial-gradient(circle at 50% 0%,#1d1b4d,#0b0a22)!important;border-radius:22px;padding:18px}
+#ezihoot.ehn-p{background:repeating-linear-gradient(0deg,#f4e4c1 0 3px,#ead7ac 3px 6px)!important;border-radius:22px;padding:18px;font-family:Georgia,serif}
+#ezihoot.ehn-s{background:linear-gradient(180deg,#140a2e 0%,#3b0d5c 60%,#ff4fa3 100%)!important;border-radius:22px;padding:18px}
+#ezihoot.ehn-k .eh-logo,#ezihoot.ehn-s .eh-logo{text-shadow:0 0 14px rgba(255,80,200,.7);letter-spacing:2px}
+#ezihoot.ehn-p .eh-logo{font-family:Georgia,serif;color:#5a3a12;text-shadow:2px 2px 0 #e9cf9a}
+#ezihoot.ehn-k .ehk-card,#ezihoot.ehn-s .ehk-card{background:#14123a!important;color:#f5f5ff;border:2px solid #3ad0ff;box-shadow:0 0 22px rgba(58,208,255,.35)}
+#ezihoot.ehn-p .ehk-card{background:#fbf3df!important;color:#4a2f10;border:3px double #8b6b3d}
+#ezihoot.ehn-s .ehk-q{background:linear-gradient(90deg,#ff2e88,#7b2cff)!important}
+#ezihoot.ehn-p .ehk-q{background:#7a4e21!important;color:#fbf3df;font-family:Georgia,serif}
+#ezihoot.ehn-k .ehk-q{background:#1c3a8a!important}
+#ezihoot.ehn-k .ehk-bar,#ezihoot.ehn-p .ehk-bar{background:rgba(0,0,0,.2)}
+</style>
+<script>
+/* EziHoot: nostalgiya mavzulari (Kosmik / Qadimgi qog'oz / Sinthvev) */
+(function(){
+  var TH=[['ehn-k','k','Kosmik neon'],['ehn-p','p','Qadimgi qog‘oz'],['ehn-s','s','Sinthvev']];
+  function sec(){return document.getElementById('ezihoot');}
+  function pick(){
+    var s=sec(); if(!s) return;
+    var h=document.getElementById('ehn-pick');
+    if(!h){ h=document.createElement('div'); h.id='ehn-pick'; h.className='ehn-pick';
+      var app=document.getElementById('eh-app'); if(app) s.insertBefore(h, app); else s.appendChild(h); }
+    var cur=(s.className.match(/ehn-\w/)||[''])[0];
+    h.innerHTML=TH.map(function(t){return '<button class="'+t[1]+(cur==='ehn-'+t[1]?' on':'')+'" data-ehn="'+t[0]+'">'+t[2]+'</button>';}).join('');
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest&&e.target.closest('[data-ehn]'); if(!b) return;
+    var s=sec(); if(!s) return;
+    s.classList.remove('ehn-k','ehn-p','ehn-s'); s.classList.add(b.dataset.ehn);
+    pick();
+  });
+  setInterval(function(){ if(location.hash==='#ezihoot') pick(); },800);
+})();
+</script>
+<script>
+/* Dino Run: kun/tun almashinuvi, chang zarralari va bosqich bayrog'i */
+var DN_PARTS=[];
+function dnDraw() {
+  var cv = document.getElementById('dn-canvas'); if (!cv) return;
+  var ctx = cv.getContext('2d');
+  var night = (Math.floor(DN.score/300)%2)===1;
+  var g = ctx.createLinearGradient(0,0,0,DN_H);
+  if(night){ g.addColorStop(0,'#0b0d2a'); g.addColorStop(1,'#2a2f5e'); }
+  else { g.addColorStop(0,'#9fd8ff'); g.addColorStop(1,'#eef9ff'); }
+  ctx.fillStyle=g; ctx.fillRect(0,0,DN_W,DN_H);
+  if(night){
+    ctx.fillStyle='#fff';
+    for(var k=0;k<40;k++){ var sx=(k*97)%DN_W, sy=(k*53)%60; ctx.globalAlpha=.4+.6*Math.abs(Math.sin(DN.t/30+k)); ctx.fillRect(sx,sy,2,2); }
+    ctx.globalAlpha=1; ctx.fillStyle='#e8e8ff'; ctx.beginPath(); ctx.arc(540,34,12,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#0b0d2a'; ctx.beginPath(); ctx.arc(546,30,11,0,Math.PI*2); ctx.fill();
+  } else {
+    ctx.fillStyle='#ffd86b'; ctx.beginPath(); ctx.arc(540,34,14,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.9)';
+    DN_CLOUDS.forEach(function(c){
+      var x=((c.x-DN.t*0.3)%(DN_W+120)+DN_W+120)%(DN_W+120)-60;
+      ctx.beginPath(); ctx.arc(x,c.y,12*c.s,0,Math.PI*2); ctx.arc(x+14*c.s,c.y-6*c.s,15*c.s,0,Math.PI*2); ctx.arc(x+30*c.s,c.y,11*c.s,0,Math.PI*2); ctx.fill();
+    });
+  }
+  ctx.fillStyle = night?'#3b3f6e':'#e8c48a'; ctx.fillRect(0,DN_G,DN_W,DN_H-DN_G);
+  ctx.fillStyle = night?'#5b5f8e':'#c99a57'; ctx.fillRect(0,DN_G,DN_W,3);
+  for (var i=0;i<12;i++){ var x=((i*70-DN.t*DN.speed)%(DN_W+70)+DN_W+70)%(DN_W+70)-35; ctx.fillRect(x,DN_G+12+(i%3)*8,22,3); }
+  var x=50, top=DN_G-30-DN.h, f=Math.floor(DN.t/6)%2;
+  /* chang zarralari (yerda yugurganda) */
+  if(DN.h===0 && DN.active && !DN.over && DN.t%4===0) DN_PARTS.push({x:x+4,y:DN_G-2,vx:-1-Math.random()*2,vy:-Math.random()*1.5,l:14});
+  DN_PARTS=DN_PARTS.filter(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.1;p.l--;return p.l>0;});
+  ctx.fillStyle=night?'rgba(200,200,255,.5)':'rgba(160,110,50,.5)';
+  DN_PARTS.forEach(function(p){ctx.fillRect(p.x,p.y,3,3);});
+  ctx.fillStyle = night?'#7cffb2':'#4caf50';
+  dnRR(ctx,x,top+6,26,20,7); ctx.fill();
+  dnRR(ctx,x+12,top-4,18,16,6); ctx.fill();
+  ctx.fillStyle = night?'#3ddc84':'#2e7d32'; ctx.beginPath(); ctx.moveTo(x-2,top+14); ctx.lineTo(x-10,top+10); ctx.lineTo(x-2,top+22); ctx.fill();
+  ctx.fillRect(x+6, top+22, 5, 10+(DN.h===0&&f?2:0));
+  ctx.fillRect(x+15, top+22, 5, 10+(DN.h===0&&!f?2:0));
+  ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(x+24,top+1,4,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#1b2a1b'; ctx.beginPath(); ctx.arc(x+25,top+1,2,0,Math.PI*2); ctx.fill();
+  DN.obs.forEach(function(o){
+    ctx.fillStyle = night?'#3ddc84':'#2e8b57';
+    dnRR(ctx,o.x,DN_G-o.h,o.w,o.h,6); ctx.fill();
+    dnRR(ctx,o.x-6,DN_G-o.h*0.6,6,14,3); ctx.fill();
+    dnRR(ctx,o.x+o.w,DN_G-o.h*0.5,6,14,3); ctx.fill();
+  });
+  ctx.font='bold 16px system-ui,sans-serif'; ctx.textAlign='right'; ctx.fillStyle=night?'#cfd4ff':'#2a4a6b';
+  ctx.fillText('HI '+String(DN.best).padStart(5,'0')+'  '+String(DN.score).padStart(5,'0'), DN_W-16, 24);
+  if(DN.score>0 && DN.score%300===0 && DN.t%5===0){ ctx.fillStyle=night?'#ffe066':'#e0a000'; ctx.font='bold 22px system-ui'; ctx.textAlign='center'; ctx.fillText(night?'TUN':'KUN', DN_W/2, 36); }
+}
+</script>
+<style id="net-status-css">
+.net-status{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;background:var(--white);font-weight:600;font-size:.9rem;margin:0 0 14px}
+.net-status i{width:10px;height:10px;border-radius:50%;background:#9aa0a6;flex-shrink:0}
+.net-status.ok i{background:#2e9d57}
+.net-status.bad i{background:#d64545}
+.net-status small{display:block;font-weight:400;opacity:.8}
+</style>
+<script>
+/* Onlayn holat xabari: Reyting va Duel uchun ulanish sababi aniq ko'rinadi */
+(function(){
+  function state(){
+    if (typeof fbDb === 'undefined' || !fbDb) return {cls:'bad', t:'Onlayn ulanmagan', d:'Firebase konfiguratsiyasi topilmadi.'};
+    if (window.__fbAnonErr) return {cls:'bad', t:'Onlayn ulanmagan', d:'Anonim kirish yoqilmagan yoki xato: '+(window.__fbAnonErr.code||window.__fbAnonErr.message||'noma‘lum')+'. Firebase Console → Authentication → Sign-in method → Anonymous ni yoqing.'};
+    return {cls:'ok', t:'Onlayn ulangan', d:'Reyting va do‘stlar jonli yangilanadi.'};
+  }
+  function paint(){
+    ['reyting','duel'].forEach(function(id){
+      var s=document.getElementById(id); if(!s) return;
+      var st=state(), el=s.querySelector(':scope > .net-status');
+      if(!el){ el=document.createElement('div'); el.className='net-status'; var first=s.querySelector('.page-head')||s.firstElementChild; s.insertBefore(el, first?first.nextSibling:s.firstChild); }
+      el.className='net-status '+st.cls;
+      el.innerHTML='<i></i><div>'+st.t+'<small>'+st.d+'</small></div>';
+    });
+  }
+  setInterval(paint,1500);
+  window.addEventListener('hashchange',paint);
+})();
+</script>
 </body>
 </html>
 
